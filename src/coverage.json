@@ -1,0 +1,114 @@
+{
+  "kind": "coverage_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-23T20:55:21.191Z",
+  "sources": {
+    "buildRequest": true,
+    "implementationPlan": true
+  },
+  "requirements": {
+    "total": 6,
+    "implemented": 6,
+    "items": [
+      {
+        "id": "REQ-1",
+        "summary": "Replace static map images with interactive Leaflet maps using OpenStreetMap tiles in both WorldMapPage and ATMapPage components",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/package.json",
+          "frontend/src/pages/WorldMapPage.tsx",
+          "frontend/src/pages/ATMapPage.tsx",
+          "frontend/src/components/LeafletMapPin.tsx",
+          "frontend/index.html"
+        ],
+        "matchedFiles": [
+          "frontend/src/pages/WorldMapPage.tsx",
+          "frontend/src/pages/ATMapPage.tsx",
+          "frontend/index.html"
+        ]
+      },
+      {
+        "id": "REQ-2",
+        "summary": "Display place name on hover over map pinpoints",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/pages/WorldMapPage.tsx",
+          "frontend/src/pages/ATMapPage.tsx",
+          "frontend/src/components/LeafletMapPin.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/pages/WorldMapPage.tsx",
+          "frontend/src/pages/ATMapPage.tsx"
+        ]
+      },
+      {
+        "id": "REQ-3",
+        "summary": "Add edit and delete abilities to guestbook entries",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/pages/EntryDetailPage.tsx",
+          "frontend/src/hooks/useQueries.ts",
+          "frontend/src/components/EditEntryDialog.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/pages/EntryDetailPage.tsx"
+        ]
+      },
+      {
+        "id": "REQ-4",
+        "summary": "Remove the generic hiking trail logo from the AT pin board",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/pages/ATMapPage.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/pages/ATMapPage.tsx"
+        ]
+      },
+      {
+        "id": "REQ-5",
+        "summary": "Use actual map backgrounds for both World and AT boards that correspond to the pinned points",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/pages/WorldMapPage.tsx",
+          "frontend/src/pages/ATMapPage.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/pages/WorldMapPage.tsx",
+          "frontend/src/pages/ATMapPage.tsx"
+        ]
+      },
+      {
+        "id": "REQ-6",
+        "summary": "Add zoom in/out functionality to both interactive maps",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/pages/WorldMapPage.tsx",
+          "frontend/src/pages/ATMapPage.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/pages/WorldMapPage.tsx",
+          "frontend/src/pages/ATMapPage.tsx"
+        ]
+      }
+    ]
+  },
+  "changedFiles": [
+    "backend/main.mo",
+    "build-request.json",
+    "caffeine.lock.json",
+    "feature_evidence.json",
+    "frontend-file-summaries.txt",
+    "frontend-implementation-plan.json",
+    "frontend/index.html",
+    "frontend/src/config.ts",
+    "frontend/src/index.css",
+    "frontend/src/pages/ATMapPage.tsx",
+    "frontend/src/pages/EntryDetailPage.tsx",
+    "frontend/src/pages/WorldMapPage.tsx",
+    "project_state.json",
+    "scratch/component-selection.json",
+    "spec.md",
+    "spec_vs_diff_report.json"
+  ]
+}

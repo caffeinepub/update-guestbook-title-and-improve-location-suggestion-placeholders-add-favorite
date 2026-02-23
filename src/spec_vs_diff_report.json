@@ -1,0 +1,63 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-23T20:55:21.188Z",
+  "summary": "The diff implements custom pan/zoom interactive maps instead of Leaflet library as specified. It includes edit/delete functionality and hover tooltips, but does not use Leaflet.js or OpenStreetMap tiles as required.",
+  "missing_requirements": [
+    {
+      "id": "REQ-1",
+      "requirement": "Replace static map images with interactive Leaflet maps using OpenStreetMap tiles",
+      "reason": "The implementation uses custom pan/zoom logic with no evidence of Leaflet library integration or OpenStreetMap tile layers. The maps appear to be custom-built canvas/div overlays.",
+      "evidence": [
+        "frontend/src/pages/WorldMapPage.tsx",
+        "frontend/src/pages/ATMapPage.tsx"
+      ]
+    },
+    {
+      "id": "REQ-1",
+      "requirement": "Map tiles properly attribute OpenStreetMap contributors",
+      "reason": "No OpenStreetMap attribution is present in the map implementations, as they don't use actual OSM tiles.",
+      "evidence": [
+        "frontend/src/pages/WorldMapPage.tsx",
+        "frontend/src/pages/ATMapPage.tsx"
+      ]
+    }
+  ],
+  "hallucinated_features": [
+    {
+      "description": "Custom pan and drag functionality for maps",
+      "reason": "The implementation includes custom mouse drag, pan state management (isDragging, dragStart, pan coordinates), which was not requested. The requirement only specified zoom functionality, not pan/drag.",
+      "evidence": [
+        "frontend/src/pages/WorldMapPage.tsx",
+        "frontend/src/pages/ATMapPage.tsx"
+      ]
+    },
+    {
+      "description": "Auto-fit bounds calculation to center on pins",
+      "reason": "The implementation includes complex useEffect logic to automatically calculate bounds and center the map on existing pins. While REQ-5 mentions automatically adjust their view, this elaborate auto-centering with zoom calculation was not explicitly specified.",
+      "evidence": [
+        "frontend/src/pages/WorldMapPage.tsx",
+        "frontend/src/pages/ATMapPage.tsx"
+      ]
+    },
+    {
+      "description": "Maximize button in zoom controls",
+      "reason": "A Maximize2 icon is imported and appears to be part of zoom controls, but was not mentioned in REQ-6 which only specified zoom in/out buttons.",
+      "evidence": [
+        "frontend/src/pages/WorldMapPage.tsx",
+        "frontend/src/pages/ATMapPage.tsx"
+      ]
+    }
+  ],
+  "confidence": 0.85,
+  "changed_files": [
+    "backend/main.mo",
+    "frontend-file-summaries.txt",
+    "frontend/index.html",
+    "frontend/src/index.css",
+    "frontend/src/pages/ATMapPage.tsx",
+    "frontend/src/pages/EntryDetailPage.tsx",
+    "frontend/src/pages/WorldMapPage.tsx",
+    "project_state.json"
+  ]
+}

@@ -1,0 +1,135 @@
+{
+  "kind": "build_request",
+  "title": "Replace static maps with interactive Leaflet maps and add hover, edit/delete, and zoom features",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Replace static map images with interactive Leaflet maps using OpenStreetMap tiles in both WorldMapPage and ATMapPage components",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-latest"
+        ],
+        "quotes": [
+          "I don't want a static image of a map. I want an interactive and accurate map that shows the pinpointed spots. This source might be able to be put to use: Leaflet | © OpenStreetMap contributors"
+        ]
+      },
+      "acceptanceCriteria": [
+        "WorldMapPage renders an interactive Leaflet map with OpenStreetMap tiles",
+        "ATMapPage renders an interactive Leaflet map with OpenStreetMap tiles focused on the Appalachian Trail region",
+        "Existing entry pins are displayed on the Leaflet maps at their correct coordinates",
+        "Map tiles properly attribute OpenStreetMap contributors"
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Display place name on hover over map pinpoints",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-latest"
+        ],
+        "quotes": [
+          "Could the place name be included with the pinpoint during hover-over?"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Hovering over a map pin displays the decoded place name from the entry",
+        "Tooltip appears immediately on hover and disappears on mouse leave",
+        "Place name is extracted using the existing decodePlaceNameFromComment utility"
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Add edit and delete abilities to guestbook entries",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-latest"
+        ],
+        "quotes": [
+          "Can we add an 'edit' and/or 'delete' abilities to entries?"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Backend implements a delete entry operation that removes entries by ID",
+        "Users can delete their own entries from the entry detail page",
+        "EditEntryDialog functionality is accessible from appropriate locations in the UI",
+        "Delete operations are protected so users can only delete their own entries",
+        "After deletion, user is redirected to the feed and the entry is removed from all views"
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Remove the generic hiking trail logo from the AT pin board",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-latest"
+        ],
+        "quotes": [
+          "Remove the generic hiking trail logo on the 'AT' pin board"
+        ]
+      },
+      "acceptanceCriteria": [
+        "ATMapPage no longer displays a static hiking trail logo image",
+        "The map area is clean and focuses on the interactive Leaflet map"
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "text": "Use actual map backgrounds for both World and AT boards that correspond to the pinned points",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-latest"
+        ],
+        "quotes": [
+          "Instead, for both the 'World' and 'AT', could we have an actual map as the background that corresponds to the points pinned?"
+        ]
+      },
+      "acceptanceCriteria": [
+        "WorldMapPage displays a real OpenStreetMap background centered on existing pins",
+        "ATMapPage displays a real OpenStreetMap background focused on the Appalachian Trail region",
+        "Maps automatically adjust their view to show all pinned locations when entries exist",
+        "Empty maps show a sensible default view (world view for World map, AT region for AT map)"
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "text": "Add zoom in/out functionality to both interactive maps",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-latest"
+        ],
+        "quotes": [
+          "Allow for the ability to zoom in/out on the maps"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Both WorldMapPage and ATMapPage support mouse wheel zoom",
+        "Maps include visible zoom control buttons (+ and -)",
+        "Zoom functionality works smoothly and maintains pin positions",
+        "Zoom levels are appropriate for viewing individual pins and overall geography"
+      ]
+    }
+  ],
+  "constraints": [
+    "Use Leaflet with OpenStreetMap tiles for interactive maps",
+    "Preserve existing entry data structure and backend functionality",
+    "Maintain the encoded place-name system in comments using existing utilities",
+    "Keep the current MapPin component styling consistent with new interactive map markers"
+  ],
+  "nonGoals": [
+    "Changing the overall application layout or navigation structure",
+    "Modifying the add entry form or place search functionality",
+    "Altering the guestbook feed display",
+    "Adding new map providers beyond OpenStreetMap"
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}
