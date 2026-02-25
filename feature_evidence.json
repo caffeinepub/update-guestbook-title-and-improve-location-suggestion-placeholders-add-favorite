@@ -1,0 +1,124 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-replace-static-map-images-with-interactive-leaflet-maps-using-openstreetmap-tiles-in-both-worldmappage-and-atmappage-components",
+      "featureTitle": "Replace static map images with interactive Leaflet maps using OpenStreetMap tiles in both WorldMapPage and ATMapPage components",
+      "files": [
+        "frontend/index.html",
+        "frontend/src/pages/ATMapPage.tsx",
+        "frontend/src/pages/WorldMapPage.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-display-place-name-on-hover-over-map-pinpoints",
+      "featureTitle": "Display place name on hover over map pinpoints",
+      "files": [
+        "frontend/src/pages/ATMapPage.tsx",
+        "frontend/src/pages/WorldMapPage.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-edit-and-delete-abilities-to-guestbook-entries",
+      "featureTitle": "Add edit and delete abilities to guestbook entries",
+      "files": [
+        "frontend/src/pages/EntryDetailPage.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-remove-the-generic-hiking-trail-logo-from-the-at-pin-board",
+      "featureTitle": "Remove the generic hiking trail logo from the AT pin board",
+      "files": [
+        "frontend/src/pages/ATMapPage.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-4"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-use-actual-map-backgrounds-for-both-world-and-at-boards-that-correspond-to-the-pinned-points",
+      "featureTitle": "Use actual map backgrounds for both World and AT boards that correspond to the pinned points",
+      "files": [
+        "frontend/src/pages/ATMapPage.tsx",
+        "frontend/src/pages/WorldMapPage.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-5"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-zoom-in-out-functionality-to-both-interactive-maps",
+      "featureTitle": "Add zoom in/out functionality to both interactive maps",
+      "files": [
+        "frontend/src/pages/ATMapPage.tsx",
+        "frontend/src/pages/WorldMapPage.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-6"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

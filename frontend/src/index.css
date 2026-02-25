@@ -1,0 +1,104 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Warm earthy palette - Light mode */
+    --background: 88% 0.02 85;
+    --foreground: 25% 0.02 85;
+    --card: 92% 0.02 85;
+    --card-foreground: 25% 0.02 85;
+    --popover: 92% 0.02 85;
+    --popover-foreground: 25% 0.02 85;
+    --primary: 48% 0.15 35;
+    --primary-foreground: 95% 0.02 85;
+    --secondary: 75% 0.08 85;
+    --secondary-foreground: 25% 0.02 85;
+    --muted: 82% 0.04 85;
+    --muted-foreground: 45% 0.02 85;
+    --accent: 65% 0.12 120;
+    --accent-foreground: 25% 0.02 85;
+    --destructive: 55% 0.20 25;
+    --destructive-foreground: 95% 0.02 85;
+    --border: 78% 0.04 85;
+    --input: 78% 0.04 85;
+    --ring: 48% 0.15 35;
+    --chart-1: 48% 0.15 35;
+    --chart-2: 65% 0.12 120;
+    --chart-3: 55% 0.20 25;
+    --chart-4: 75% 0.08 85;
+    --chart-5: 45% 0.10 60;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    /* Warm earthy palette - Dark mode */
+    --background: 20% 0.02 85;
+    --foreground: 88% 0.02 85;
+    --card: 24% 0.02 85;
+    --card-foreground: 88% 0.02 85;
+    --popover: 24% 0.02 85;
+    --popover-foreground: 88% 0.02 85;
+    --primary: 58% 0.15 35;
+    --primary-foreground: 20% 0.02 85;
+    --secondary: 32% 0.08 85;
+    --secondary-foreground: 88% 0.02 85;
+    --muted: 28% 0.04 85;
+    --muted-foreground: 65% 0.02 85;
+    --accent: 55% 0.12 120;
+    --accent-foreground: 88% 0.02 85;
+    --destructive: 50% 0.20 25;
+    --destructive-foreground: 88% 0.02 85;
+    --border: 32% 0.04 85;
+    --input: 32% 0.04 85;
+    --ring: 58% 0.15 35;
+    --chart-1: 58% 0.15 35;
+    --chart-2: 55% 0.12 120;
+    --chart-3: 50% 0.20 25;
+    --chart-4: 42% 0.08 85;
+    --chart-5: 48% 0.10 60;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+/* Touch-friendly sizing */
+@media (pointer: coarse) {
+  button,
+  a,
+  input,
+  select,
+  textarea {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: oklch(var(--muted));
+  border-radius: var(--radius);
+}
+
+::-webkit-scrollbar-thumb {
+  background: oklch(var(--muted-foreground) / 0.3);
+  border-radius: var(--radius);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: oklch(var(--muted-foreground) / 0.5);
+}

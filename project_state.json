@@ -1,0 +1,103 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 3,
+  "summary": "Interactive pin board application for tracking travel locations on World and Appalachian Trail maps",
+  "architectural_notes": [
+    "Using Leaflet with OpenStreetMap tiles for interactive maps",
+    "Two separate map boards: World map and Appalachian Trail map",
+    "Pin points represent visited locations with place names"
+  ],
+  "known_issues": [],
+  "isFixRequest": false,
+  "existing_features": [
+    {
+      "id": "feature-replace-static-map-images-with-interactive-leaflet-maps-using-openstreetmap-tiles-in-both-worldmappage-and-atmappage-components",
+      "title": "Replace static map images with interactive Leaflet maps using OpenStreetMap tiles in both WorldMapPage and ATMapPage components",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-display-place-name-on-hover-over-map-pinpoints",
+      "title": "Display place name on hover over map pinpoints",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-edit-and-delete-abilities-to-guestbook-entries",
+      "title": "Add edit and delete abilities to guestbook entries",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-remove-the-generic-hiking-trail-logo-from-the-at-pin-board",
+      "title": "Remove the generic hiking trail logo from the AT pin board",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-use-actual-map-backgrounds-for-both-world-and-at-boards-that-correspond-to-the-pinned-points",
+      "title": "Use actual map backgrounds for both World and AT boards that correspond to the pinned points",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-zoom-in-out-functionality-to-both-interactive-maps",
+      "title": "Add zoom in/out functionality to both interactive maps",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Replace static map images with interactive Leaflet/OpenStreetMap maps",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Show place name on hover over pinpoints",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Add edit and delete abilities to entries",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Remove generic hiking trail logo from AT pin board",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Use actual map backgrounds for both World and AT boards corresponding to pinned points",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Add zoom in/out functionality to maps",
+      "reqIds": [],
+      "status": "pending"
+    }
+  ],
+  "projectName": "Replace static maps with interactive Leaflet maps and add hover, edit/delete, and zoom features",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}
