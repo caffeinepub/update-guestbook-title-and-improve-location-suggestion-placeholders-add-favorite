@@ -1,132 +1,75 @@
 {
   "kind": "build_request",
-  "title": "Replace static maps with interactive Leaflet maps and add hover, edit/delete, and zoom features",
-  "priority": "normal",
+  "title": "Fix Leaflet map errors and restore entry creation functionality",
+  "projectName": "VTH Guest Book",
+  "priority": "high",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Replace static map images with interactive Leaflet maps using OpenStreetMap tiles in both WorldMapPage and ATMapPage components",
+      "text": "Rebuild the Leaflet map integration in WorldMapPage.tsx and ATMapPage.tsx from scratch: remove any CDN-based Leaflet script/CSS loading from index.html and instead install Leaflet as an npm package (leaflet + @types/leaflet), import Leaflet CSS directly in the component files, fix the default marker icon broken asset paths by explicitly setting L.Icon.Default.mergeOptions with the correct icon URLs pointing to the leaflet/dist/images assets, and ensure the map container div has an explicit pixel height so the map renders correctly.",
       "target": "frontend",
       "source": {
         "messageIds": [
           "msg-latest"
         ],
         "quotes": [
-          "I don't want a static image of a map. I want an interactive and accurate map that shows the pinpointed spots. This source might be able to be put to use: Leaflet | © OpenStreetMap contributors"
+          "Errors are occurring with the map and entries cannot be made. Reconfigure and retry."
         ]
       },
       "acceptanceCriteria": [
-        "WorldMapPage renders an interactive Leaflet map with OpenStreetMap tiles",
-        "ATMapPage renders an interactive Leaflet map with OpenStreetMap tiles focused on the Appalachian Trail region",
-        "Existing entry pins are displayed on the Leaflet maps at their correct coordinates",
-        "Map tiles properly attribute OpenStreetMap contributors"
+        "WorldMapPage renders an interactive Leaflet map without JavaScript errors in the console",
+        "ATMapPage renders an interactive Leaflet map without JavaScript errors in the console",
+        "Map pins/markers are visible and use correct marker icons (no broken image icons)",
+        "Clicking a pin opens a popup with entry details",
+        "No duplicate Leaflet CSS or JS loading conflicts between CDN and npm"
       ]
     },
     {
       "id": "REQ-2",
-      "text": "Display place name on hover over map pinpoints",
+      "text": "Fix the AddEntryPage so that new guestbook entries can be successfully submitted. Ensure the PlaceSearchField geocoding integration and form submission do not throw runtime errors, and that the backend addEntry call completes without failure. Remove any dependency on map state or Leaflet initialization that may be blocking or erroring during form submission.",
       "target": "frontend",
       "source": {
         "messageIds": [
           "msg-latest"
         ],
         "quotes": [
-          "Could the place name be included with the pinpoint during hover-over?"
+          "entries cannot be made"
         ]
       },
       "acceptanceCriteria": [
-        "Hovering over a map pin displays the decoded place name from the entry",
-        "Tooltip appears immediately on hover and disappears on mouse leave",
-        "Place name is extracted using the existing decodePlaceNameFromComment utility"
+        "A user can fill out the Add Entry form and submit it without errors",
+        "The entry appears in the GuestbookFeedPage feed after submission",
+        "Place search (current location and favorite AT place) works without throwing errors",
+        "Form submission does not depend on Leaflet map state being initialized"
       ]
     },
     {
       "id": "REQ-3",
-      "text": "Add edit and delete abilities to guestbook entries",
-      "target": "both",
-      "source": {
-        "messageIds": [
-          "msg-latest"
-        ],
-        "quotes": [
-          "Can we add an 'edit' and/or 'delete' abilities to entries?"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Backend implements a delete entry operation that removes entries by ID",
-        "Users can delete their own entries from the entry detail page",
-        "EditEntryDialog functionality is accessible from appropriate locations in the UI",
-        "Delete operations are protected so users can only delete their own entries",
-        "After deletion, user is redirected to the feed and the entry is removed from all views"
-      ]
-    },
-    {
-      "id": "REQ-4",
-      "text": "Remove the generic hiking trail logo from the AT pin board",
+      "text": "Audit and clean up frontend/index.html to remove any Leaflet CDN script or link tags (CSS and JS) that conflict with the npm-installed Leaflet package. Ensure only one source of Leaflet is loaded in the application.",
       "target": "frontend",
       "source": {
         "messageIds": [
           "msg-latest"
         ],
         "quotes": [
-          "Remove the generic hiking trail logo on the 'AT' pin board"
+          "Reconfigure and retry."
         ]
       },
       "acceptanceCriteria": [
-        "ATMapPage no longer displays a static hiking trail logo image",
-        "The map area is clean and focuses on the interactive Leaflet map"
-      ]
-    },
-    {
-      "id": "REQ-5",
-      "text": "Use actual map backgrounds for both World and AT boards that correspond to the pinned points",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-latest"
-        ],
-        "quotes": [
-          "Instead, for both the 'World' and 'AT', could we have an actual map as the background that corresponds to the points pinned?"
-        ]
-      },
-      "acceptanceCriteria": [
-        "WorldMapPage displays a real OpenStreetMap background centered on existing pins",
-        "ATMapPage displays a real OpenStreetMap background focused on the Appalachian Trail region",
-        "Maps automatically adjust their view to show all pinned locations when entries exist",
-        "Empty maps show a sensible default view (world view for World map, AT region for AT map)"
-      ]
-    },
-    {
-      "id": "REQ-6",
-      "text": "Add zoom in/out functionality to both interactive maps",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-latest"
-        ],
-        "quotes": [
-          "Allow for the ability to zoom in/out on the maps"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Both WorldMapPage and ATMapPage support mouse wheel zoom",
-        "Maps include visible zoom control buttons (+ and -)",
-        "Zoom functionality works smoothly and maintains pin positions",
-        "Zoom levels are appropriate for viewing individual pins and overall geography"
+        "index.html contains no Leaflet CDN <script> or <link> tags",
+        "Leaflet is loaded exclusively via the npm package import",
+        "No 'L is not defined' or similar global Leaflet reference errors occur"
       ]
     }
   ],
   "constraints": [
-    "Use Leaflet with OpenStreetMap tiles for interactive maps",
-    "Preserve existing entry data structure and backend functionality",
-    "Maintain the encoded place-name system in comments using existing utilities",
-    "Keep the current MapPin component styling consistent with new interactive map markers"
+    "Do not modify files under frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, or frontend/src/components/ui",
+    "Keep all Motoko backend logic in backend/main.mo — do not change the backend schema or data model"
   ],
   "nonGoals": [
-    "Changing the overall application layout or navigation structure",
-    "Modifying the add entry form or place search functionality",
-    "Altering the guestbook feed display",
-    "Adding new map providers beyond OpenStreetMap"
+    "Adding new map features or new types of map pins beyond what already exists",
+    "Changing the visual design or color theme of the application",
+    "Modifying backend guestbook entry storage or retrieval logic"
   ],
   "imageRequirements": {
     "required": [],

@@ -1,15 +1,13 @@
 # Specification
 
 ## Summary
-**Goal:** Replace static map images with interactive Leaflet maps, add hover tooltips showing place names, enable edit/delete functionality for entries, and implement zoom controls.
+**Goal:** Fix broken Leaflet map rendering and restore the ability to create new guestbook entries.
 
 **Planned changes:**
-- Replace static map images in WorldMapPage and ATMapPage with interactive Leaflet maps using OpenStreetMap tiles
-- Display place names in tooltips when hovering over map pins
-- Add delete functionality for guestbook entries (users can delete their own entries)
-- Enable edit functionality for entries via EditEntryDialog
-- Remove generic hiking trail logo from AT pin board
-- Add zoom in/out controls and mouse wheel zoom to both maps
-- Auto-fit map views to show all pinned locations when entries exist
+- Remove Leaflet CDN `<script>` and `<link>` tags from `frontend/index.html`
+- Install Leaflet as an npm package (`leaflet` + `@types/leaflet`) and import its CSS directly in `WorldMapPage.tsx` and `ATMapPage.tsx`
+- Fix default marker icon broken asset paths by setting `L.Icon.Default.mergeOptions` with correct URLs pointing to `leaflet/dist/images`
+- Ensure map container divs have explicit pixel heights so maps render correctly
+- Fix `AddEntryPage` so form submission and `PlaceSearchField` geocoding work without runtime errors and do not depend on Leaflet map state
 
-**User-visible outcome:** Users can interact with accurate, zoomable maps showing their pinned locations, hover over pins to see place names, and edit or delete their own guestbook entries.
+**User-visible outcome:** Users can view interactive maps with visible pins and popups, and can successfully submit new guestbook entries that appear in the feed.

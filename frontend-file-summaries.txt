@@ -9,13 +9,13 @@
   "frontend/src/pages/GuestbookFeedPage.tsx": "Main feed page displaying all guestbook entries with stripped place names in comment preview.",
   "frontend/src/pages/AddEntryPage.tsx": "Form page for creating guestbook entries with place name capture using correct GeocodingResult interface properties (latitude, longitude, displayName) and PlaceSearchField props (label, onSelect).",
   "frontend/src/pages/EntryDetailPage.tsx": "Entry detail page with edit and delete buttons visible only to entry creators, confirmation dialog for deletion, and proper authorization checks using Internet Identity.",
-  "frontend/src/pages/WorldMapPage.tsx": "Interactive world map page with pan, zoom (mouse wheel and buttons), and drag functionality, displaying guestbook entries with current locations as clickable markers with hover tooltips showing place names, automatic bounds fitting to show all pins, and OpenStreetMap attribution.",
-  "frontend/src/pages/ATMapPage.tsx": "Interactive Appalachian Trail map page with pan, zoom (mouse wheel and buttons), and drag functionality, displaying favorite AT places as clickable markers with hover tooltips showing place names, automatic bounds fitting to show all pins, and OpenStreetMap attribution.",
+  "frontend/src/pages/WorldMapPage.tsx": "Interactive world map using Leaflet as a CDN global (`declare const L: any`), with a synchronous guard check replacing the polling loop, custom SVG green pins with proper `<defs>` blocks, and popups showing author/place/comment.",
+  "frontend/src/pages/ATMapPage.tsx": "Interactive Appalachian Trail map using Leaflet as a CDN global (`declare const L: any`), with a synchronous guard check replacing the polling loop, custom SVG brown pins with proper `<defs>` blocks, and popups showing author and favorite place name.",
   "frontend/src/components/MapPin.tsx": "Reusable map pin marker component with default and selected states, rendered as SVG with drop shadow and hover effects.",
   "frontend/src/components/MapLegend.tsx": "Small legend component explaining map pin interaction for touch devices, displayed above map views.",
   "frontend/src/lib/geocoding.ts": "Reusable geocoding utility using OpenStreetMap Nominatim API to search place names and return normalized candidate results with coordinates.",
   "frontend/src/components/PlaceSearchField.tsx": "Reusable place search component with input, search button, and results dropdown that uses the geocoding utility to search for locations and allows selection from multiple results.",
-  "frontend/index.html": "HTML entry point with VTH branding and favicon link.",
+  "frontend/index.html": "HTML entry point with VTH branding, favicon, and Leaflet CSS/JS loaded via CDN (unpkg v1.9.4) without SRI integrity hashes to prevent hash-mismatch failures.",
   "frontend/src/components/AboutDialog.tsx": "Dialog component explaining the VTH Guest Book project and defining what a \"vicarious thru-hiker\" is.",
   "frontend/src/components/EditEntryDialog.tsx": "Dialog component for editing existing guestbook entries with all fields pre-filled, using correct GeocodingResult interface properties and PlaceSearchField props."
 }

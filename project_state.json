@@ -1,103 +1,41 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "Interactive pin board application for tracking travel locations on World and Appalachian Trail maps",
-  "architectural_notes": [
-    "Using Leaflet with OpenStreetMap tiles for interactive maps",
-    "Two separate map boards: World map and Appalachian Trail map",
-    "Pin points represent visited locations with place names"
+  "summary": "New project",
+  "architectural_notes": [],
+  "known_issues": [
+    "Map errors preventing entries from being made; map functionality needs to be reconfigured"
   ],
-  "known_issues": [],
-  "isFixRequest": false,
+  "isFixRequest": true,
   "existing_features": [
     {
-      "id": "feature-replace-static-map-images-with-interactive-leaflet-maps-using-openstreetmap-tiles-in-both-worldmappage-and-atmappage-components",
-      "title": "Replace static map images with interactive Leaflet maps using OpenStreetMap tiles in both WorldMapPage and ATMapPage components",
+      "id": "feature-rebuild-the-leaflet-map-integration-in-worldmappage-tsx-and-atmappage-tsx-from-scratch-remove-any-cdn-based-leaflet-script-css-loading-from-index-html-and-instead-install-leaflet-as-an-npm-package-leaflet-types-leaflet-import-leaflet-css-directly-in-the-component-files-fix-the-default-marker-icon-broken-asset-paths-by-explicitly-setting-l-icon-default-mergeoptions-with-the-correct-icon-urls-pointing-to-the-leaflet-dist-images-assets-and-ensure-the-map-container-div-has-an-explicit-pixel-height-so-the-map-renders-correctly",
+      "title": "Rebuild the Leaflet map integration in WorldMapPage.tsx and ATMapPage.tsx from scratch: remove any CDN-based Leaflet script/CSS loading from index.html and instead install Leaflet as an npm package (leaflet + @types/leaflet), import Leaflet CSS directly in the component files, fix the default marker icon broken asset paths by explicitly setting L.Icon.Default.mergeOptions with the correct icon URLs pointing to the leaflet/dist/images assets, and ensure the map container div has an explicit pixel height so the map renders correctly.",
       "reqIds": [
         "REQ-1"
       ],
       "version": 1
     },
     {
-      "id": "feature-display-place-name-on-hover-over-map-pinpoints",
-      "title": "Display place name on hover over map pinpoints",
-      "reqIds": [
-        "REQ-2"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-add-edit-and-delete-abilities-to-guestbook-entries",
-      "title": "Add edit and delete abilities to guestbook entries",
+      "id": "feature-audit-and-clean-up-frontend-index-html-to-remove-any-leaflet-cdn-script-or-link-tags-css-and-js-that-conflict-with-the-npm-installed-leaflet-package-ensure-only-one-source-of-leaflet-is-loaded-in-the-application",
+      "title": "Audit and clean up frontend/index.html to remove any Leaflet CDN script or link tags (CSS and JS) that conflict with the npm-installed Leaflet package. Ensure only one source of Leaflet is loaded in the application.",
       "reqIds": [
         "REQ-3"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-remove-the-generic-hiking-trail-logo-from-the-at-pin-board",
-      "title": "Remove the generic hiking trail logo from the AT pin board",
-      "reqIds": [
-        "REQ-4"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-use-actual-map-backgrounds-for-both-world-and-at-boards-that-correspond-to-the-pinned-points",
-      "title": "Use actual map backgrounds for both World and AT boards that correspond to the pinned points",
-      "reqIds": [
-        "REQ-5"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-add-zoom-in-out-functionality-to-both-interactive-maps",
-      "title": "Add zoom in/out functionality to both interactive maps",
-      "reqIds": [
-        "REQ-6"
       ],
       "version": 1
     }
   ],
   "new_feature_requests": [
     {
-      "id": "AR-1",
-      "summary": "Replace static map images with interactive Leaflet/OpenStreetMap maps",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
       "id": "AR-2",
-      "summary": "Show place name on hover over pinpoints",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-3",
-      "summary": "Add edit and delete abilities to entries",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-4",
-      "summary": "Remove generic hiking trail logo from AT pin board",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-5",
-      "summary": "Use actual map backgrounds for both World and AT boards corresponding to pinned points",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-6",
-      "summary": "Add zoom in/out functionality to maps",
-      "reqIds": [],
+      "summary": "Fix the AddEntryPage so that new guestbook entries can be successfully submitted. Ensure the PlaceSearchField geocoding integration and form submission do not throw runtime errors, and that the backend addEntry call completes without failure. Remove any dependency on map state or Leaflet initialization that may be blocking or erroring during form submission.",
+      "reqIds": [
+        "REQ-2"
+      ],
       "status": "pending"
     }
   ],
-  "projectName": "Replace static maps with interactive Leaflet maps and add hover, edit/delete, and zoom features",
+  "projectName": "VTH Guest Book",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

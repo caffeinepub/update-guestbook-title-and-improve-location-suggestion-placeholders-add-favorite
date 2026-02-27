@@ -1,110 +1,61 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-23T20:55:21.191Z",
+  "generatedAt": "2026-02-27T21:14:17.749Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 6,
-    "implemented": 6,
+    "total": 3,
+    "implemented": 2,
     "items": [
       {
         "id": "REQ-1",
-        "summary": "Replace static map images with interactive Leaflet maps using OpenStreetMap tiles in both WorldMapPage and ATMapPage components",
+        "summary": "Rebuild the Leaflet map integration in WorldMapPage.tsx and ATMapPage.tsx from scratch: remove any CDN-based Leaflet script/CSS loading from index.html and instead install Leaflet as an npm package (leaflet + @types/leaflet), import Leaflet CSS directly in the component files, fix the default marker icon broken asset paths by explicitly setting L.Icon.Default.mergeOptions with the correct icon URLs pointing to the leaflet/dist/images assets, and ensure the map container div has an explicit pixel height so the map renders correctly.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/package.json",
           "frontend/src/pages/WorldMapPage.tsx",
-          "frontend/src/pages/ATMapPage.tsx",
-          "frontend/src/components/LeafletMapPin.tsx",
-          "frontend/index.html"
+          "frontend/src/pages/ATMapPage.tsx"
         ],
         "matchedFiles": [
           "frontend/src/pages/WorldMapPage.tsx",
-          "frontend/src/pages/ATMapPage.tsx",
-          "frontend/index.html"
+          "frontend/src/pages/ATMapPage.tsx"
         ]
       },
       {
         "id": "REQ-2",
-        "summary": "Display place name on hover over map pinpoints",
-        "status": "implemented",
+        "summary": "Fix the AddEntryPage so that new guestbook entries can be successfully submitted. Ensure the PlaceSearchField geocoding integration and form submission do not throw runtime errors, and that the backend addEntry call completes without failure. Remove any dependency on map state or Leaflet initialization that may be blocking or erroring during form submission.",
+        "status": "missing",
         "plannedFiles": [
-          "frontend/src/pages/WorldMapPage.tsx",
-          "frontend/src/pages/ATMapPage.tsx",
-          "frontend/src/components/LeafletMapPin.tsx"
+          "frontend/src/pages/AddEntryPage.tsx",
+          "frontend/src/components/PlaceSearchField.tsx",
+          "frontend/src/lib/geocoding.ts"
         ],
-        "matchedFiles": [
-          "frontend/src/pages/WorldMapPage.tsx",
-          "frontend/src/pages/ATMapPage.tsx"
-        ]
+        "matchedFiles": []
       },
       {
         "id": "REQ-3",
-        "summary": "Add edit and delete abilities to guestbook entries",
+        "summary": "Audit and clean up frontend/index.html to remove any Leaflet CDN script or link tags (CSS and JS) that conflict with the npm-installed Leaflet package. Ensure only one source of Leaflet is loaded in the application.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/pages/EntryDetailPage.tsx",
-          "frontend/src/hooks/useQueries.ts",
-          "frontend/src/components/EditEntryDialog.tsx"
+          "frontend/index.html"
         ],
         "matchedFiles": [
-          "frontend/src/pages/EntryDetailPage.tsx"
-        ]
-      },
-      {
-        "id": "REQ-4",
-        "summary": "Remove the generic hiking trail logo from the AT pin board",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/pages/ATMapPage.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/pages/ATMapPage.tsx"
-        ]
-      },
-      {
-        "id": "REQ-5",
-        "summary": "Use actual map backgrounds for both World and AT boards that correspond to the pinned points",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/pages/WorldMapPage.tsx",
-          "frontend/src/pages/ATMapPage.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/pages/WorldMapPage.tsx",
-          "frontend/src/pages/ATMapPage.tsx"
-        ]
-      },
-      {
-        "id": "REQ-6",
-        "summary": "Add zoom in/out functionality to both interactive maps",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/pages/WorldMapPage.tsx",
-          "frontend/src/pages/ATMapPage.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/pages/WorldMapPage.tsx",
-          "frontend/src/pages/ATMapPage.tsx"
+          "frontend/index.html"
         ]
       }
     ]
   },
   "changedFiles": [
-    "backend/main.mo",
     "build-request.json",
+    "build-template/README.md",
     "caffeine.lock.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
     "frontend/index.html",
-    "frontend/src/config.ts",
-    "frontend/src/index.css",
     "frontend/src/pages/ATMapPage.tsx",
-    "frontend/src/pages/EntryDetailPage.tsx",
     "frontend/src/pages/WorldMapPage.tsx",
     "project_state.json",
     "scratch/component-selection.json",

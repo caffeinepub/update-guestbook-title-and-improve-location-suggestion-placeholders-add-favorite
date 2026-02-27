@@ -1,154 +1,71 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Replace static maps with interactive Leaflet maps and add hover, edit/delete, and zoom features",
+  "title": "Fix Leaflet map errors and restore entry creation functionality",
   "requirements": [
     {
       "id": "REQ-1",
-      "summary": "Replace static map images with interactive Leaflet maps using OpenStreetMap tiles in both WorldMapPage and ATMapPage components",
+      "summary": "Rebuild Leaflet map integration from scratch using npm package instead of CDN",
       "acceptanceCriteria": [
-        "WorldMapPage renders an interactive Leaflet map with OpenStreetMap tiles",
-        "ATMapPage renders an interactive Leaflet map with OpenStreetMap tiles focused on the Appalachian Trail region",
-        "Existing entry pins are displayed on the Leaflet maps at their correct coordinates",
-        "Map tiles properly attribute OpenStreetMap contributors"
+        "WorldMapPage renders an interactive Leaflet map without JavaScript errors in the console",
+        "ATMapPage renders an interactive Leaflet map without JavaScript errors in the console",
+        "Map pins/markers are visible and use correct marker icons (no broken image icons)",
+        "Clicking a pin opens a popup with entry details",
+        "No duplicate Leaflet CSS or JS loading conflicts between CDN and npm"
       ],
       "file_operations": [
         {
-          "path": "frontend/package.json",
-          "operation": "modify",
-          "description": "Add leaflet and react-leaflet dependencies (leaflet@^1.9.4, react-leaflet@^4.2.1) and @types/leaflet as a dev dependency for TypeScript support"
-        },
-        {
           "path": "frontend/src/pages/WorldMapPage.tsx",
           "operation": "modify",
-          "description": "Replace the static div-based map layout with a Leaflet MapContainer component using OpenStreetMap tiles. Configure the map to show a world view by default, add TileLayer with proper OSM attribution, and render Marker components for each entry's currentLocation. Remove the absolute-positioned MapPin components and replace them with Leaflet markers that maintain interactivity and selection state."
+          "description": "Remove CDN-based Leaflet initialization and rebuild from scratch: import Leaflet CSS at the top of the file ('leaflet/dist/leaflet.css'), import Leaflet library directly, configure L.Icon.Default.mergeOptions to fix broken marker icon paths by pointing to the correct URLs in leaflet/dist/images (marker-icon.png, marker-icon-2x.png, marker-shadow.png), ensure the map container div has an explicit pixel height (e.g., h-full with parent constraints or inline style), initialize the Leaflet map instance with proper bounds and zoom for world view, and render markers for entries with currentLocation using L.marker with popups showing author, place name, and comment preview."
         },
         {
           "path": "frontend/src/pages/ATMapPage.tsx",
           "operation": "modify",
-          "description": "Replace the static background image (frontend/public/assets/generated/at-map-background.dim_1600x900.png) and MapPin layout with a Leaflet MapContainer focused on the Appalachian Trail region (centered approximately at [37.5, -81.5] with zoom level 6). Add TileLayer with OpenStreetMap tiles and proper attribution. Render Marker components for each entry's favoritePlace instead of absolute-positioned MapPin components. Remove the hiking trail logo image reference."
-        },
-        {
-          "path": "frontend/src/components/LeafletMapPin.tsx",
-          "operation": "create",
-          "description": "Create a custom Leaflet marker component that wraps the existing MapPin visual styling as a Leaflet DivIcon. Accept props for selected state, onClick handler, and optional tooltip content. This component bridges the existing MapPin appearance with Leaflet's marker system while supporting hover tooltips for place names."
-        },
-        {
-          "path": "frontend/index.html",
-          "operation": "modify",
-          "description": "Add Leaflet CSS import in the head section: <link rel=\"stylesheet\" href=\"https://unpkg.com/leaflet@1.9.4/dist/leaflet.css\" /> to ensure proper styling of Leaflet map controls and markers"
+          "description": "Remove CDN-based Leaflet initialization and rebuild from scratch: import Leaflet CSS at the top of the file ('leaflet/dist/leaflet.css'), import Leaflet library directly, configure L.Icon.Default.mergeOptions to fix broken marker icon paths by pointing to the correct URLs in leaflet/dist/images (marker-icon.png, marker-icon-2x.png, marker-shadow.png), ensure the map container div has an explicit pixel height (e.g., h-full with parent constraints or inline style), initialize the Leaflet map instance with proper bounds and zoom for the Appalachian Trail region, and render markers for entries with favoritePlace using L.marker with popups showing author and place name."
         }
       ]
     },
     {
       "id": "REQ-2",
-      "summary": "Display place name on hover over map pinpoints",
+      "summary": "Fix AddEntryPage to allow successful guestbook entry submission without map dependency errors",
       "acceptanceCriteria": [
-        "Hovering over a map pin displays the decoded place name from the entry",
-        "Tooltip appears immediately on hover and disappears on mouse leave",
-        "Place name is extracted using the existing decodePlaceNameFromComment utility"
+        "A user can fill out the Add Entry form and submit it without errors",
+        "The entry appears in the GuestbookFeedPage feed after submission",
+        "Place search (current location and favorite AT place) works without throwing errors",
+        "Form submission does not depend on Leaflet map state being initialized"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/pages/WorldMapPage.tsx",
+          "path": "frontend/src/pages/AddEntryPage.tsx",
           "operation": "modify",
-          "description": "For each entry marker, extract the place name using decodePlaceNameFromComment(entry.comment) and pass it to the LeafletMapPin component or Leaflet Tooltip component. Configure the tooltip to appear on hover with bindTooltip or Tooltip component wrapping each Marker."
+          "description": "Remove any dependency on map state or Leaflet initialization that may block form submission. Ensure PlaceSearchField geocoding integration works correctly without requiring a map to be rendered. Verify the form's handleSubmit function correctly calls the backend addEntry method with properly formatted Location objects (or null) and handles success/error states. Ensure the geocoding results from PlaceSearchField are correctly converted to Location format before submission. Add error handling and user feedback for failed submissions."
         },
         {
-          "path": "frontend/src/pages/ATMapPage.tsx",
+          "path": "frontend/src/components/PlaceSearchField.tsx",
           "operation": "modify",
-          "description": "For each entry marker, extract the place name using decodePlaceNameFromComment(entry.comment) and pass it to the LeafletMapPin component or Leaflet Tooltip component. Configure the tooltip to appear on hover with bindTooltip or Tooltip component wrapping each Marker."
+          "description": "Audit the geocoding integration to ensure it does not throw runtime errors during place search. Verify the OpenStreetMap Nominatim API calls in lib/geocoding.ts are properly handled with error boundaries. Ensure the component correctly returns selected location coordinates without requiring Leaflet to be initialized. Fix any async/await or promise handling issues that may cause silent failures."
         },
         {
-          "path": "frontend/src/components/LeafletMapPin.tsx",
+          "path": "frontend/src/lib/geocoding.ts",
           "operation": "modify",
-          "description": "Add support for rendering a Leaflet Tooltip when tooltip content is provided via props. Ensure the tooltip displays immediately on hover and disappears on mouse leave by configuring appropriate Leaflet tooltip options."
+          "description": "Review and fix the Nominatim API integration to handle network errors, malformed responses, and edge cases gracefully. Ensure the geocoding results are properly normalized and return valid coordinate objects. Add proper error handling and logging to help diagnose issues."
         }
       ]
     },
     {
       "id": "REQ-3",
-      "summary": "Add edit and delete abilities to guestbook entries",
+      "summary": "Remove Leaflet CDN dependencies from index.html to prevent conflicts with npm package",
       "acceptanceCriteria": [
-        "Users can delete their own entries from the entry detail page",
-        "EditEntryDialog functionality is accessible from appropriate locations in the UI",
-        "Delete operations are protected so users can only delete their own entries",
-        "After deletion, user is redirected to the feed and the entry is removed from all views"
+        "index.html contains no Leaflet CDN <script> or <link> tags",
+        "Leaflet is loaded exclusively via the npm package import",
+        "No 'L is not defined' or similar global Leaflet reference errors occur"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/pages/EntryDetailPage.tsx",
+          "path": "frontend/index.html",
           "operation": "modify",
-          "description": "Add a delete button next to the existing edit button that is visible only when the current user is the entry creator (using identity.getPrincipal().toString() === entry.creator.toString()). Wire the delete button to call the deleteEntry mutation from useQueries with the entry's timestamp. On successful deletion, navigate the user back to the guestbook feed page. Show a confirmation dialog before deleting to prevent accidental deletions."
-        },
-        {
-          "path": "frontend/src/hooks/useQueries.ts",
-          "operation": "modify",
-          "description": "Add a useDeleteEntry mutation hook that calls actor.deleteEntry(timestamp). Configure the mutation to invalidate the 'entries' and 'entriesWithLocation' and 'entriesWithFavoritePlace' query keys on success to ensure all entry lists refresh after deletion. Return the mutation function and status for use in components."
-        },
-        {
-          "path": "frontend/src/components/EditEntryDialog.tsx",
-          "operation": "modify",
-          "description": "Ensure the EditEntryDialog is already accessible from the entry detail page and functions correctly with the existing updateEntry mutation. Verify that the dialog properly handles the encoded place-name system and location updates. No changes needed if already functional."
-        }
-      ]
-    },
-    {
-      "id": "REQ-4",
-      "summary": "Remove the generic hiking trail logo from the AT pin board",
-      "acceptanceCriteria": [
-        "ATMapPage no longer displays a static hiking trail logo image",
-        "The map area is clean and focuses on the interactive Leaflet map"
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/pages/ATMapPage.tsx",
-          "operation": "modify",
-          "description": "Remove any img or background-image references to hiking trail logos (likely referencing assets in frontend/public/assets/generated/ with names like at-outline-map or similar). Ensure the component only renders the interactive Leaflet map without decorative static images overlaying or surrounding it."
-        }
-      ]
-    },
-    {
-      "id": "REQ-5",
-      "summary": "Use actual map backgrounds for both World and AT boards that correspond to the pinned points",
-      "acceptanceCriteria": [
-        "WorldMapPage displays a real OpenStreetMap background centered on existing pins",
-        "ATMapPage displays a real OpenStreetMap background focused on the Appalachian Trail region",
-        "Maps automatically adjust their view to show all pinned locations when entries exist",
-        "Empty maps show a sensible default view (world view for World map, AT region for AT map)"
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/pages/WorldMapPage.tsx",
-          "operation": "modify",
-          "description": "Implement automatic map bounds calculation using Leaflet's fitBounds when entries with currentLocation exist. Calculate the bounding box from all entry coordinates and call map.fitBounds to center and zoom the map to show all pins. If no entries exist, default to a world view (center [0, 0] with zoom level 2). The OpenStreetMap TileLayer already provides the real map background."
-        },
-        {
-          "path": "frontend/src/pages/ATMapPage.tsx",
-          "operation": "modify",
-          "description": "Implement automatic map bounds calculation using Leaflet's fitBounds when entries with favoritePlace exist. Calculate the bounding box from all entry coordinates and call map.fitBounds to center and zoom the map to show all pins. If no entries exist, default to the Appalachian Trail region view (center approximately [37.5, -81.5] with zoom level 6). The OpenStreetMap TileLayer already provides the real map background instead of the static image frontend/public/assets/generated/at-map-background.dim_1600x900.png."
-        }
-      ]
-    },
-    {
-      "id": "REQ-6",
-      "summary": "Add zoom in/out functionality to both interactive maps",
-      "acceptanceCriteria": [
-        "Both WorldMapPage and ATMapPage support mouse wheel zoom",
-        "Maps include visible zoom control buttons (+ and -)",
-        "Zoom functionality works smoothly and maintains pin positions",
-        "Zoom levels are appropriate for viewing individual pins and overall geography"
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/pages/WorldMapPage.tsx",
-          "operation": "modify",
-          "description": "Ensure the MapContainer has scrollWheelZoom enabled and includes a ZoomControl component from react-leaflet. Configure appropriate min and max zoom levels (e.g., minZoom: 2, maxZoom: 18) to allow viewing from world geography down to individual pin locations. The zoom control buttons (+ and -) are provided by default by Leaflet's ZoomControl."
-        },
-        {
-          "path": "frontend/src/pages/ATMapPage.tsx",
-          "operation": "modify",
-          "description": "Ensure the MapContainer has scrollWheelZoom enabled and includes a ZoomControl component from react-leaflet. Configure appropriate min and max zoom levels (e.g., minZoom: 5, maxZoom: 18) to allow viewing the full AT region down to individual favorite place pins. The zoom control buttons (+ and -) are provided by default by Leaflet's ZoomControl."
+          "description": "Remove all Leaflet CDN script and link tags from the HTML file. Specifically, remove the <link> tag loading Leaflet CSS from unpkg.com and the <script> tag loading Leaflet JS from unpkg.com. Keep only the VTH favicon link and the root div element. Leaflet will be loaded exclusively via npm package imports in the component files."
         }
       ]
     }
