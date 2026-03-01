@@ -28,6 +28,7 @@ export default function AddEntryPage() {
   const [currentLon, setCurrentLon] = useState('');
   const [currentPlaceName, setCurrentPlaceName] = useState('');
   const [gettingLocation, setGettingLocation] = useState(false);
+  const [geoBlocked, setGeoBlocked] = useState(false);
 
   // Favorite place state
   const [favLat, setFavLat] = useState('');
@@ -36,12 +37,13 @@ export default function AddEntryPage() {
 
   const handleGetCurrentLocation = () => {
     if (!navigator.geolocation) {
-      setError('Geolocation is not supported by your browser');
+      setGeoBlocked(true);
       return;
     }
 
     setGettingLocation(true);
     setError('');
+    setGeoBlocked(false);
 
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -51,8 +53,17 @@ export default function AddEntryPage() {
         setGettingLocation(false);
       },
       (err) => {
-        setError(`Unable to get location: ${err.message}`);
         setGettingLocation(false);
+        if (
+          err.code === err.PERMISSION_DENIED ||
+          err.message.toLowerCase().includes('permissions policy') ||
+          err.message.toLowerCase().includes('disabled') ||
+          err.message.toLowerCase().includes('not allowed')
+        ) {
+          setGeoBlocked(true);
+        } else {
+          setError(`Unable to get location: ${err.message}`);
+        }
       }
     );
   };
@@ -171,33 +182,45 @@ export default function AddEntryPage() {
                 Where are you signing from?
               </p>
 
+              {/* Geolocation blocked notice */}
+              {geoBlocked && (
+                <Alert className="border-blue-500/40 bg-blue-50 dark:bg-blue-950/20">
+                  <MapPin className="h-4 w-4 text-blue-600" />
+                  <AlertDescription className="text-blue-800 dark:text-blue-200 text-sm">
+                    Location access is not available in this environment. Please use the search field below to find your location.
+                  </AlertDescription>
+                </Alert>
+              )}
+
               <PlaceSearchField
                 label="Search for your location"
                 placeholder="My home town"
                 onSelect={handleSelectCurrentPlace}
               />
 
-              <div className="flex items-center gap-2">
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={handleGetCurrentLocation}
-                  disabled={gettingLocation}
-                >
-                  {gettingLocation ? (
-                    <>
-                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                      Getting location...
-                    </>
-                  ) : (
-                    <>
-                      <Locate className="h-4 w-4 mr-2" />
-                      Use my location
-                    </>
-                  )}
-                </Button>
-              </div>
+              {!geoBlocked && (
+                <div className="flex items-center gap-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={handleGetCurrentLocation}
+                    disabled={gettingLocation}
+                  >
+                    {gettingLocation ? (
+                      <>
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        Getting location...
+                      </>
+                    ) : (
+                      <>
+                        <Locate className="h-4 w-4 mr-2" />
+                        Use my location
+                      </>
+                    )}
+                  </Button>
+                </div>
+              )}
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-2">

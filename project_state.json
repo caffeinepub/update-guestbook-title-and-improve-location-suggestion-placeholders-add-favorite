@@ -1,41 +1,40 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "New project",
-  "architectural_notes": [],
-  "known_issues": [
-    "Map errors preventing entries from being made; map functionality needs to be reconfigured"
+  "summary": "A guestbook app deployed on the Internet Computer. Removing mandatory Internet Identity authentication so anyone can sign the guestbook anonymously without needing an account.",
+  "architectural_notes": [
+    "Backend originally required Internet Identity authentication for guestbook entries; this restriction is being removed to allow anonymous submissions."
   ],
+  "known_issues": [],
   "isFixRequest": true,
   "existing_features": [
     {
-      "id": "feature-rebuild-the-leaflet-map-integration-in-worldmappage-tsx-and-atmappage-tsx-from-scratch-remove-any-cdn-based-leaflet-script-css-loading-from-index-html-and-instead-install-leaflet-as-an-npm-package-leaflet-types-leaflet-import-leaflet-css-directly-in-the-component-files-fix-the-default-marker-icon-broken-asset-paths-by-explicitly-setting-l-icon-default-mergeoptions-with-the-correct-icon-urls-pointing-to-the-leaflet-dist-images-assets-and-ensure-the-map-container-div-has-an-explicit-pixel-height-so-the-map-renders-correctly",
-      "title": "Rebuild the Leaflet map integration in WorldMapPage.tsx and ATMapPage.tsx from scratch: remove any CDN-based Leaflet script/CSS loading from index.html and instead install Leaflet as an npm package (leaflet + @types/leaflet), import Leaflet CSS directly in the component files, fix the default marker icon broken asset paths by explicitly setting L.Icon.Default.mergeOptions with the correct icon URLs pointing to the leaflet/dist/images assets, and ensure the map container div has an explicit pixel height so the map renders correctly.",
+      "id": "feature-update-the-addentrypage-so-that-authentication-is-no-longer-required-to-submit-the-form-remove-any-sign-in-gate-error-message-or-disabled-state-that-blocks-submission-for-unauthenticated-users-the-form-should-be-fully-accessible-and-submittable-without-logging-in",
+      "title": "Update the AddEntryPage so that authentication is no longer required to submit the form. Remove any sign-in gate, error message, or disabled state that blocks submission for unauthenticated users. The form should be fully accessible and submittable without logging in.",
       "reqIds": [
-        "REQ-1"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-audit-and-clean-up-frontend-index-html-to-remove-any-leaflet-cdn-script-or-link-tags-css-and-js-that-conflict-with-the-npm-installed-leaflet-package-ensure-only-one-source-of-leaflet-is-loaded-in-the-application",
-      "title": "Audit and clean up frontend/index.html to remove any Leaflet CDN script or link tags (CSS and JS) that conflict with the npm-installed Leaflet package. Ensure only one source of Leaflet is loaded in the application.",
-      "reqIds": [
-        "REQ-3"
+        "REQ-2"
       ],
       "version": 1
     }
   ],
   "new_feature_requests": [
     {
+      "id": "AR-1",
+      "summary": "Allow anonymous guestbook entries without requiring Internet Identity sign-in",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
       "id": "AR-2",
-      "summary": "Fix the AddEntryPage so that new guestbook entries can be successfully submitted. Ensure the PlaceSearchField geocoding integration and form submission do not throw runtime errors, and that the backend addEntry call completes without failure. Remove any dependency on map state or Leaflet initialization that may be blocking or erroring during form submission.",
+      "summary": "Remove the authentication check in the backend that prevents anonymous users from adding guestbook entries. Any visitor should be able to submit a guestbook entry without being signed in via Internet Identity.",
       "reqIds": [
-        "REQ-2"
+        "REQ-1"
       ],
       "status": "pending"
     }
   ],
-  "projectName": "VTH Guest Book",
+  "gameProjectType": "none",
+  "projectName": "Guestbook App",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

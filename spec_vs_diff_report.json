@@ -1,35 +1,15 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-27T21:14:17.746Z",
-  "summary": "The diff shows modifications to WorldMapPage.tsx, ATMapPage.tsx, index.html, and supporting files. However, the implementation continues to use Leaflet via CDN (unpkg) rather than installing it as an npm package. REQ-1 and REQ-3 both require removing CDN-based loading and switching to npm-installed Leaflet with direct CSS imports and L.Icon.Default.mergeOptions, but the diff retains CDN tags in index.html and uses 'declare const L: any' (CDN global) in the component files. REQ-2 (AddEntryPage fix) appears addressed per the file summaries. REQ-3 is explicitly violated as index.html still contains Leaflet CDN script and link tags.",
-  "missing_requirements": [
-    {
-      "id": "REQ-1",
-      "requirement": "Install Leaflet as an npm package (leaflet + @types/leaflet), import Leaflet CSS directly in the component files, fix default marker icon broken asset paths by explicitly setting L.Icon.Default.mergeOptions with correct icon URLs pointing to leaflet/dist/images assets, and ensure map container div has an explicit pixel height.",
-      "reason": "WorldMapPage.tsx and ATMapPage.tsx still use 'declare const L: any' (CDN global), not an npm import. There is no 'import leaflet/dist/leaflet.css' or 'import L from leaflet' in the component files. L.Icon.Default.mergeOptions is not called. The components rely on the CDN global rather than the npm package.",
-      "evidence": [
-        "frontend/src/pages/WorldMapPage.tsx",
-        "frontend/src/pages/ATMapPage.tsx",
-        "frontend-file-summaries.txt"
-      ]
-    },
-    {
-      "id": "REQ-3",
-      "requirement": "Remove all Leaflet CDN script and link tags from index.html so Leaflet is loaded exclusively via the npm package import.",
-      "reason": "index.html still contains both a Leaflet CDN link rel=stylesheet and a script tag loading Leaflet from unpkg. The requirement is explicitly not met.",
-      "evidence": [
-        "frontend/index.html"
-      ]
-    }
-  ],
+  "generatedAt": "2026-03-01T10:00:45.633Z",
+  "summary": "Both REQ-1 and REQ-2 appear to be implemented. The backend addEntry function no longer contains an authentication/authorization check (the diff shows no Runtime.trap for unauthorized caller in addEntry), and the frontend AddEntryPage summary explicitly states it 'allows anyone (authenticated or anonymous) to submit without requiring login.' The constraints are respected: the Login/Logout button remains in the header (AppLayout.tsx still uses useInternetIdentity), and edit/delete controls remain creator-only (EntryDetailPage.tsx still checks authorization).",
+  "missing_requirements": [],
   "hallucinated_features": [],
-  "confidence": 0.95,
+  "confidence": 0.87,
   "changed_files": [
+    "backend/main.mo",
     "frontend-file-summaries.txt",
-    "frontend/index.html",
-    "frontend/src/pages/ATMapPage.tsx",
-    "frontend/src/pages/WorldMapPage.tsx",
+    "frontend/src/pages/AddEntryPage.tsx",
     "project_state.json"
   ]
 }

@@ -1,71 +1,26 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Fix Leaflet map errors and restore entry creation functionality",
+  "title": "Remove mandatory Internet Identity authentication for guestbook entries",
   "requirements": [
     {
-      "id": "REQ-1",
-      "summary": "Rebuild Leaflet map integration from scratch using npm package instead of CDN",
-      "acceptanceCriteria": [
-        "WorldMapPage renders an interactive Leaflet map without JavaScript errors in the console",
-        "ATMapPage renders an interactive Leaflet map without JavaScript errors in the console",
-        "Map pins/markers are visible and use correct marker icons (no broken image icons)",
-        "Clicking a pin opens a popup with entry details",
-        "No duplicate Leaflet CSS or JS loading conflicts between CDN and npm"
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/pages/WorldMapPage.tsx",
-          "operation": "modify",
-          "description": "Remove CDN-based Leaflet initialization and rebuild from scratch: import Leaflet CSS at the top of the file ('leaflet/dist/leaflet.css'), import Leaflet library directly, configure L.Icon.Default.mergeOptions to fix broken marker icon paths by pointing to the correct URLs in leaflet/dist/images (marker-icon.png, marker-icon-2x.png, marker-shadow.png), ensure the map container div has an explicit pixel height (e.g., h-full with parent constraints or inline style), initialize the Leaflet map instance with proper bounds and zoom for world view, and render markers for entries with currentLocation using L.marker with popups showing author, place name, and comment preview."
-        },
-        {
-          "path": "frontend/src/pages/ATMapPage.tsx",
-          "operation": "modify",
-          "description": "Remove CDN-based Leaflet initialization and rebuild from scratch: import Leaflet CSS at the top of the file ('leaflet/dist/leaflet.css'), import Leaflet library directly, configure L.Icon.Default.mergeOptions to fix broken marker icon paths by pointing to the correct URLs in leaflet/dist/images (marker-icon.png, marker-icon-2x.png, marker-shadow.png), ensure the map container div has an explicit pixel height (e.g., h-full with parent constraints or inline style), initialize the Leaflet map instance with proper bounds and zoom for the Appalachian Trail region, and render markers for entries with favoritePlace using L.marker with popups showing author and place name."
-        }
-      ]
-    },
-    {
       "id": "REQ-2",
-      "summary": "Fix AddEntryPage to allow successful guestbook entry submission without map dependency errors",
+      "summary": "Update the AddEntryPage so that authentication is no longer required to submit the form. Remove any sign-in gate, error message, or disabled state that blocks submission for unauthenticated users.",
       "acceptanceCriteria": [
-        "A user can fill out the Add Entry form and submit it without errors",
-        "The entry appears in the GuestbookFeedPage feed after submission",
-        "Place search (current location and favorite AT place) works without throwing errors",
-        "Form submission does not depend on Leaflet map state being initialized"
+        "The submit button on AddEntryPage is enabled and functional without signing in",
+        "No sign-in prompt or authentication error is shown when a visitor tries to submit an entry",
+        "A visitor can enter their name and message and successfully submit the form anonymously"
       ],
       "file_operations": [
         {
           "path": "frontend/src/pages/AddEntryPage.tsx",
           "operation": "modify",
-          "description": "Remove any dependency on map state or Leaflet initialization that may block form submission. Ensure PlaceSearchField geocoding integration works correctly without requiring a map to be rendered. Verify the form's handleSubmit function correctly calls the backend addEntry method with properly formatted Location objects (or null) and handles success/error states. Ensure the geocoding results from PlaceSearchField are correctly converted to Location format before submission. Add error handling and user feedback for failed submissions."
+          "description": "Remove the authentication requirement check that blocks form submission for anonymous users. Update the form submission logic to allow unauthenticated visitors to submit entries. Remove any conditional rendering of error messages or disabled states tied to authentication status. Ensure the form is fully accessible and submittable without Internet Identity login."
         },
         {
-          "path": "frontend/src/components/PlaceSearchField.tsx",
+          "path": "frontend/src/hooks/useQueries.ts",
           "operation": "modify",
-          "description": "Audit the geocoding integration to ensure it does not throw runtime errors during place search. Verify the OpenStreetMap Nominatim API calls in lib/geocoding.ts are properly handled with error boundaries. Ensure the component correctly returns selected location coordinates without requiring Leaflet to be initialized. Fix any async/await or promise handling issues that may cause silent failures."
-        },
-        {
-          "path": "frontend/src/lib/geocoding.ts",
-          "operation": "modify",
-          "description": "Review and fix the Nominatim API integration to handle network errors, malformed responses, and edge cases gracefully. Ensure the geocoding results are properly normalized and return valid coordinate objects. Add proper error handling and logging to help diagnose issues."
-        }
-      ]
-    },
-    {
-      "id": "REQ-3",
-      "summary": "Remove Leaflet CDN dependencies from index.html to prevent conflicts with npm package",
-      "acceptanceCriteria": [
-        "index.html contains no Leaflet CDN <script> or <link> tags",
-        "Leaflet is loaded exclusively via the npm package import",
-        "No 'L is not defined' or similar global Leaflet reference errors occur"
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/index.html",
-          "operation": "modify",
-          "description": "Remove all Leaflet CDN script and link tags from the HTML file. Specifically, remove the <link> tag loading Leaflet CSS from unpkg.com and the <script> tag loading Leaflet JS from unpkg.com. Keep only the VTH favicon link and the root div element. Leaflet will be loaded exclusively via npm package imports in the component files."
+          "description": "Update the addEntry mutation hook to work with both authenticated and anonymous actors. Ensure the mutation does not require authentication and can successfully call the backend addEntry function with an anonymous principal."
         }
       ]
     }

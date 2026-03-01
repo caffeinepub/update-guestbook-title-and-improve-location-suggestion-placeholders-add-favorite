@@ -5,7 +5,6 @@ import Order "mo:core/Order";
 import Text "mo:core/Text";
 import Map "mo:core/Map";
 import Principal "mo:core/Principal";
-
 import Runtime "mo:core/Runtime";
 import Int "mo:core/Int";
 import MixinAuthorization "authorization/MixinAuthorization";
@@ -75,10 +74,6 @@ actor {
     currentLocation : ?Location,
     favoritePlace : ?Location,
   ) : async () {
-    if (not AccessControl.hasPermission(accessControlState, caller, #user)) {
-      Runtime.trap("Unauthorized: Only users can add guestbook entries");
-    };
-
     if (Text.equal(comment.trim(#char ' '), "")) {
       Runtime.trap("Comment cannot be empty.");
     };

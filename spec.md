@@ -1,13 +1,11 @@
 # Specification
 
 ## Summary
-**Goal:** Fix broken Leaflet map rendering and restore the ability to create new guestbook entries.
+**Goal:** Allow any visitor to submit a guestbook entry without requiring Internet Identity authentication.
 
 **Planned changes:**
-- Remove Leaflet CDN `<script>` and `<link>` tags from `frontend/index.html`
-- Install Leaflet as an npm package (`leaflet` + `@types/leaflet`) and import its CSS directly in `WorldMapPage.tsx` and `ATMapPage.tsx`
-- Fix default marker icon broken asset paths by setting `L.Icon.Default.mergeOptions` with correct URLs pointing to `leaflet/dist/images`
-- Ensure map container divs have explicit pixel heights so maps render correctly
-- Fix `AddEntryPage` so form submission and `PlaceSearchField` geocoding work without runtime errors and do not depend on Leaflet map state
+- Remove the authentication/authorization check in the backend `addEntry` function so anonymous principals are accepted and entries are stored without error
+- Remove the sign-in gate, disabled state, and any authentication error messages on the `AddEntryPage` so the form is fully submittable without logging in
+- Keep the Internet Identity login/logout button in the header for users who wish to sign in voluntarily
 
-**User-visible outcome:** Users can view interactive maps with visible pins and popups, and can successfully submit new guestbook entries that appear in the feed.
+**User-visible outcome:** Visitors can enter their name and message and submit a guestbook entry without signing in. No account or Internet Identity login is required to use the guestbook form.
