@@ -1,56 +1,54 @@
 {
   "kind": "build_request",
-  "title": "Remove mandatory Internet Identity authentication for guestbook entries",
+  "title": "Update VTH logo — larger size, improved color scheme",
   "projectName": "VTH Guest Book",
   "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Remove the authentication check in the backend that prevents anonymous users from adding guestbook entries. Any visitor should be able to submit a guestbook entry without being signed in via Internet Identity.",
-      "target": "backend",
+      "text": "Redesign the VTH logo/wordmark in the sticky header (AppLayout.tsx) to be significantly larger and more visually prominent. The 'VTH' text or mark should have increased font size, weight, and/or letter spacing so it stands out clearly at a glance.",
+      "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-recent"
+          "msg-6"
         ],
         "quotes": [
-          "Mandatory signing in would be a dead end feature because almost no one has an internet computer account",
-          "anyone can sign the guestbook anonymously — no account required"
+          "Make the VTH bigger and more visible"
         ]
       },
       "acceptanceCriteria": [
-        "The backend addEntry (or equivalent) function no longer checks for an authenticated caller before allowing the entry",
-        "An anonymous principal is accepted and an entry is successfully stored",
-        "No 'Unauthorized' error is returned for unauthenticated calls to add an entry"
+        "The VTH branding in the header is noticeably larger than before",
+        "The logo/wordmark is immediately readable and prominent on both mobile and desktop viewports",
+        "No other header elements are obscured by the larger logo"
       ]
     },
     {
       "id": "REQ-2",
-      "text": "Update the AddEntryPage so that authentication is no longer required to submit the form. Remove any sign-in gate, error message, or disabled state that blocks submission for unauthenticated users. The form should be fully accessible and submittable without logging in.",
+      "text": "Update the color scheme of the VTH logo/wordmark to use colors that are aesthetically pleasing and harmonize with the site's existing warm earthy OKLCH design tokens (defined in frontend/src/index.css and frontend/tailwind.config.js). The new logo colors should feel cohesive with the overall palette rather than contrasting against it.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-recent"
+          "msg-6"
         ],
         "quotes": [
-          "Visitors would just enter their name and message directly",
-          "anyone can sign the guestbook anonymously — no account required"
+          "change the color scheme of the logo to be more aesthetically pleasing and to complement the website better"
         ]
       },
       "acceptanceCriteria": [
-        "The submit button on AddEntryPage is enabled and functional without signing in",
-        "No sign-in prompt or authentication error is shown when a visitor tries to submit an entry",
-        "A visitor can enter their name and message and successfully submit the form anonymously"
+        "The VTH logo uses colors drawn from or harmonious with the site's warm earthy OKLCH color tokens",
+        "The logo color scheme looks polished and intentional in both light and dark modes",
+        "The logo does not clash visually with the header background or navigation elements"
       ]
     }
   ],
   "constraints": [
-    "Do not remove the Internet Identity login/logout button from the header — users who have an account can still choose to log in",
-    "Do not change any other access control logic (e.g., edit/delete controls that belong to an entry's creator)"
+    "Do not modify any files under frontend/src/hooks/ or frontend/src/components/ui/",
+    "Color changes must remain consistent with the existing warm earthy OKLCH design token system defined in frontend/src/index.css and frontend/tailwind.config.js"
   ],
   "nonGoals": [
-    "Removing Internet Identity integration entirely from the app",
-    "Changing the visual design or layout of any page",
-    "Adding any new fields to the guestbook entry form"
+    "Changing any other part of the header layout beyond the VTH logo/wordmark",
+    "Modifying the backend in any way",
+    "Replacing the text-based logo with an image asset"
   ],
   "imageRequirements": {
     "required": [],

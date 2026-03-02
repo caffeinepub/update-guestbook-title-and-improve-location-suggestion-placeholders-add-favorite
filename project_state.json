@@ -1,16 +1,22 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "A guestbook app deployed on the Internet Computer. Removing mandatory Internet Identity authentication so anyone can sign the guestbook anonymously without needing an account.",
-  "architectural_notes": [
-    "Backend originally required Internet Identity authentication for guestbook entries; this restriction is being removed to allow anonymous submissions."
-  ],
+  "summary": "Website project (VTH) with a guestbook feature. User wants the VTH logo updated to be bigger, more visible, and with a more aesthetically pleasing color scheme that complements the website.",
+  "architectural_notes": [],
   "known_issues": [],
-  "isFixRequest": true,
+  "isFixRequest": false,
   "existing_features": [
     {
-      "id": "feature-update-the-addentrypage-so-that-authentication-is-no-longer-required-to-submit-the-form-remove-any-sign-in-gate-error-message-or-disabled-state-that-blocks-submission-for-unauthenticated-users-the-form-should-be-fully-accessible-and-submittable-without-logging-in",
-      "title": "Update the AddEntryPage so that authentication is no longer required to submit the form. Remove any sign-in gate, error message, or disabled state that blocks submission for unauthenticated users. The form should be fully accessible and submittable without logging in.",
+      "id": "feature-redesign-the-vth-logo-wordmark-in-the-sticky-header-applayout-tsx-to-be-significantly-larger-and-more-visually-prominent-the-vth-text-or-mark-should-have-increased-font-size-weight-and-or-letter-spacing-so-it-stands-out-clearly-at-a-glance",
+      "title": "Redesign the VTH logo/wordmark in the sticky header (AppLayout.tsx) to be significantly larger and more visually prominent. The 'VTH' text or mark should have increased font size, weight, and/or letter spacing so it stands out clearly at a glance.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-color-scheme-of-the-vth-logo-wordmark-to-use-colors-that-are-aesthetically-pleasing-and-harmonize-with-the-site-s-existing-warm-earthy-oklch-design-tokens-defined-in-frontend-src-index-css-and-frontend-tailwind-config-js-the-new-logo-colors-should-feel-cohesive-with-the-overall-palette-rather-than-contrasting-against-it",
+      "title": "Update the color scheme of the VTH logo/wordmark to use colors that are aesthetically pleasing and harmonize with the site's existing warm earthy OKLCH design tokens (defined in frontend/src/index.css and frontend/tailwind.config.js). The new logo colors should feel cohesive with the overall palette rather than contrasting against it.",
       "reqIds": [
         "REQ-2"
       ],
@@ -20,21 +26,13 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Allow anonymous guestbook entries without requiring Internet Identity sign-in",
+      "summary": "Update VTH logo: make it bigger and more visible, and update color scheme to be more aesthetically pleasing and complement the website better",
       "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-2",
-      "summary": "Remove the authentication check in the backend that prevents anonymous users from adding guestbook entries. Any visitor should be able to submit a guestbook entry without being signed in via Internet Identity.",
-      "reqIds": [
-        "REQ-1"
-      ],
       "status": "pending"
     }
   ],
   "gameProjectType": "none",
-  "projectName": "Guestbook App",
+  "projectName": "VTH",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

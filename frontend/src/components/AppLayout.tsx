@@ -40,17 +40,28 @@ export default function AppLayout() {
       {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80">
         <div className="container flex h-16 items-center justify-between">
-          <div className="flex items-center gap-3">
-            <img 
-              src="/assets/generated/vth-logo.dim_512x512.png" 
-              alt="VTH Logo" 
-              className="h-10 w-10 rounded-lg"
-            />
-            <div>
-              <h1 className="text-lg font-bold text-foreground">VTH Guest Book</h1>
-              <p className="text-xs text-muted-foreground">Vicarious Thru-Hikers</p>
+          {/* VTH Logo */}
+          <button
+            onClick={() => navigate({ to: '/' })}
+            className="flex items-center gap-3 group focus:outline-none"
+            aria-label="Go to home"
+          >
+            {/* Emblem badge */}
+            <div className="relative flex items-center justify-center w-11 h-11 rounded-xl bg-logo-bg shadow-logo border border-logo-border shrink-0 transition-transform group-hover:scale-105">
+              <span className="text-logo-emblem font-black text-lg tracking-tighter leading-none select-none">
+                VTH
+              </span>
             </div>
-          </div>
+            {/* Wordmark */}
+            <div className="flex flex-col leading-none">
+              <span className="text-2xl font-black tracking-widest text-logo-title uppercase leading-none">
+                VTH
+              </span>
+              <span className="text-[10px] font-semibold tracking-[0.2em] text-logo-subtitle uppercase mt-0.5">
+                Guest&nbsp;Book
+              </span>
+            </div>
+          </button>
 
           {/* Login / Logout button */}
           <Button

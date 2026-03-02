@@ -1,11 +1,10 @@
 # Specification
 
 ## Summary
-**Goal:** Allow any visitor to submit a guestbook entry without requiring Internet Identity authentication.
+**Goal:** Make the VTH logo/wordmark in the sticky header larger, more prominent, and visually cohesive with the site's warm earthy color palette.
 
 **Planned changes:**
-- Remove the authentication/authorization check in the backend `addEntry` function so anonymous principals are accepted and entries are stored without error
-- Remove the sign-in gate, disabled state, and any authentication error messages on the `AddEntryPage` so the form is fully submittable without logging in
-- Keep the Internet Identity login/logout button in the header for users who wish to sign in voluntarily
+- Increase the font size, weight, and/or letter spacing of the VTH logo/wordmark in the header (`AppLayout.tsx`) so it is noticeably larger and more readable
+- Update the logo/wordmark colors to use the site's existing warm earthy OKLCH design tokens, ensuring it looks polished in both light and dark modes without clashing with the header background or navigation elements
 
-**User-visible outcome:** Visitors can enter their name and message and submit a guestbook entry without signing in. No account or Internet Identity login is required to use the guestbook form.
+**User-visible outcome:** The VTH branding in the header is immediately prominent and visually harmonious with the rest of the site's warm earthy design on both mobile and desktop.

@@ -55,6 +55,14 @@ export default {
                     3: 'oklch(var(--chart-3))',
                     4: 'oklch(var(--chart-4))',
                     5: 'oklch(var(--chart-5))'
+                },
+                // Logo-specific color tokens
+                logo: {
+                    bg: 'oklch(var(--logo-bg))',
+                    border: 'oklch(var(--logo-border))',
+                    emblem: 'oklch(var(--logo-emblem))',
+                    title: 'oklch(var(--logo-title))',
+                    subtitle: 'oklch(var(--logo-subtitle))'
                 }
             },
             borderRadius: {
@@ -68,7 +76,8 @@ export default {
             },
             boxShadow: {
                 xs: '0 1px 2px 0 rgba(0,0,0,0.05)',
-                soft: '0 2px 8px -2px rgba(0,0,0,0.1)'
+                soft: '0 2px 8px -2px rgba(0,0,0,0.1)',
+                logo: '0 2px 8px -1px rgba(0,0,0,0.18), 0 1px 2px 0 rgba(0,0,0,0.10)'
             },
             keyframes: {
                 'accordion-down': {

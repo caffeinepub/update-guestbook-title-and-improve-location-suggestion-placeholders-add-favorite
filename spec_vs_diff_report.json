@@ -1,15 +1,31 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-03-01T10:00:45.633Z",
-  "summary": "Both REQ-1 and REQ-2 appear to be implemented. The backend addEntry function no longer contains an authentication/authorization check (the diff shows no Runtime.trap for unauthorized caller in addEntry), and the frontend AddEntryPage summary explicitly states it 'allows anyone (authenticated or anonymous) to submit without requiring login.' The constraints are respected: the Login/Logout button remains in the header (AppLayout.tsx still uses useInternetIdentity), and edit/delete controls remain creator-only (EntryDetailPage.tsx still checks authorization).",
+  "generatedAt": "2026-03-01T10:18:36.634Z",
+  "summary": "Both REQ-1 and REQ-2 are fully implemented. The diff shows AppLayout.tsx redesigned with a larger, bolder VTH wordmark (text-2xl, font-black, tracking-widest) plus an emblem badge, new logo-specific OKLCH CSS tokens added to index.css for both light and dark modes, and corresponding Tailwind color/shadow utilities added to tailwind.config.js. No missing requirements were identified. Two unrequested additions were made beyond the spec.",
   "missing_requirements": [],
-  "hallucinated_features": [],
-  "confidence": 0.87,
+  "hallucinated_features": [
+    {
+      "description": "A 'Guest Book' subtitle was added beneath the VTH wordmark in the header logo area.",
+      "reason": "The build request only asked for the VTH logo/wordmark to be larger and recolored. Adding a 'Guest Book' subtitle text element was not requested and goes beyond the specified scope.",
+      "evidence": [
+        "frontend/src/components/AppLayout.tsx"
+      ]
+    },
+    {
+      "description": "An emblem badge (a styled amber-brown box containing 'VTH' text) was added alongside the wordmark as a second visual element.",
+      "reason": "The build request specified updating the existing VTH logo/wordmark size and colors, not adding a separate emblem badge component. Adding a second distinct badge element was not requested.",
+      "evidence": [
+        "frontend/src/components/AppLayout.tsx"
+      ]
+    }
+  ],
+  "confidence": 0.75,
   "changed_files": [
-    "backend/main.mo",
     "frontend-file-summaries.txt",
-    "frontend/src/pages/AddEntryPage.tsx",
+    "frontend/src/components/AppLayout.tsx",
+    "frontend/src/index.css",
+    "frontend/tailwind.config.js",
     "project_state.json"
   ]
 }

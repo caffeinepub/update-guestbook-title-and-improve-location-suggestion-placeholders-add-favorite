@@ -30,6 +30,17 @@
     --chart-4: 75% 0.08 85;
     --chart-5: 45% 0.10 60;
     --radius: 0.5rem;
+
+    /* Logo-specific tokens - Light mode */
+    /* Emblem badge: warm amber-brown background */
+    --logo-bg: 55% 0.14 55;
+    --logo-border: 48% 0.16 50;
+    /* Emblem text: deep forest green for contrast on amber */
+    --logo-emblem: 28% 0.10 145;
+    /* Wordmark "VTH": rich warm brown */
+    --logo-title: 38% 0.14 42;
+    /* Subtitle "Guest Book": muted forest green */
+    --logo-subtitle: 48% 0.11 145;
   }
 
   .dark {
@@ -58,6 +69,17 @@
     --chart-3: 50% 0.20 25;
     --chart-4: 42% 0.08 85;
     --chart-5: 48% 0.10 60;
+
+    /* Logo-specific tokens - Dark mode */
+    /* Emblem badge: deep amber-brown background */
+    --logo-bg: 38% 0.12 50;
+    --logo-border: 48% 0.14 52;
+    /* Emblem text: bright warm cream for contrast on dark amber */
+    --logo-emblem: 92% 0.04 85;
+    /* Wordmark "VTH": warm golden amber */
+    --logo-title: 72% 0.16 55;
+    /* Subtitle "Guest Book": soft sage green */
+    --logo-subtitle: 68% 0.10 145;
   }
 }
 

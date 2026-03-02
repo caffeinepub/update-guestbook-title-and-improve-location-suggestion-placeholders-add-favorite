@@ -1,8 +1,8 @@
 {
-  "frontend/src/index.css": "Global styles with warm earthy OKLCH color palette for light and dark modes, touch-friendly sizing, and custom scrollbar styling.",
-  "frontend/tailwind.config.js": "Tailwind configuration extending the theme with custom colors, fonts (Inter), border radius, shadows, and animations aligned with the earthy design system.",
+  "frontend/src/index.css": "Global styles with warm earthy OKLCH color palette for light and dark modes, extended with dedicated logo-specific CSS tokens (logo-bg, logo-border, logo-emblem, logo-title, logo-subtitle) for the redesigned header branding.",
+  "frontend/tailwind.config.js": "Tailwind configuration extending the theme with custom colors including a new `logo` color group mapping to the logo-specific OKLCH tokens, a `shadow-logo` utility, custom fonts, border radius, and animations aligned with the earthy design system.",
   "frontend/src/App.tsx": "Root application component setting up TanStack Router with routes for feed, add entry, entry detail, world map, and AT map pages.",
-  "frontend/src/components/AppLayout.tsx": "Shared layout wrapper with VTH branding, a Login/Logout button in the header using useInternetIdentity, About button in footer, and bottom navigation bar for all pages.",
+  "frontend/src/components/AppLayout.tsx": "Shared layout wrapper with a redesigned VTH logo featuring a styled amber-brown emblem badge alongside a large bold \"VTH\" wordmark with wide letter-spacing and a \"Guest Book\" subtitle, plus Login/Logout button in the header, About button in footer, and bottom navigation bar.",
   "frontend/src/hooks/useQueries.ts": "React Query hooks for all backend operations including new useUpdateEntry and useDeleteEntry mutation hooks with automatic cache invalidation.",
   "frontend/src/lib/guestbookFormat.ts": "Utility functions for formatting author labels, timestamps, coordinates, and encoding/decoding place names into entry comments for hover tooltips.",
   "frontend/src/lib/utils.ts": "Utility function for merging Tailwind CSS classes using clsx and tailwind-merge.",

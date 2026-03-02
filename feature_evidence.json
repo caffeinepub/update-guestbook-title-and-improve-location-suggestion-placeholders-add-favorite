@@ -2,10 +2,29 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-update-the-addentrypage-so-that-authentication-is-no-longer-required-to-submit-the-form-remove-any-sign-in-gate-error-message-or-disabled-state-that-blocks-submission-for-unauthenticated-users-the-form-should-be-fully-accessible-and-submittable-without-logging-in",
-      "featureTitle": "Update the AddEntryPage so that authentication is no longer required to submit the form. Remove any sign-in gate, error message, or disabled state that blocks submission for unauthenticated users. The form should be fully accessible and submittable without logging in.",
+      "featureId": "feature-redesign-the-vth-logo-wordmark-in-the-sticky-header-applayout-tsx-to-be-significantly-larger-and-more-visually-prominent-the-vth-text-or-mark-should-have-increased-font-size-weight-and-or-letter-spacing-so-it-stands-out-clearly-at-a-glance",
+      "featureTitle": "Redesign the VTH logo/wordmark in the sticky header (AppLayout.tsx) to be significantly larger and more visually prominent. The 'VTH' text or mark should have increased font size, weight, and/or letter spacing so it stands out clearly at a glance.",
       "files": [
-        "frontend/src/pages/AddEntryPage.tsx"
+        "frontend/src/components/AppLayout.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-update-the-color-scheme-of-the-vth-logo-wordmark-to-use-colors-that-are-aesthetically-pleasing-and-harmonize-with-the-site-s-existing-warm-earthy-oklch-design-tokens-defined-in-frontend-src-index-css-and-frontend-tailwind-config-js-the-new-logo-colors-should-feel-cohesive-with-the-overall-palette-rather-than-contrasting-against-it",
+      "featureTitle": "Update the color scheme of the VTH logo/wordmark to use colors that are aesthetically pleasing and harmonize with the site's existing warm earthy OKLCH design tokens (defined in frontend/src/index.css and frontend/tailwind.config.js). The new logo colors should feel cohesive with the overall palette rather than contrasting against it.",
+      "files": [
+        "frontend/src/components/AppLayout.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
