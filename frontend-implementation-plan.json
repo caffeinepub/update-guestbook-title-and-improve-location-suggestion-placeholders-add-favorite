@@ -1,37 +1,95 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Update VTH logo — larger size, improved color scheme",
+  "title": "Fix guestbook entry save, add admin/user edit-delete controls, and hamburger menu",
   "requirements": [
     {
       "id": "REQ-1",
-      "summary": "Redesign the VTH logo/wordmark in the sticky header to be significantly larger and more visually prominent with increased font size, weight, and letter spacing",
+      "summary": "Investigate and fix the bug where submitting the guestbook entry form saves the map pin/location but does not persist the text entry to the backend. Ensure all fields are correctly passed to the backend addEntry call.",
       "acceptanceCriteria": [
-        "The VTH branding in the header is noticeably larger than before",
-        "The logo/wordmark is immediately readable and prominent on both mobile and desktop viewports",
-        "No other header elements are obscured by the larger logo"
+        "Submitting the Add Entry form persists all fields (name, trail name, comment, current location, favorite AT place) to the backend.",
+        "After submission, the new entry appears in the guestbook feed with correct text content.",
+        "The entry's map pin and text content both appear correctly on the world map and AT map.",
+        "No silent failures on submission; user sees a success or error message."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/AppLayout.tsx",
+          "path": "frontend/src/pages/AddEntryPage.tsx",
           "operation": "modify",
-          "description": "Increase the size, weight, and letter spacing of the VTH logo/wordmark in the sticky header. Update the font size from text-xl to a larger size (e.g., text-3xl or text-4xl), increase font weight to font-extrabold or font-black, and add letter spacing (tracking-wide or tracking-wider) to make the branding more prominent and immediately readable on all viewport sizes."
+          "description": "Review and fix the form submission logic in the handleSubmit function to ensure all text fields (name, trail name, comment) and encoded location data are correctly passed to the addEntry mutation. Verify that the comment encoding for place names is working correctly and that all optional fields use null instead of undefined. Add error handling to display user-facing error messages if submission fails. Confirm that the mutation invalidates queries to trigger feed and map updates after successful submission."
+        },
+        {
+          "path": "frontend/src/hooks/useQueries.ts",
+          "operation": "modify",
+          "description": "Review the addEntry mutation to ensure it correctly passes all five parameters (name, trailName, comment, currentLocation, favoritePlace) to the backend actor's addEntry method. Verify that optional fields are sent as null rather than undefined, matching the backend interface signature. Ensure onSuccess invalidates all relevant query keys (getAllEntries, getEntriesWithLocation, getEntriesWithFavoritePlace) so that the feed and maps refresh automatically."
         }
       ]
     },
     {
       "id": "REQ-2",
-      "summary": "Update the color scheme of the VTH logo/wordmark to use warm earthy OKLCH colors that harmonize with the site's existing design tokens",
+      "summary": "Add delete and edit controls on each guestbook entry so that the admin principal can delete or edit any entry, and any authenticated user can delete or edit their own entries. Controls should be visible on the entry detail page and feed cards.",
       "acceptanceCriteria": [
-        "The VTH logo uses colors drawn from or harmonious with the site's warm earthy OKLCH color tokens",
-        "The logo color scheme looks polished and intentional in both light and dark modes",
-        "The logo does not clash visually with the header background or navigation elements"
+        "Admin can delete or edit any guestbook entry from the entry detail page.",
+        "A logged-in user sees delete and edit buttons only on entries they authored.",
+        "Unauthenticated users see no delete or edit controls.",
+        "Deleting an entry removes it from the feed and maps.",
+        "Editing an entry opens a pre-filled modal and saves changes correctly."
       ],
       "file_operations": [
         {
+          "path": "frontend/src/pages/EntryDetailPage.tsx",
+          "operation": "modify",
+          "description": "Extend the existing edit/delete controls to support admin access. Use the authorization component's useIsCallerAdmin query hook to check if the current user is an admin. Display edit and delete buttons if the user is either the entry creator OR an admin. Ensure the delete confirmation dialog and EditEntryDialog integration work correctly. Add loading and error states for the admin check query."
+        },
+        {
+          "path": "frontend/src/pages/GuestbookFeedPage.tsx",
+          "operation": "modify",
+          "description": "Add inline edit and delete action buttons on each entry card. Use useInternetIdentity to get the current user's identity and compare it with the entry's creator principal to show controls for owned entries. Use useIsCallerAdmin query hook to show controls for all entries if the user is an admin. Add an EditEntryDialog integration for inline editing from the feed. Ensure delete action invalidates queries to refresh the feed. Keep the UI clean by placing buttons in a corner or overflow menu on each card."
+        },
+        {
+          "path": "frontend/src/hooks/useQueries.ts",
+          "operation": "modify",
+          "description": "Add a useIsCallerAdmin query hook that calls actor.isCallerAdmin() and caches the result with queryKey ['isCallerAdmin']. Enable the query only when actor is available. Export this hook for use in EntryDetailPage and GuestbookFeedPage to enforce admin-level access control in the UI. Verify that the existing deleteEntry and updateEntry mutations are correctly implemented and invalidate all relevant queries on success."
+        },
+        {
+          "path": "frontend/src/components/EditEntryDialog.tsx",
+          "operation": "modify",
+          "description": "Ensure the dialog correctly pre-fills all form fields (name, trail name, comment, current location, favorite place) from the entry prop. Verify that the updateEntry mutation is called with all required parameters including the entry timestamp. Ensure place name decoding from the comment works correctly when populating the form. Add proper error handling and success feedback."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Add a hamburger menu icon to the app header that opens a slide-out drawer or dropdown menu containing 'About', 'Create Account', and 'How to Use' items. The menu must be implemented via a new component composed into AppLayout without editing immutable paths.",
+      "acceptanceCriteria": [
+        "A hamburger (three-line) icon is visible in the header on all pages.",
+        "Clicking the hamburger icon opens a menu with at least 'About', 'Create Account', and 'How to Use' items.",
+        "The 'About' item opens a modal describing the VTH Guest Book and Vicarious Thru-Hikers.",
+        "The 'Create Account' item opens a modal explaining Internet Identity and the Internet Computer, with a login/create identity action button.",
+        "The 'How to Use' item opens a modal with brief usage instructions.",
+        "The menu closes when an item is selected or when clicking outside.",
+        "The hamburger menu does not edit any immutable frontend paths."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/HamburgerMenu.tsx",
+          "operation": "create",
+          "description": "Create a new HamburgerMenu component that renders a three-line hamburger icon button (using SVG or a simple stacked-div pattern styled with Tailwind). On click, toggle a slide-out drawer or dropdown menu positioned near the header. The menu should contain at least three items: 'About' (opens AboutDialog), 'Create Account' (opens a new CreateAccountDialog), and 'How to Use' (opens a new HowToUseDialog). Use state to manage menu open/close. Add click-outside detection or an overlay to close the menu. Ensure the component is fully self-contained and does not depend on immutable paths."
+        },
+        {
+          "path": "frontend/src/components/CreateAccountDialog.tsx",
+          "operation": "create",
+          "description": "Create a dialog component that explains what Internet Identity is and how accounts on this app are powered by the Internet Computer. Include a brief, user-friendly description of Internet Identity's decentralized authentication and privacy benefits. Provide a primary action button that triggers the login flow (using useInternetIdentity's login function) to create or authenticate an identity. Use the same dialog UI pattern as AboutDialog for consistency."
+        },
+        {
+          "path": "frontend/src/components/HowToUseDialog.tsx",
+          "operation": "create",
+          "description": "Create a dialog component that provides brief usage instructions for the VTH Guest Book app. Explain how to sign the guestbook (go to Add Entry, fill in details, submit), how to pin a location (use GPS or search for a place), and how to navigate the app (feed, world map, AT map). Keep the tone friendly and concise. Use the same dialog UI pattern as AboutDialog for consistency."
+        },
+        {
           "path": "frontend/src/components/AppLayout.tsx",
           "operation": "modify",
-          "description": "Update the VTH logo/wordmark color classes to use warm earthy OKLCH colors from the site's design token system defined in frontend/src/index.css. Replace the current text color with classes that reference the existing color tokens (e.g., text-chart-1, text-chart-2, or custom combinations of the warm OKLCH palette) to create a harmonious, polished appearance that works in both light and dark modes without clashing with the header background."
+          "description": "Import and compose the new HamburgerMenu component into the header section of AppLayout. Position the hamburger icon to the left or right of the existing VTH emblem and wordmark, ensuring it does not interfere with the login/logout button. Verify that the menu renders correctly on all pages and that dialog triggers from the menu work as expected. Do not modify any immutable file paths; only add the HamburgerMenu component to the layout."
         }
       ]
     }

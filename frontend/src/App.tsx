@@ -1,4 +1,7 @@
+import React from 'react';
 import { RouterProvider, createRouter, createRoute, createRootRoute } from '@tanstack/react-router';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Toaster } from '@/components/ui/sonner';
 import AppLayout from './components/AppLayout';
 import GuestbookFeedPage from './pages/GuestbookFeedPage';
 import AddEntryPage from './pages/AddEntryPage';
@@ -6,11 +9,13 @@ import EntryDetailPage from './pages/EntryDetailPage';
 import WorldMapPage from './pages/WorldMapPage';
 import ATMapPage from './pages/ATMapPage';
 
+const queryClient = new QueryClient();
+
 const rootRoute = createRootRoute({
   component: AppLayout,
 });
 
-const indexRoute = createRoute({
+const feedRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/',
   component: GuestbookFeedPage,
@@ -22,9 +27,9 @@ const addRoute = createRoute({
   component: AddEntryPage,
 });
 
-const entryRoute = createRoute({
+const entryDetailRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/entry/$entryId',
+  path: '/entry/$timestamp',
   component: EntryDetailPage,
 });
 
@@ -41,9 +46,9 @@ const atMapRoute = createRoute({
 });
 
 const routeTree = rootRoute.addChildren([
-  indexRoute,
+  feedRoute,
   addRoute,
-  entryRoute,
+  entryDetailRoute,
   worldMapRoute,
   atMapRoute,
 ]);
@@ -57,5 +62,10 @@ declare module '@tanstack/react-router' {
 }
 
 export default function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+      <Toaster />
+    </QueryClientProvider>
+  );
 }

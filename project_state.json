@@ -1,24 +1,39 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "Website project (VTH) with a guestbook feature. User wants the VTH logo updated to be bigger, more visible, and with a more aesthetically pleasing color scheme that complements the website.",
-  "architectural_notes": [],
-  "known_issues": [],
-  "isFixRequest": false,
+  "summary": "VTH Guest Book app ('Vicarious Thru-Hikers') — a map-based guest book where users can pin AT locations and leave entries. Built on the Internet Computer. Features include interactive map with clickable pinpoints linking to guest book entries, guest book entries showing user location/favorite AT location/comment, admin and user-level delete/modify controls, and a hamburger menu with About/Create Account modals.",
+  "architectural_notes": [
+    "Built on the Internet Computer (ICP) blockchain platform",
+    "Map pinpoints link to corresponding guest book entries via popup modal",
+    "Guest book entries include: user comment, location, and favorite AT location",
+    "Admin role has elevated permissions (delete/modify any entry); logged-in users can delete/modify their own entries"
+  ],
+  "known_issues": [
+    "Guest book text entry does not save on form submission (map pin saves but text does not)"
+  ],
+  "isFixRequest": true,
   "existing_features": [
     {
-      "id": "feature-redesign-the-vth-logo-wordmark-in-the-sticky-header-applayout-tsx-to-be-significantly-larger-and-more-visually-prominent-the-vth-text-or-mark-should-have-increased-font-size-weight-and-or-letter-spacing-so-it-stands-out-clearly-at-a-glance",
-      "title": "Redesign the VTH logo/wordmark in the sticky header (AppLayout.tsx) to be significantly larger and more visually prominent. The 'VTH' text or mark should have increased font size, weight, and/or letter spacing so it stands out clearly at a glance.",
+      "id": "feature-investigate-and-fix-the-bug-where-submitting-the-guestbook-entry-form-saves-the-map-pin-location-but-does-not-persist-the-text-entry-name-trail-name-comment-and-place-names-to-the-backend-ensure-the-full-entry-including-all-text-fields-and-encoded-location-data-is-correctly-passed-to-the-backend-addentry-call-and-confirmed-saved",
+      "title": "Investigate and fix the bug where submitting the guestbook entry form saves the map pin/location but does not persist the text entry (name, trail name, comment, and place names) to the backend. Ensure the full entry — including all text fields and encoded location data — is correctly passed to the backend `addEntry` call and confirmed saved.",
       "reqIds": [
         "REQ-1"
       ],
       "version": 1
     },
     {
-      "id": "feature-update-the-color-scheme-of-the-vth-logo-wordmark-to-use-colors-that-are-aesthetically-pleasing-and-harmonize-with-the-site-s-existing-warm-earthy-oklch-design-tokens-defined-in-frontend-src-index-css-and-frontend-tailwind-config-js-the-new-logo-colors-should-feel-cohesive-with-the-overall-palette-rather-than-contrasting-against-it",
-      "title": "Update the color scheme of the VTH logo/wordmark to use colors that are aesthetically pleasing and harmonize with the site's existing warm earthy OKLCH design tokens (defined in frontend/src/index.css and frontend/tailwind.config.js). The new logo colors should feel cohesive with the overall palette rather than contrasting against it.",
+      "id": "feature-add-delete-and-edit-modify-controls-on-each-guestbook-entry-so-that-a-the-admin-principal-can-delete-or-edit-any-entry-and-b-any-authenticated-user-can-delete-or-edit-their-own-entries-these-controls-should-be-visible-on-the-entry-detail-page-and-or-the-feed-card-for-eligible-users-editing-should-open-the-existing-editentrydialog-pre-populated-with-the-entry-s-current-data",
+      "title": "Add delete and edit (modify) controls on each guestbook entry so that: (a) the admin principal can delete or edit any entry, and (b) any authenticated user can delete or edit their own entries. These controls should be visible on the entry detail page and/or the feed card for eligible users. Editing should open the existing EditEntryDialog pre-populated with the entry's current data.",
       "reqIds": [
         "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-hamburger-menu-icon-to-the-app-header-applayout-tsx-area-via-a-safe-non-immutable-component-that-opens-a-slide-out-drawer-or-dropdown-menu-the-menu-must-contain-at-minimum-1-about-opens-the-existing-aboutdialog-describing-the-vth-guest-book-project-and-the-vicarious-thru-hiker-concept-2-create-account-opens-a-modal-explaining-that-accounts-on-this-app-are-powered-by-the-internet-computer-and-internet-identity-with-a-brief-description-of-what-internet-identity-is-and-a-button-to-log-in-create-an-identity-3-how-to-use-a-brief-modal-or-section-explaining-how-to-sign-the-guestbook-pin-a-location-and-navigate-the-app",
+      "title": "Add a hamburger menu icon to the app header (AppLayout.tsx area — via a safe, non-immutable component) that opens a slide-out drawer or dropdown menu. The menu must contain at minimum: (1) 'About' — opens the existing AboutDialog describing the VTH Guest Book project and the Vicarious Thru-Hiker concept; (2) 'Create Account' — opens a modal explaining that accounts on this app are powered by the Internet Computer and Internet Identity, with a brief description of what Internet Identity is and a button to log in / create an identity; (3) 'How to Use' — a brief modal or section explaining how to sign the guestbook, pin a location, and navigate the app.",
+      "reqIds": [
+        "REQ-3"
       ],
       "version": 1
     }
@@ -26,13 +41,31 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Update VTH logo: make it bigger and more visible, and update color scheme to be more aesthetically pleasing and complement the website better",
+      "summary": "Fix guest book text entry not saving when signing the guest book",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Admin ability to delete or modify any guest book entry",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Logged-in users can delete or modify their own guest book entries",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Hamburger menu icon with popup modal containing About, Create Account (explaining Internet Computer), and other relevant info",
       "reqIds": [],
       "status": "pending"
     }
   ],
   "gameProjectType": "none",
-  "projectName": "VTH",
+  "projectName": "VTH Guest Book",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

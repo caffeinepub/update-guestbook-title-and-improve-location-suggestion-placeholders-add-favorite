@@ -1,26 +1,25 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
+  DialogFooter,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Separator } from '@/components/ui/separator';
+import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Loader2, MapPin, Mountain } from 'lucide-react';
-import type { GuestbookEntry, Location } from '../backend';
-import type { GeocodingResult } from '../lib/geocoding';
 import PlaceSearchField from './PlaceSearchField';
 import { useUpdateEntry } from '../hooks/useQueries';
-import { encodeLocationPlaceName, decodeLocationPlaceName, stripPlaceNames } from '../lib/guestbookFormat';
+import { decodeComment, decodePlaceNames } from '../lib/guestbookFormat';
+import type { GuestbookEntry } from '../backend';
+import type { GeocodingResult } from '../lib/geocoding';
+import { Loader2, AlertCircle, MapPin } from 'lucide-react';
 
 interface EditEntryDialogProps {
-  entry: GuestbookEntry | null;
+  entry: GuestbookEntry;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
@@ -31,284 +30,197 @@ export default function EditEntryDialog({ entry, open, onOpenChange }: EditEntry
   const [name, setName] = useState('');
   const [trailName, setTrailName] = useState('');
   const [comment, setComment] = useState('');
-  const [error, setError] = useState('');
+  const [currentLocation, setCurrentLocation] = useState<GeocodingResult | null>(null);
+  const [favoritePlace, setFavoritePlace] = useState<GeocodingResult | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  // Current location state
-  const [currentLat, setCurrentLat] = useState('');
-  const [currentLon, setCurrentLon] = useState('');
-  const [currentPlaceName, setCurrentPlaceName] = useState('');
-
-  // Favorite place state
-  const [favLat, setFavLat] = useState('');
-  const [favLon, setFavLon] = useState('');
-  const [favPlaceName, setFavPlaceName] = useState('');
-
-  // Initialize form when entry changes
+  // Re-initialize form fields whenever the dialog opens or entry changes
   useEffect(() => {
-    if (entry) {
+    if (open) {
+      const { cleanComment } = decodeComment(entry.comment);
+      const { currentLocationName, favoritePlaceName } = decodePlaceNames(entry.comment);
+
       setName(entry.name || '');
       setTrailName(entry.trailName || '');
-      setComment(stripPlaceNames(entry.comment));
-      
-      if (entry.currentLocation) {
-        setCurrentLat(entry.currentLocation.latitude.toString());
-        setCurrentLon(entry.currentLocation.longitude.toString());
-        setCurrentPlaceName(decodeLocationPlaceName(entry.comment, 'current') || '');
-      } else {
-        setCurrentLat('');
-        setCurrentLon('');
-        setCurrentPlaceName('');
-      }
+      setComment(cleanComment);
 
-      if (entry.favoritePlace) {
-        setFavLat(entry.favoritePlace.latitude.toString());
-        setFavLon(entry.favoritePlace.longitude.toString());
-        setFavPlaceName(decodeLocationPlaceName(entry.comment, 'favorite') || '');
-      } else {
-        setFavLat('');
-        setFavLon('');
-        setFavPlaceName('');
-      }
-      
-      setError('');
+      setCurrentLocation(
+        entry.currentLocation
+          ? {
+              displayName:
+                currentLocationName ||
+                `${entry.currentLocation.latitude.toFixed(4)}, ${entry.currentLocation.longitude.toFixed(4)}`,
+              latitude: entry.currentLocation.latitude,
+              longitude: entry.currentLocation.longitude,
+            }
+          : null
+      );
+
+      setFavoritePlace(
+        entry.favoritePlace
+          ? {
+              displayName:
+                favoritePlaceName ||
+                `${entry.favoritePlace.latitude.toFixed(4)}, ${entry.favoritePlace.longitude.toFixed(4)}`,
+              latitude: entry.favoritePlace.latitude,
+              longitude: entry.favoritePlace.longitude,
+            }
+          : null
+      );
+
+      setError(null);
     }
-  }, [entry]);
-
-  const handleSelectCurrentPlace = (result: GeocodingResult) => {
-    setCurrentLat(result.latitude.toFixed(6));
-    setCurrentLon(result.longitude.toFixed(6));
-    setCurrentPlaceName(result.displayName);
-  };
-
-  const handleSelectFavoritePlace = (result: GeocodingResult) => {
-    setFavLat(result.latitude.toFixed(6));
-    setFavLon(result.longitude.toFixed(6));
-    setFavPlaceName(result.displayName);
-  };
+  }, [open, entry]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
-
-    if (!entry) return;
+    setError(null);
 
     if (!comment.trim()) {
-      setError('Please enter a comment');
+      setError('Comment cannot be empty.');
       return;
     }
 
-    const currentLocation: Location | null =
-      currentLat && currentLon
-        ? { latitude: parseFloat(currentLat), longitude: parseFloat(currentLon) }
-        : null;
-
-    const favoritePlace: Location | null =
-      favLat && favLon
-        ? { latitude: parseFloat(favLat), longitude: parseFloat(favLon) }
-        : null;
-
-    // Encode place names into comment
-    let enrichedComment = comment;
-    if (currentLocation && currentPlaceName) {
-      enrichedComment = encodeLocationPlaceName(enrichedComment, currentPlaceName, 'current');
+    let enrichedComment = comment.trim();
+    if (currentLocation) {
+      enrichedComment += `\n[loc:${currentLocation.displayName}]`;
     }
-    if (favoritePlace && favPlaceName) {
-      enrichedComment = encodeLocationPlaceName(enrichedComment, favPlaceName, 'favorite');
+    if (favoritePlace) {
+      enrichedComment += `\n[fav:${favoritePlace.displayName}]`;
     }
 
     try {
       await updateEntry.mutateAsync({
         timestamp: entry.timestamp,
-        name,
-        trailName,
-        comment: enrichedComment,
-        currentLocation,
-        favoritePlace,
+        name: name.trim() || null,
+        trailName: trailName.trim() || null,
+        newComment: enrichedComment,
+        currentLocation: currentLocation
+          ? { latitude: currentLocation.latitude, longitude: currentLocation.longitude }
+          : null,
+        favoritePlace: favoritePlace
+          ? { latitude: favoritePlace.latitude, longitude: favoritePlace.longitude }
+          : null,
       });
       onOpenChange(false);
-    } catch (err: any) {
-      setError(err.message || 'Failed to update entry');
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      setError(msg || 'Failed to update entry. Please try again.');
     }
   };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Edit Entry</DialogTitle>
-          <DialogDescription>
-            Update your guest book entry
-          </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Name Fields */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="edit-name">Name (optional)</Label>
-              <Input
-                id="edit-name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Your name"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="edit-trailName">Trail Name (optional)</Label>
-              <Input
-                id="edit-trailName"
-                value={trailName}
-                onChange={(e) => setTrailName(e.target.value)}
-                placeholder="Your trail name"
-              />
-            </div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <Label htmlFor="edit-name">Name <span className="text-muted-foreground text-xs">(optional)</span></Label>
+            <Input
+              id="edit-name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Your name or trail name"
+              className="mt-1"
+            />
           </div>
 
-          {/* Comment */}
-          <div className="space-y-2">
-            <Label htmlFor="edit-comment">Comment *</Label>
+          <div>
+            <Label htmlFor="edit-trailName">Trail Name <span className="text-muted-foreground text-xs">(optional)</span></Label>
+            <Input
+              id="edit-trailName"
+              value={trailName}
+              onChange={(e) => setTrailName(e.target.value)}
+              placeholder="e.g. Ridgerunner, Blaze"
+              className="mt-1"
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="edit-comment">Message <span className="text-destructive">*</span></Label>
             <Textarea
               id="edit-comment"
               value={comment}
               onChange={(e) => setComment(e.target.value)}
-              placeholder="Share your story, memories, or connection to the trail..."
-              rows={5}
+              rows={4}
+              className="mt-1"
               required
             />
           </div>
 
-          <Separator />
-
-          {/* Current Location */}
-          <div className="space-y-3">
-            <div className="flex items-center gap-2">
-              <MapPin className="h-5 w-5 text-primary" />
-              <Label className="text-base font-semibold">Current Location (optional)</Label>
-            </div>
-
-            <PlaceSearchField
-              label="Search for your location"
-              placeholder="My home town"
-              onSelect={handleSelectCurrentPlace}
-            />
-
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-2">
-                <Label htmlFor="edit-currentLat" className="text-sm">
-                  Latitude
-                </Label>
-                <Input
-                  id="edit-currentLat"
-                  type="number"
-                  step="any"
-                  value={currentLat}
-                  onChange={(e) => {
-                    setCurrentLat(e.target.value);
-                    setCurrentPlaceName('');
-                  }}
-                  placeholder="e.g., 40.7128"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="edit-currentLon" className="text-sm">
-                  Longitude
-                </Label>
-                <Input
-                  id="edit-currentLon"
-                  type="number"
-                  step="any"
-                  value={currentLon}
-                  onChange={(e) => {
-                    setCurrentLon(e.target.value);
-                    setCurrentPlaceName('');
-                  }}
-                  placeholder="e.g., -74.0060"
-                />
-              </div>
+          <div>
+            <Label>Current Location <span className="text-muted-foreground text-xs">(optional)</span></Label>
+            <div className="mt-1 space-y-2">
+              {currentLocation && (
+                <div className="flex items-center gap-2 text-sm bg-muted rounded-lg px-3 py-2">
+                  <MapPin className="w-3 h-3 text-primary shrink-0" />
+                  <span className="flex-1 truncate text-foreground">{currentLocation.displayName}</span>
+                  <button
+                    type="button"
+                    onClick={() => setCurrentLocation(null)}
+                    className="text-muted-foreground hover:text-destructive text-xs ml-1"
+                  >
+                    ✕
+                  </button>
+                </div>
+              )}
+              <PlaceSearchField
+                label=""
+                placeholder="Search for your current location…"
+                onSelect={(result) => setCurrentLocation(result)}
+              />
             </div>
           </div>
 
-          <Separator />
-
-          {/* Favorite AT Place */}
-          <div className="space-y-3">
-            <div className="flex items-center gap-2">
-              <Mountain className="h-5 w-5 text-primary" />
-              <Label className="text-base font-semibold">Favorite AT Place (optional)</Label>
-            </div>
-
-            <PlaceSearchField
-              label="Search for AT location"
-              placeholder="e.g., Springer Mtn, Mt. Katahdin"
-              onSelect={handleSelectFavoritePlace}
-            />
-
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-2">
-                <Label htmlFor="edit-favLat" className="text-sm">
-                  Latitude
-                </Label>
-                <Input
-                  id="edit-favLat"
-                  type="number"
-                  step="any"
-                  value={favLat}
-                  onChange={(e) => {
-                    setFavLat(e.target.value);
-                    setFavPlaceName('');
-                  }}
-                  placeholder="e.g., 34.6267"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="edit-favLon" className="text-sm">
-                  Longitude
-                </Label>
-                <Input
-                  id="edit-favLon"
-                  type="number"
-                  step="any"
-                  value={favLon}
-                  onChange={(e) => {
-                    setFavLon(e.target.value);
-                    setFavPlaceName('');
-                  }}
-                  placeholder="e.g., -84.1937"
-                />
-              </div>
+          <div>
+            <Label>Favorite AT Location <span className="text-muted-foreground text-xs">(optional)</span></Label>
+            <div className="mt-1 space-y-2">
+              {favoritePlace && (
+                <div className="flex items-center gap-2 text-sm bg-muted rounded-lg px-3 py-2">
+                  <MapPin className="w-3 h-3 text-amber-600 shrink-0" />
+                  <span className="flex-1 truncate text-foreground">{favoritePlace.displayName}</span>
+                  <button
+                    type="button"
+                    onClick={() => setFavoritePlace(null)}
+                    className="text-muted-foreground hover:text-destructive text-xs ml-1"
+                  >
+                    ✕
+                  </button>
+                </div>
+              )}
+              <PlaceSearchField
+                label=""
+                placeholder="Search for your favorite AT spot…"
+                onSelect={(result) => setFavoritePlace(result)}
+              />
             </div>
           </div>
 
           {error && (
             <Alert variant="destructive">
+              <AlertCircle className="h-4 w-4" />
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
 
-          <div className="flex gap-3">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => onOpenChange(false)}
-              className="flex-1"
-            >
+          <DialogFooter>
+            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
               Cancel
             </Button>
-            <Button
-              type="submit"
-              disabled={updateEntry.isPending}
-              className="flex-1"
-            >
+            <Button type="submit" disabled={updateEntry.isPending}>
               {updateEntry.isPending ? (
                 <>
-                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Saving...
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Saving…
                 </>
               ) : (
                 'Save Changes'
               )}
             </Button>
-          </div>
+          </DialogFooter>
         </form>
       </DialogContent>
     </Dialog>

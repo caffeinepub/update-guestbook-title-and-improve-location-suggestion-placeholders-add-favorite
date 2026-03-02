@@ -2,10 +2,11 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-redesign-the-vth-logo-wordmark-in-the-sticky-header-applayout-tsx-to-be-significantly-larger-and-more-visually-prominent-the-vth-text-or-mark-should-have-increased-font-size-weight-and-or-letter-spacing-so-it-stands-out-clearly-at-a-glance",
-      "featureTitle": "Redesign the VTH logo/wordmark in the sticky header (AppLayout.tsx) to be significantly larger and more visually prominent. The 'VTH' text or mark should have increased font size, weight, and/or letter spacing so it stands out clearly at a glance.",
+      "featureId": "feature-investigate-and-fix-the-bug-where-submitting-the-guestbook-entry-form-saves-the-map-pin-location-but-does-not-persist-the-text-entry-name-trail-name-comment-and-place-names-to-the-backend-ensure-the-full-entry-including-all-text-fields-and-encoded-location-data-is-correctly-passed-to-the-backend-addentry-call-and-confirmed-saved",
+      "featureTitle": "Investigate and fix the bug where submitting the guestbook entry form saves the map pin/location but does not persist the text entry (name, trail name, comment, and place names) to the backend. Ensure the full entry — including all text fields and encoded location data — is correctly passed to the backend `addEntry` call and confirmed saved.",
       "files": [
-        "frontend/src/components/AppLayout.tsx"
+        "frontend/src/hooks/useQueries.ts",
+        "frontend/src/pages/AddEntryPage.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -21,10 +22,13 @@
       "confidence": "high"
     },
     {
-      "featureId": "feature-update-the-color-scheme-of-the-vth-logo-wordmark-to-use-colors-that-are-aesthetically-pleasing-and-harmonize-with-the-site-s-existing-warm-earthy-oklch-design-tokens-defined-in-frontend-src-index-css-and-frontend-tailwind-config-js-the-new-logo-colors-should-feel-cohesive-with-the-overall-palette-rather-than-contrasting-against-it",
-      "featureTitle": "Update the color scheme of the VTH logo/wordmark to use colors that are aesthetically pleasing and harmonize with the site's existing warm earthy OKLCH design tokens (defined in frontend/src/index.css and frontend/tailwind.config.js). The new logo colors should feel cohesive with the overall palette rather than contrasting against it.",
+      "featureId": "feature-add-delete-and-edit-modify-controls-on-each-guestbook-entry-so-that-a-the-admin-principal-can-delete-or-edit-any-entry-and-b-any-authenticated-user-can-delete-or-edit-their-own-entries-these-controls-should-be-visible-on-the-entry-detail-page-and-or-the-feed-card-for-eligible-users-editing-should-open-the-existing-editentrydialog-pre-populated-with-the-entry-s-current-data",
+      "featureTitle": "Add delete and edit (modify) controls on each guestbook entry so that: (a) the admin principal can delete or edit any entry, and (b) any authenticated user can delete or edit their own entries. These controls should be visible on the entry detail page and/or the feed card for eligible users. Editing should open the existing EditEntryDialog pre-populated with the entry's current data.",
       "files": [
-        "frontend/src/components/AppLayout.tsx"
+        "frontend/src/components/EditEntryDialog.tsx",
+        "frontend/src/hooks/useQueries.ts",
+        "frontend/src/pages/EntryDetailPage.tsx",
+        "frontend/src/pages/GuestbookFeedPage.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -36,6 +40,28 @@
       ],
       "testIds": [
         "REQ-2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-a-hamburger-menu-icon-to-the-app-header-applayout-tsx-area-via-a-safe-non-immutable-component-that-opens-a-slide-out-drawer-or-dropdown-menu-the-menu-must-contain-at-minimum-1-about-opens-the-existing-aboutdialog-describing-the-vth-guest-book-project-and-the-vicarious-thru-hiker-concept-2-create-account-opens-a-modal-explaining-that-accounts-on-this-app-are-powered-by-the-internet-computer-and-internet-identity-with-a-brief-description-of-what-internet-identity-is-and-a-button-to-log-in-create-an-identity-3-how-to-use-a-brief-modal-or-section-explaining-how-to-sign-the-guestbook-pin-a-location-and-navigate-the-app",
+      "featureTitle": "Add a hamburger menu icon to the app header (AppLayout.tsx area — via a safe, non-immutable component) that opens a slide-out drawer or dropdown menu. The menu must contain at minimum: (1) 'About' — opens the existing AboutDialog describing the VTH Guest Book project and the Vicarious Thru-Hiker concept; (2) 'Create Account' — opens a modal explaining that accounts on this app are powered by the Internet Computer and Internet Identity, with a brief description of what Internet Identity is and a button to log in / create an identity; (3) 'How to Use' — a brief modal or section explaining how to sign the guestbook, pin a location, and navigate the app.",
+      "files": [
+        "frontend/src/components/AppLayout.tsx",
+        "frontend/src/components/CreateAccountDialog.tsx",
+        "frontend/src/components/HamburgerMenu.tsx",
+        "frontend/src/components/HowToUseDialog.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
       ],
       "confidence": "high"
     }

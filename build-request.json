@@ -1,54 +1,84 @@
 {
   "kind": "build_request",
-  "title": "Update VTH logo — larger size, improved color scheme",
+  "title": "Fix guestbook entry save, add admin/user edit-delete controls, and hamburger menu",
   "projectName": "VTH Guest Book",
-  "priority": "normal",
+  "priority": "high",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Redesign the VTH logo/wordmark in the sticky header (AppLayout.tsx) to be significantly larger and more visually prominent. The 'VTH' text or mark should have increased font size, weight, and/or letter spacing so it stands out clearly at a glance.",
-      "target": "frontend",
+      "text": "Investigate and fix the bug where submitting the guestbook entry form saves the map pin/location but does not persist the text entry (name, trail name, comment, and place names) to the backend. Ensure the full entry — including all text fields and encoded location data — is correctly passed to the backend `addEntry` call and confirmed saved.",
+      "target": "both",
       "source": {
         "messageIds": [
-          "msg-6"
+          "msg-user-last"
         ],
         "quotes": [
-          "Make the VTH bigger and more visible"
+          "signing the guest book did not save",
+          "The map points did save, but the text entry did not"
         ]
       },
       "acceptanceCriteria": [
-        "The VTH branding in the header is noticeably larger than before",
-        "The logo/wordmark is immediately readable and prominent on both mobile and desktop viewports",
-        "No other header elements are obscured by the larger logo"
+        "Submitting the Add Entry form persists all fields (name, trail name, comment, current location, favorite AT place) to the backend.",
+        "After submission, the new entry appears in the guestbook feed with correct text content.",
+        "The entry's map pin and text content both appear correctly on the world map and AT map.",
+        "No silent failures on submission; user sees a success or error message."
       ]
     },
     {
       "id": "REQ-2",
-      "text": "Update the color scheme of the VTH logo/wordmark to use colors that are aesthetically pleasing and harmonize with the site's existing warm earthy OKLCH design tokens (defined in frontend/src/index.css and frontend/tailwind.config.js). The new logo colors should feel cohesive with the overall palette rather than contrasting against it.",
-      "target": "frontend",
+      "text": "Add delete and edit (modify) controls on each guestbook entry so that: (a) the admin principal can delete or edit any entry, and (b) any authenticated user can delete or edit their own entries. These controls should be visible on the entry detail page and/or the feed card for eligible users. Editing should open the existing EditEntryDialog pre-populated with the entry's current data.",
+      "target": "both",
       "source": {
         "messageIds": [
-          "msg-6"
+          "msg-user-last"
         ],
         "quotes": [
-          "change the color scheme of the logo to be more aesthetically pleasing and to complement the website better"
+          "there needs to be a 'delete' or 'modify' entry for me as admin",
+          "anyone who is logged in could delete or modify their own as well"
         ]
       },
       "acceptanceCriteria": [
-        "The VTH logo uses colors drawn from or harmonious with the site's warm earthy OKLCH color tokens",
-        "The logo color scheme looks polished and intentional in both light and dark modes",
-        "The logo does not clash visually with the header background or navigation elements"
+        "Admin can delete or edit any guestbook entry from the entry detail page.",
+        "A logged-in user sees delete and edit buttons only on entries they authored.",
+        "Unauthenticated users see no delete or edit controls.",
+        "Deleting an entry removes it from the feed and maps.",
+        "Editing an entry opens a pre-filled modal and saves changes correctly.",
+        "Backend enforces authorization — non-owners and non-admins cannot delete or modify others' entries."
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Add a hamburger menu icon to the app header (AppLayout.tsx area — via a safe, non-immutable component) that opens a slide-out drawer or dropdown menu. The menu must contain at minimum: (1) 'About' — opens the existing AboutDialog describing the VTH Guest Book project and the Vicarious Thru-Hiker concept; (2) 'Create Account' — opens a modal explaining that accounts on this app are powered by the Internet Computer and Internet Identity, with a brief description of what Internet Identity is and a button to log in / create an identity; (3) 'How to Use' — a brief modal or section explaining how to sign the guestbook, pin a location, and navigate the app.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-user-last"
+        ],
+        "quotes": [
+          "include a hamburger icon with a popup modal for 'About' telling about this project, 'Create Account' that would explain this is part of the Internet Computer, and anything else you think would be appropriate"
+        ]
+      },
+      "acceptanceCriteria": [
+        "A hamburger (three-line) icon is visible in the header on all pages.",
+        "Clicking the hamburger icon opens a menu with at least 'About', 'Create Account', and 'How to Use' items.",
+        "The 'About' item opens a modal describing the VTH Guest Book and Vicarious Thru-Hikers.",
+        "The 'Create Account' item opens a modal explaining Internet Identity and the Internet Computer, with a login/create identity action button.",
+        "The 'How to Use' item opens a modal with brief usage instructions.",
+        "The menu closes when an item is selected or when clicking outside.",
+        "The hamburger menu does not edit any immutable frontend paths."
       ]
     }
   ],
   "constraints": [
-    "Do not modify any files under frontend/src/hooks/ or frontend/src/components/ui/",
-    "Color changes must remain consistent with the existing warm earthy OKLCH design token system defined in frontend/src/index.css and frontend/tailwind.config.js"
+    "Do not edit any files under frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, or frontend/src/components/ui.",
+    "Admin identity/principal must be enforced in the backend, not just the frontend.",
+    "The hamburger menu must be implemented via a new or existing non-immutable component composed into AppLayout, not by editing immutable paths."
   ],
   "nonGoals": [
-    "Changing any other part of the header layout beyond the VTH logo/wordmark",
-    "Modifying the backend in any way",
-    "Replacing the text-based logo with an image asset"
+    "Redesigning the overall visual theme or color palette.",
+    "Adding new map features beyond what already exists.",
+    "Social login or third-party authentication (only Internet Identity).",
+    "Email notifications or real-time updates."
   ],
   "imageRequirements": {
     "required": [],

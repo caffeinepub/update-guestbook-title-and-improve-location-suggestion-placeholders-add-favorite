@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useGetEntriesWithLocation } from '../hooks/useQueries';
-import { decodeLocationPlaceName, stripPlaceNames } from '../lib/guestbookFormat';
+import { decodePlaceNames, decodeComment } from '../lib/guestbookFormat';
 
 // Leaflet is loaded via CDN in index.html
 declare const L: any;
@@ -80,14 +80,16 @@ export default function WorldMapPage() {
       const lon = entry.currentLocation!.longitude;
       bounds.push([lat, lon]);
 
-      const placeName = decodeLocationPlaceName(entry.comment, 'current') || entry.trailName || 'Unknown location';
+      const { currentLocationName } = decodePlaceNames(entry.comment);
+      const { cleanComment } = decodeComment(entry.comment);
+
+      const placeName = currentLocationName || entry.trailName || 'Unknown location';
       const authorName = entry.name || 'Anonymous';
       const trailInfo = entry.trailName
         ? `<div style="color:#666;font-size:12px;margin-top:2px;">${entry.trailName}</div>`
         : '';
-      const stripped = stripPlaceNames(entry.comment);
-      const commentPreview = stripped
-        ? `<div style="color:#555;font-size:12px;margin-top:4px;max-width:200px;word-wrap:break-word;">${stripped.slice(0, 100)}${stripped.length > 100 ? '…' : ''}</div>`
+      const commentPreview = cleanComment
+        ? `<div style="color:#555;font-size:12px;margin-top:4px;max-width:200px;word-wrap:break-word;">${cleanComment.slice(0, 100)}${cleanComment.length > 100 ? '…' : ''}</div>`
         : '';
 
       const popupContent = `

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useGetEntriesWithFavoritePlace } from '../hooks/useQueries';
-import { decodeLocationPlaceName } from '../lib/guestbookFormat';
+import { decodePlaceNames } from '../lib/guestbookFormat';
 
 // Leaflet is loaded via CDN in index.html
 declare const L: any;
@@ -80,7 +80,8 @@ export default function ATMapPage() {
       const lon = entry.favoritePlace!.longitude;
       bounds.push([lat, lon]);
 
-      const placeName = decodeLocationPlaceName(entry.comment, 'favorite') || 'Unknown place';
+      const { favoritePlaceName } = decodePlaceNames(entry.comment);
+      const placeName = favoritePlaceName || 'Unknown place';
       const authorName = entry.name || 'Anonymous';
 
       const popupContent = `

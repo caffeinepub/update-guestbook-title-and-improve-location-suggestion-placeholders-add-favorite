@@ -74,6 +74,10 @@ actor {
     currentLocation : ?Location,
     favoritePlace : ?Location,
   ) : async () {
+    if (not AccessControl.hasPermission(accessControlState, caller, #user)) {
+      Runtime.trap("Unauthorized: Only authenticated users can add entries");
+    };
+
     if (Text.equal(comment.trim(#char ' '), "")) {
       Runtime.trap("Comment cannot be empty.");
     };
@@ -99,6 +103,10 @@ actor {
     currentLocation : ?Location,
     favoritePlace : ?Location,
   ) : async () {
+    if (not AccessControl.hasPermission(accessControlState, caller, #user)) {
+      Runtime.trap("Unauthorized: Only authenticated users can update entries");
+    };
+
     if (Text.equal(newComment.trim(#char ' '), "")) {
       Runtime.trap("Comment cannot be empty.");
     };
@@ -137,6 +145,10 @@ actor {
   };
 
   public shared ({ caller }) func deleteEntry(timestamp : Time.Time) : async () {
+    if (not AccessControl.hasPermission(accessControlState, caller, #user)) {
+      Runtime.trap("Unauthorized: Only authenticated users can delete entries");
+    };
+
     // Find the entry by timestamp
     let entryResult = entries.entries().toArray().find(
       func((_, entry)) { entry.timestamp == timestamp }
@@ -157,17 +169,17 @@ actor {
     };
   };
 
-  public query ({ caller }) func getAllEntries() : async [GuestbookEntry] {
+  public query func getAllEntries() : async [GuestbookEntry] {
     entries.values().toArray().sort();
   };
 
-  public query ({ caller }) func getEntriesWithLocation() : async [GuestbookEntry] {
+  public query func getEntriesWithLocation() : async [GuestbookEntry] {
     entries.values().toArray().filter<GuestbookEntry>(
       func(entry) { entry.currentLocation != null }
     );
   };
 
-  public query ({ caller }) func getEntriesWithFavoritePlace() : async [GuestbookEntry] {
+  public query func getEntriesWithFavoritePlace() : async [GuestbookEntry] {
     entries.values().toArray().filter<GuestbookEntry>(
       func(entry) { entry.favoritePlace != null }
     );

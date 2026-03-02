@@ -1,47 +1,84 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-03-01T10:18:36.636Z",
+  "generatedAt": "2026-03-02T20:37:02.475Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 2,
-    "implemented": 2,
+    "total": 3,
+    "implemented": 3,
     "items": [
       {
         "id": "REQ-1",
-        "summary": "Redesign the VTH logo/wordmark in the sticky header (AppLayout.tsx) to be significantly larger and more visually prominent. The 'VTH' text or mark should have increased font size, weight, and/or letter spacing so it stands out clearly at a glance.",
+        "summary": "Investigate and fix the bug where submitting the guestbook entry form saves the map pin/location but does not persist the text entry (name, trail name, comment, and place names) to the backend. Ensure the full entry — including all text fields and encoded location data — is correctly passed to the backend `addEntry` call and confirmed saved.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/AppLayout.tsx"
+          "frontend/src/pages/AddEntryPage.tsx",
+          "frontend/src/hooks/useQueries.ts"
         ],
         "matchedFiles": [
-          "frontend/src/components/AppLayout.tsx"
+          "frontend/src/pages/AddEntryPage.tsx",
+          "frontend/src/hooks/useQueries.ts"
         ]
       },
       {
         "id": "REQ-2",
-        "summary": "Update the color scheme of the VTH logo/wordmark to use colors that are aesthetically pleasing and harmonize with the site's existing warm earthy OKLCH design tokens (defined in frontend/src/index.css and frontend/tailwind.config.js). The new logo colors should feel cohesive with the overall palette rather than contrasting against it.",
+        "summary": "Add delete and edit (modify) controls on each guestbook entry so that: (a) the admin principal can delete or edit any entry, and (b) any authenticated user can delete or edit their own entries. These controls should be visible on the entry detail page and/or the feed card for eligible users. Editing should open the existing EditEntryDialog pre-populated with the entry's current data.",
         "status": "implemented",
         "plannedFiles": [
+          "frontend/src/pages/EntryDetailPage.tsx",
+          "frontend/src/pages/GuestbookFeedPage.tsx",
+          "frontend/src/hooks/useQueries.ts",
+          "frontend/src/components/EditEntryDialog.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/pages/EntryDetailPage.tsx",
+          "frontend/src/pages/GuestbookFeedPage.tsx",
+          "frontend/src/hooks/useQueries.ts",
+          "frontend/src/components/EditEntryDialog.tsx"
+        ]
+      },
+      {
+        "id": "REQ-3",
+        "summary": "Add a hamburger menu icon to the app header (AppLayout.tsx area — via a safe, non-immutable component) that opens a slide-out drawer or dropdown menu. The menu must contain at minimum: (1) 'About' — opens the existing AboutDialog describing the VTH Guest Book project and the Vicarious Thru-Hiker concept; (2) 'Create Account' — opens a modal explaining that accounts on this app are powered by the Internet Computer and Internet Identity, with a brief description of what Internet Identity is and a button to log in / create an identity; (3) 'How to Use' — a brief modal or section explaining how to sign the guestbook, pin a location, and navigate the app.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/HamburgerMenu.tsx",
+          "frontend/src/components/CreateAccountDialog.tsx",
+          "frontend/src/components/HowToUseDialog.tsx",
           "frontend/src/components/AppLayout.tsx"
         ],
         "matchedFiles": [
+          "frontend/src/components/HamburgerMenu.tsx",
+          "frontend/src/components/CreateAccountDialog.tsx",
+          "frontend/src/components/HowToUseDialog.tsx",
           "frontend/src/components/AppLayout.tsx"
         ]
       }
     ]
   },
   "changedFiles": [
+    "backend/main.mo",
     "build-request.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
+    "frontend/src/App.tsx",
+    "frontend/src/components/AboutDialog.tsx",
     "frontend/src/components/AppLayout.tsx",
-    "frontend/src/index.css",
-    "frontend/tailwind.config.js",
+    "frontend/src/components/CreateAccountDialog.tsx",
+    "frontend/src/components/EditEntryDialog.tsx",
+    "frontend/src/components/HamburgerMenu.tsx",
+    "frontend/src/components/HowToUseDialog.tsx",
+    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/lib/guestbookFormat.ts",
+    "frontend/src/pages/ATMapPage.tsx",
+    "frontend/src/pages/AddEntryPage.tsx",
+    "frontend/src/pages/EntryDetailPage.tsx",
+    "frontend/src/pages/GuestbookFeedPage.tsx",
+    "frontend/src/pages/WorldMapPage.tsx",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",
