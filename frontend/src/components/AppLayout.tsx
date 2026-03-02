@@ -40,24 +40,24 @@ export default function AppLayout() {
             className="flex items-center gap-3 hover:opacity-90 transition-opacity"
             aria-label="Go to home"
           >
-            {/* Emblem badge */}
-            <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-logo-emblem border-2 border-logo-border shadow-sm overflow-hidden">
+            {/* VTH Avatar badge */}
+            <div className="flex items-center justify-center w-11 h-11 rounded-xl bg-logo-emblem border-2 border-logo-border shadow-sm overflow-hidden">
               <img
-                src="/assets/generated/atvth-logo.dim_512x512.png"
-                alt="VTH emblem"
-                className="w-9 h-9 object-contain"
+                src="/assets/generated/vth-avatar.dim_256x256.png"
+                alt="VTH – Vicarious Thru-Hiker emblem"
+                className="w-11 h-11 object-cover"
               />
             </div>
             {/* Wordmark */}
-            <div className="flex flex-col leading-none">
+            <div className="flex flex-col leading-none gap-0.5">
               <span
                 className="text-logo-title font-extrabold tracking-widest uppercase"
-                style={{ fontSize: '1.35rem', letterSpacing: '0.18em' }}
+                style={{ fontSize: '1.25rem', letterSpacing: '0.2em' }}
               >
-                VTH
+                VTH Guest Book
               </span>
               <span className="text-logo-subtitle text-xs tracking-wide font-medium">
-                Guest Book
+                Vicarious Thru-Hiker
               </span>
             </div>
           </button>

@@ -35,14 +35,15 @@ export default function CreateAccountDialog({ open, onOpenChange }: CreateAccoun
         <DialogHeader>
           <DialogTitle className="text-xl">Create Account / Login</DialogTitle>
           <DialogDescription className="sr-only">
-            Learn about Internet Identity and create your account
+            Learn about Internet Identity and create your account for VTH Guest Book: Vicarious Thru-Hiker
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 py-2">
           <p className="text-sm text-foreground leading-relaxed">
-            The VTH Guest Book runs on the <strong>Internet Computer</strong> — a decentralized
-            blockchain network that hosts apps and data without traditional servers or cloud providers.
+            The <strong>VTH Guest Book: Vicarious Thru-Hiker</strong> runs on the{' '}
+            <strong>Internet Computer</strong> — a decentralized blockchain network that hosts apps
+            and data without traditional servers or cloud providers.
           </p>
 
           <div className="space-y-3">

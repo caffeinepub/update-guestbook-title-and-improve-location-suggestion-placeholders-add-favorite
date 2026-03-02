@@ -2,11 +2,14 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-investigate-and-fix-the-bug-where-submitting-the-guestbook-entry-form-saves-the-map-pin-location-but-does-not-persist-the-text-entry-name-trail-name-comment-and-place-names-to-the-backend-ensure-the-full-entry-including-all-text-fields-and-encoded-location-data-is-correctly-passed-to-the-backend-addentry-call-and-confirmed-saved",
-      "featureTitle": "Investigate and fix the bug where submitting the guestbook entry form saves the map pin/location but does not persist the text entry (name, trail name, comment, and place names) to the backend. Ensure the full entry — including all text fields and encoded location data — is correctly passed to the backend `addEntry` call and confirmed saved.",
+      "featureId": "feature-update-the-main-app-title-from-vth-guest-book-to-vth-guest-book-vicarious-thru-hiker-everywhere-it-appears-across-the-application-including-the-header-in-applayout-tsx-the-aboutdialog-tsx-modal-howtousedialog-tsx-createaccountdialog-tsx-the-html-page-title-in-index-html-and-any-other-component-or-page-that-displays-the-app-name",
+      "featureTitle": "Update the main app title from 'VTH: Guest Book' to 'VTH Guest Book: Vicarious Thru-Hiker' everywhere it appears across the application, including the header in AppLayout.tsx, the AboutDialog.tsx modal, HowToUseDialog.tsx, CreateAccountDialog.tsx, the HTML page title in index.html, and any other component or page that displays the app name.",
       "files": [
-        "frontend/src/hooks/useQueries.ts",
-        "frontend/src/pages/AddEntryPage.tsx"
+        "frontend/index.html",
+        "frontend/src/components/AboutDialog.tsx",
+        "frontend/src/components/AppLayout.tsx",
+        "frontend/src/components/CreateAccountDialog.tsx",
+        "frontend/src/components/HowToUseDialog.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -22,13 +25,11 @@
       "confidence": "high"
     },
     {
-      "featureId": "feature-add-delete-and-edit-modify-controls-on-each-guestbook-entry-so-that-a-the-admin-principal-can-delete-or-edit-any-entry-and-b-any-authenticated-user-can-delete-or-edit-their-own-entries-these-controls-should-be-visible-on-the-entry-detail-page-and-or-the-feed-card-for-eligible-users-editing-should-open-the-existing-editentrydialog-pre-populated-with-the-entry-s-current-data",
-      "featureTitle": "Add delete and edit (modify) controls on each guestbook entry so that: (a) the admin principal can delete or edit any entry, and (b) any authenticated user can delete or edit their own entries. These controls should be visible on the entry detail page and/or the feed card for eligible users. Editing should open the existing EditEntryDialog pre-populated with the entry's current data.",
+      "featureId": "feature-redesign-the-vth-avatar-logo-to-prominently-accentuate-the-vth-initials-the-new-avatar-should-make-vth-the-focal-point-with-bold-legible-lettering-styled-to-evoke-the-outdoors-hiking-theme-e-g-rugged-serif-or-bold-condensed-sans-serif-earthy-tones-replace-the-existing-avatar-image-with-the-new-generated-asset-in-all-locations-where-the-avatar-appears-including-the-header-in-applayout-tsx-and-the-aboutdialog-tsx-modal",
+      "featureTitle": "Redesign the VTH avatar/logo to prominently accentuate the 'VTH' initials. The new avatar should make 'VTH' the focal point with bold, legible lettering styled to evoke the outdoors/hiking theme (e.g., rugged serif or bold condensed sans-serif, earthy tones). Replace the existing avatar image with the new generated asset in all locations where the avatar appears, including the header in AppLayout.tsx and the AboutDialog.tsx modal.",
       "files": [
-        "frontend/src/components/EditEntryDialog.tsx",
-        "frontend/src/hooks/useQueries.ts",
-        "frontend/src/pages/EntryDetailPage.tsx",
-        "frontend/src/pages/GuestbookFeedPage.tsx"
+        "frontend/src/components/AboutDialog.tsx",
+        "frontend/src/components/AppLayout.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -40,28 +41,6 @@
       ],
       "testIds": [
         "REQ-2"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-add-a-hamburger-menu-icon-to-the-app-header-applayout-tsx-area-via-a-safe-non-immutable-component-that-opens-a-slide-out-drawer-or-dropdown-menu-the-menu-must-contain-at-minimum-1-about-opens-the-existing-aboutdialog-describing-the-vth-guest-book-project-and-the-vicarious-thru-hiker-concept-2-create-account-opens-a-modal-explaining-that-accounts-on-this-app-are-powered-by-the-internet-computer-and-internet-identity-with-a-brief-description-of-what-internet-identity-is-and-a-button-to-log-in-create-an-identity-3-how-to-use-a-brief-modal-or-section-explaining-how-to-sign-the-guestbook-pin-a-location-and-navigate-the-app",
-      "featureTitle": "Add a hamburger menu icon to the app header (AppLayout.tsx area — via a safe, non-immutable component) that opens a slide-out drawer or dropdown menu. The menu must contain at minimum: (1) 'About' — opens the existing AboutDialog describing the VTH Guest Book project and the Vicarious Thru-Hiker concept; (2) 'Create Account' — opens a modal explaining that accounts on this app are powered by the Internet Computer and Internet Identity, with a brief description of what Internet Identity is and a button to log in / create an identity; (3) 'How to Use' — a brief modal or section explaining how to sign the guestbook, pin a location, and navigate the app.",
-      "files": [
-        "frontend/src/components/AppLayout.tsx",
-        "frontend/src/components/CreateAccountDialog.tsx",
-        "frontend/src/components/HamburgerMenu.tsx",
-        "frontend/src/components/HowToUseDialog.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0",
-        "authorization@4.0.0"
-      ],
-      "testIds": [
-        "REQ-3"
       ],
       "confidence": "high"
     }

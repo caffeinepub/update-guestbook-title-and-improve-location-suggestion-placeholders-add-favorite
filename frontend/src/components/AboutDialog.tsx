@@ -17,19 +17,30 @@ export default function AboutDialog({ open, onOpenChange }: AboutDialogProps) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-xl">About VTH Guest Book</DialogTitle>
+          <DialogTitle className="text-xl">About VTH Guest Book: Vicarious Thru-Hiker</DialogTitle>
           <DialogDescription className="sr-only">
-            About the Vicarious Thru-Hikers Guest Book project
+            About the VTH Guest Book: Vicarious Thru-Hiker project
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 py-2 text-sm text-foreground leading-relaxed">
-          <div className="flex justify-center">
-            <img
-              src="/assets/generated/vth-logo.dim_512x512.png"
-              alt="VTH Logo"
-              className="w-20 h-20 object-contain rounded-xl"
-            />
+          {/* VTH Avatar prominently displayed */}
+          <div className="flex flex-col items-center gap-2">
+            <div className="w-24 h-24 rounded-2xl overflow-hidden border-2 border-logo-border shadow-logo bg-logo-emblem">
+              <img
+                src="/assets/generated/vth-avatar.dim_256x256.png"
+                alt="VTH – Vicarious Thru-Hiker avatar"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="text-center leading-none">
+              <p className="font-extrabold tracking-widest uppercase text-logo-title" style={{ fontSize: '1.1rem', letterSpacing: '0.2em' }}>
+                VTH
+              </p>
+              <p className="text-xs text-logo-subtitle font-medium tracking-wide">
+                Vicarious Thru-Hiker
+              </p>
+            </div>
           </div>
 
           <p>

@@ -18,15 +18,15 @@ export default function HowToUseDialog({ open, onOpenChange }: HowToUseDialogPro
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-xl">How to Use VTH Guest Book</DialogTitle>
+          <DialogTitle className="text-xl">How to Use VTH Guest Book: Vicarious Thru-Hiker</DialogTitle>
           <DialogDescription className="sr-only">
-            Instructions for using the VTH Guest Book app
+            Instructions for using the VTH Guest Book: Vicarious Thru-Hiker app
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 py-2">
           <p className="text-sm text-muted-foreground">
-            Welcome to the Vicarious Thru-Hikers Guest Book! Here's how to get the most out of it:
+            Welcome to the <strong>VTH Guest Book: Vicarious Thru-Hiker</strong>! Here's how to get the most out of it:
           </p>
 
           <div className="space-y-4">

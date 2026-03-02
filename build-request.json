@@ -1,87 +1,67 @@
 {
   "kind": "build_request",
-  "title": "Fix guestbook entry save, add admin/user edit-delete controls, and hamburger menu",
+  "title": "Update app title and redesign VTH avatar branding across all pages",
   "projectName": "VTH Guest Book",
-  "priority": "high",
+  "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Investigate and fix the bug where submitting the guestbook entry form saves the map pin/location but does not persist the text entry (name, trail name, comment, and place names) to the backend. Ensure the full entry — including all text fields and encoded location data — is correctly passed to the backend `addEntry` call and confirmed saved.",
-      "target": "both",
+      "text": "Update the main app title from 'VTH: Guest Book' to 'VTH Guest Book: Vicarious Thru-Hiker' everywhere it appears across the application, including the header in AppLayout.tsx, the AboutDialog.tsx modal, HowToUseDialog.tsx, CreateAccountDialog.tsx, the HTML page title in index.html, and any other component or page that displays the app name.",
+      "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-user-last"
+          "msg-latest"
         ],
         "quotes": [
-          "signing the guest book did not save",
-          "The map points did save, but the text entry did not"
+          "Change the main title from \"VTH: Guest Book\" to \"VTH Guest Book: Vicarious Thru-Hiker\"",
+          "do this for each page, such as the About popup modal"
         ]
       },
       "acceptanceCriteria": [
-        "Submitting the Add Entry form persists all fields (name, trail name, comment, current location, favorite AT place) to the backend.",
-        "After submission, the new entry appears in the guestbook feed with correct text content.",
-        "The entry's map pin and text content both appear correctly on the world map and AT map.",
-        "No silent failures on submission; user sees a success or error message."
+        "The header in AppLayout.tsx shows 'VTH Guest Book: Vicarious Thru-Hiker'",
+        "The AboutDialog.tsx modal title reads 'VTH Guest Book: Vicarious Thru-Hiker'",
+        "The HTML <title> tag in index.html reads 'VTH Guest Book: Vicarious Thru-Hiker'",
+        "No instance of the old title 'VTH: Guest Book' remains anywhere in the UI",
+        "All dialogs (HowToUse, CreateAccount, About) reflect the updated title where applicable"
       ]
     },
     {
       "id": "REQ-2",
-      "text": "Add delete and edit (modify) controls on each guestbook entry so that: (a) the admin principal can delete or edit any entry, and (b) any authenticated user can delete or edit their own entries. These controls should be visible on the entry detail page and/or the feed card for eligible users. Editing should open the existing EditEntryDialog pre-populated with the entry's current data.",
-      "target": "both",
-      "source": {
-        "messageIds": [
-          "msg-user-last"
-        ],
-        "quotes": [
-          "there needs to be a 'delete' or 'modify' entry for me as admin",
-          "anyone who is logged in could delete or modify their own as well"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Admin can delete or edit any guestbook entry from the entry detail page.",
-        "A logged-in user sees delete and edit buttons only on entries they authored.",
-        "Unauthenticated users see no delete or edit controls.",
-        "Deleting an entry removes it from the feed and maps.",
-        "Editing an entry opens a pre-filled modal and saves changes correctly.",
-        "Backend enforces authorization — non-owners and non-admins cannot delete or modify others' entries."
-      ]
-    },
-    {
-      "id": "REQ-3",
-      "text": "Add a hamburger menu icon to the app header (AppLayout.tsx area — via a safe, non-immutable component) that opens a slide-out drawer or dropdown menu. The menu must contain at minimum: (1) 'About' — opens the existing AboutDialog describing the VTH Guest Book project and the Vicarious Thru-Hiker concept; (2) 'Create Account' — opens a modal explaining that accounts on this app are powered by the Internet Computer and Internet Identity, with a brief description of what Internet Identity is and a button to log in / create an identity; (3) 'How to Use' — a brief modal or section explaining how to sign the guestbook, pin a location, and navigate the app.",
+      "text": "Redesign the VTH avatar/logo to prominently accentuate the 'VTH' initials. The new avatar should make 'VTH' the focal point with bold, legible lettering styled to evoke the outdoors/hiking theme (e.g., rugged serif or bold condensed sans-serif, earthy tones). Replace the existing avatar image with the new generated asset in all locations where the avatar appears, including the header in AppLayout.tsx and the AboutDialog.tsx modal.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-user-last"
+          "msg-latest"
         ],
         "quotes": [
-          "include a hamburger icon with a popup modal for 'About' telling about this project, 'Create Account' that would explain this is part of the Internet Computer, and anything else you think would be appropriate"
+          "remake the avatar to accentuate 'VTH'",
+          "do this for each page, such as the About popup modal"
         ]
       },
       "acceptanceCriteria": [
-        "A hamburger (three-line) icon is visible in the header on all pages.",
-        "Clicking the hamburger icon opens a menu with at least 'About', 'Create Account', and 'How to Use' items.",
-        "The 'About' item opens a modal describing the VTH Guest Book and Vicarious Thru-Hikers.",
-        "The 'Create Account' item opens a modal explaining Internet Identity and the Internet Computer, with a login/create identity action button.",
-        "The 'How to Use' item opens a modal with brief usage instructions.",
-        "The menu closes when an item is selected or when clicking outside.",
-        "The hamburger menu does not edit any immutable frontend paths."
+        "The new avatar prominently displays 'VTH' as the primary visual element",
+        "The avatar is rendered in the sticky header in AppLayout.tsx",
+        "The avatar is rendered inside the AboutDialog.tsx modal",
+        "The avatar uses the new generated image asset from frontend/public/assets/generated",
+        "The avatar style is consistent across all locations it appears"
       ]
     }
   ],
   "constraints": [
-    "Do not edit any files under frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, or frontend/src/components/ui.",
-    "Admin identity/principal must be enforced in the backend, not just the frontend.",
-    "The hamburger menu must be implemented via a new or existing non-immutable component composed into AppLayout, not by editing immutable paths."
+    "Do not modify any files under frontend/src/hooks/ (useInternetIdentity.ts, useActor.ts) or frontend/src/main.tsx",
+    "Do not alter the backend schema or Motoko logic",
+    "Do not change the color palette defined in frontend/src/index.css or tailwind.config.js"
   ],
   "nonGoals": [
-    "Redesigning the overall visual theme or color palette.",
-    "Adding new map features beyond what already exists.",
-    "Social login or third-party authentication (only Internet Identity).",
-    "Email notifications or real-time updates."
+    "Changing navigation routes or page structure",
+    "Adding new features or dialogs",
+    "Modifying backend data models or guestbook logic",
+    "Redesigning layout or overall visual theme beyond the avatar and title"
   ],
   "imageRequirements": {
-    "required": [],
+    "required": [
+      "Bold outdoor-themed logo badge with large stylized 'VTH' initials in rugged condensed lettering, earthy green and brown tones, mountain silhouette or trail motif in the background (vth-avatar.dim_256x256.png)"
+    ],
     "edits": []
   }
 }
