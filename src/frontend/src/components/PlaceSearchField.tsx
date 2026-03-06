@@ -1,11 +1,17 @@
-import { useState } from 'react';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Loader2, Search } from 'lucide-react';
-import { searchPlaces, type GeocodingResult } from '../lib/geocoding';
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Loader2, Search } from "lucide-react";
+import { useState } from "react";
+import { type GeocodingResult, searchPlaces } from "../lib/geocoding";
 
 interface PlaceSearchFieldProps {
   label: string;
@@ -13,32 +19,38 @@ interface PlaceSearchFieldProps {
   onSelect: (result: GeocodingResult) => void;
 }
 
-export default function PlaceSearchField({ label, placeholder, onSelect }: PlaceSearchFieldProps) {
-  const [query, setQuery] = useState('');
+export default function PlaceSearchField({
+  label,
+  placeholder,
+  onSelect,
+}: PlaceSearchFieldProps) {
+  const [query, setQuery] = useState("");
   const [results, setResults] = useState<GeocodingResult[]>([]);
   const [isSearching, setIsSearching] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const handleSearch = async () => {
     if (!query.trim()) {
-      setError('Please enter a place name');
+      setError("Please enter a place name");
       return;
     }
 
     setIsSearching(true);
-    setError('');
+    setError("");
     setResults([]);
 
     try {
       const searchResults = await searchPlaces(query);
       setResults(searchResults);
-      
+
       // If only one result, auto-select it
       if (searchResults.length === 1) {
         handleSelect(searchResults[0]);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to search for location');
+      setError(
+        err instanceof Error ? err.message : "Failed to search for location",
+      );
     } finally {
       setIsSearching(false);
     }
@@ -47,13 +59,15 @@ export default function PlaceSearchField({ label, placeholder, onSelect }: Place
   const handleSelect = (result: GeocodingResult) => {
     onSelect(result);
     setResults([]);
-    setQuery('');
-    setError('');
+    setQuery("");
+    setError("");
   };
 
   return (
     <div className="space-y-2">
-      <Label htmlFor={`place-search-${label}`} className="text-sm">{label}</Label>
+      <Label htmlFor={`place-search-${label}`} className="text-sm">
+        {label}
+      </Label>
       <div className="flex gap-2">
         <Input
           id={`place-search-${label}`}
@@ -61,7 +75,7 @@ export default function PlaceSearchField({ label, placeholder, onSelect }: Place
           onChange={(e) => setQuery(e.target.value)}
           placeholder={placeholder}
           onKeyDown={(e) => {
-            if (e.key === 'Enter') {
+            if (e.key === "Enter") {
               e.preventDefault();
               handleSearch();
             }
@@ -86,15 +100,18 @@ export default function PlaceSearchField({ label, placeholder, onSelect }: Place
       {results.length > 1 && (
         <div className="space-y-2">
           <Label className="text-sm">Select a location</Label>
-          <Select onValueChange={(value) => {
-            const result = results[parseInt(value)];
-            if (result) handleSelect(result);
-          }}>
+          <Select
+            onValueChange={(value) => {
+              const result = results[Number.parseInt(value)];
+              if (result) handleSelect(result);
+            }}
+          >
             <SelectTrigger>
               <SelectValue placeholder="Choose from results..." />
             </SelectTrigger>
             <SelectContent>
               {results.map((result, index) => (
+                // biome-ignore lint/suspicious/noArrayIndexKey: results are transient search hits with no stable key
                 <SelectItem key={index} value={index.toString()}>
                   {result.displayName}
                 </SelectItem>

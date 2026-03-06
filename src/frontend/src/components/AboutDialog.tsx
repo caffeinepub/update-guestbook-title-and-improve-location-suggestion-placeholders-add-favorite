@@ -4,8 +4,8 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Mountain } from 'lucide-react';
+} from "@/components/ui/dialog";
+import React from "react";
 
 interface AboutDialogProps {
   open: boolean;
@@ -15,49 +15,71 @@ interface AboutDialogProps {
 export default function AboutDialog({ open, onOpenChange }: AboutDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+      <DialogContent className="max-w-md">
         <DialogHeader>
-          <div className="flex items-center gap-3 mb-2">
-            <Mountain className="h-8 w-8 text-primary" />
-            <DialogTitle className="text-2xl">About VTH Guest Book</DialogTitle>
-          </div>
-          <DialogDescription className="text-base space-y-4 pt-4">
-            <p>
-              Welcome to the <strong>VTH Guest Book</strong> — a digital gathering place for 
-              Vicarious Thru-Hikers of the Appalachian Trail.
-            </p>
-            
-            <div className="space-y-2">
-              <h3 className="font-semibold text-foreground text-lg">What is a Vicarious Thru-Hiker?</h3>
-              <p>
-                A <strong>Vicarious Thru-Hiker (VTH)</strong> is someone who has "experienced" 
-                the Appalachian Trail through the lived, shared experiences of another person 
-                who has hiked the trail. Rather than walking every mile themselves, a VTH has 
-                "hiked thru" the trail vicariously — through stories, photos, videos, journals, 
-                and conversations with actual thru-hikers.
-              </p>
-              <p>
-                Whether you're a family member who followed along every step of the way, a friend 
-                who lived through the adventure via daily updates, or someone who was deeply moved 
-                by a hiker's journey, you are a Vicarious Thru-Hiker.
-              </p>
-            </div>
-
-            <div className="space-y-2">
-              <h3 className="font-semibold text-foreground text-lg">About This Project</h3>
-              <p>
-                This guest book celebrates the unique bond between hikers and those who support 
-                them from afar. Share your connection to the trail, mark your location on the 
-                world map, and pin your favorite AT spots. Together, we honor the trail and the 
-                community it creates — both on the path and beyond.
-              </p>
-            </div>
-
-            <p className="text-sm text-muted-foreground italic pt-2">
-              Sign the guest book to share your story and become part of the VTH community.
-            </p>
+          <DialogTitle className="text-xl">
+            About VTH Guest Book: Vicarious Thru-Hikers
+          </DialogTitle>
+          <DialogDescription className="sr-only">
+            About the VTH Guest Book: Vicarious Thru-Hikers project
           </DialogDescription>
         </DialogHeader>
+
+        <div className="space-y-4 py-2 text-sm text-foreground leading-relaxed">
+          {/* VTH Avatar prominently displayed — forced square */}
+          <div className="flex flex-col items-center gap-2">
+            <div className="w-24 h-24 aspect-square rounded-2xl overflow-hidden border-2 border-logo-border shadow-logo bg-logo-emblem flex-shrink-0">
+              <img
+                src="/assets/generated/vth-avatar.dim_256x256.png"
+                alt="VTH – Vicarious Thru-Hikers avatar"
+                className="w-full h-full object-cover block"
+              />
+            </div>
+            <div className="text-center leading-none">
+              <p
+                className="font-extrabold tracking-widest uppercase text-logo-title"
+                style={{ fontSize: "1.1rem", letterSpacing: "0.2em" }}
+              >
+                VTH
+              </p>
+              <p className="text-xs text-logo-subtitle font-medium tracking-wide">
+                Vicarious Thru-Hikers
+              </p>
+            </div>
+          </div>
+
+          <p>
+            <strong>Vicarious Thru-Hikers (VTH)</strong> is a community for
+            those who love the Appalachian Trail — whether you've hiked every
+            mile or just dream of doing so someday.
+          </p>
+
+          <p>
+            A <em>vicarious thru-hiker</em> is someone who experiences the trail
+            through the stories, photos, and journeys of others. We follow
+            along, cheer on the hikers, and share in the adventure from wherever
+            we are in the world.
+          </p>
+
+          <p>
+            The <strong>VTH Guest Book</strong> is a place for the community to
+            leave their mark — share where you are, your favorite trail spot,
+            and a message for fellow trail lovers. Your entry is pinned on the
+            world map so the whole community can see where VTH members are
+            located.
+          </p>
+
+          <p>
+            This app is built on the <strong>Internet Computer</strong>, a
+            decentralized blockchain network, ensuring your entries are
+            permanent, censorship-resistant, and owned by the community — not a
+            corporation.
+          </p>
+
+          <p className="text-xs text-muted-foreground border-t border-border pt-3">
+            🥾 Happy trails, wherever you are!
+          </p>
+        </div>
       </DialogContent>
     </Dialog>
   );

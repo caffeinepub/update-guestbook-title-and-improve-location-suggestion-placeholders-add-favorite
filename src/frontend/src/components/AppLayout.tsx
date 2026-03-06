@@ -1,114 +1,114 @@
-import { Outlet, useNavigate, useRouterState } from '@tanstack/react-router';
-import { Button } from '@/components/ui/button';
-import { Home, Plus, MapPin, Mountain, Info } from 'lucide-react';
-import { useState } from 'react';
-import AboutDialog from './AboutDialog';
+import { useQueryClient } from "@tanstack/react-query";
+import { Outlet, useLocation, useNavigate } from "@tanstack/react-router";
+import { BookOpen, Globe, Map as MapIcon, PenLine } from "lucide-react";
+import React from "react";
+import { useInternetIdentity } from "../hooks/useInternetIdentity";
+import HamburgerMenu from "./HamburgerMenu";
 
 export default function AppLayout() {
   const navigate = useNavigate();
-  const routerState = useRouterState();
-  const currentPath = routerState.location.pathname;
-  const [showAbout, setShowAbout] = useState(false);
+  const location = useLocation();
+  const { identity, clear } = useInternetIdentity();
+  const queryClient = useQueryClient();
+  const isAuthenticated = !!identity;
+
+  const handleLogout = async () => {
+    await clear();
+    queryClient.clear();
+  };
+
+  const navItems = [
+    { path: "/", label: "Feed", icon: BookOpen },
+    { path: "/add", label: "Sign", icon: PenLine },
+    { path: "/world-map", label: "World", icon: Globe },
+    { path: "/at-map", label: "Trail Map", icon: MapIcon },
+  ];
+
+  const isActive = (path: string) => {
+    if (path === "/") return location.pathname === "/";
+    return location.pathname.startsWith(path);
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
       {/* Header */}
-      <header className="sticky top-0 z-50 w-full border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80">
-        <div className="container flex h-16 items-center justify-between">
-          <div className="flex items-center gap-3">
-            <img 
-              src="/assets/generated/vth-logo.dim_512x512.png" 
-              alt="VTH Logo" 
-              className="h-10 w-10 rounded-lg"
-            />
-            <div>
-              <h1 className="text-lg font-bold text-foreground">VTH Guest Book</h1>
-              <p className="text-xs text-muted-foreground">Vicarious Thru-Hikers</p>
+      <header className="sticky top-0 z-40 bg-logo-bg border-b border-logo-border shadow-logo">
+        <div className="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between">
+          {/* Logo area */}
+          <button
+            type="button"
+            onClick={() => navigate({ to: "/" })}
+            className="flex items-center gap-3 hover:opacity-90 transition-opacity"
+            aria-label="Go to home"
+          >
+            {/* VTH Avatar badge — forced square */}
+            <div className="flex-shrink-0 w-11 h-11 aspect-square rounded-xl bg-logo-emblem border-2 border-logo-border shadow-sm overflow-hidden">
+              <img
+                src="/assets/generated/vth-avatar.dim_256x256.png"
+                alt="VTH – Vicarious Thru-Hikers emblem"
+                className="w-full h-full object-cover block"
+              />
             </div>
+            {/* Wordmark */}
+            <div className="flex flex-col leading-none gap-0.5">
+              <span
+                className="text-logo-title font-extrabold tracking-widest uppercase"
+                style={{ fontSize: "1.25rem", letterSpacing: "0.2em" }}
+              >
+                VTH Guest Book
+              </span>
+              <span className="text-logo-subtitle text-xs tracking-wide font-medium">
+                Vicarious Thru-Hikers
+              </span>
+            </div>
+          </button>
+
+          {/* Right side: logout if authenticated + hamburger */}
+          <div className="flex items-center gap-2">
+            {isAuthenticated && (
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="text-xs text-logo-subtitle hover:text-logo-title transition-colors px-2 py-1 rounded"
+              >
+                Logout
+              </button>
+            )}
+            <HamburgerMenu />
           </div>
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="flex-1 container py-6">
+      {/* Main content */}
+      <main className="flex-1 pb-20">
         <Outlet />
       </main>
 
-      {/* Footer */}
-      <footer className="border-t bg-card py-4">
-        <div className="container space-y-3">
-          <div className="flex justify-center">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setShowAbout(true)}
-              className="text-muted-foreground hover:text-foreground"
+      {/* Bottom navigation */}
+      <nav className="fixed bottom-0 left-0 right-0 z-40 bg-card border-t border-border">
+        <div className="max-w-2xl mx-auto flex">
+          {navItems.map(({ path, label, icon: Icon }) => (
+            <button
+              type="button"
+              key={path}
+              onClick={() => navigate({ to: path })}
+              className={`flex-1 flex flex-col items-center gap-1 py-3 text-xs font-medium transition-colors ${
+                isActive(path)
+                  ? "text-primary"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
             >
-              <Info className="h-4 w-4 mr-2" />
-              About
-            </Button>
-          </div>
-          <div className="text-center text-sm text-muted-foreground">
-            <p>
-              © {new Date().getFullYear()} · Built with ❤️ using{' '}
-              <a
-                href={`https://caffeine.ai/?utm_source=Caffeine-footer&utm_medium=referral&utm_content=${encodeURIComponent(
-                  typeof window !== 'undefined' ? window.location.hostname : 'vth-guestbook'
-                )}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary hover:underline"
-              >
-                caffeine.ai
-              </a>
-            </p>
-          </div>
-        </div>
-      </footer>
-
-      {/* Bottom Navigation */}
-      <nav className="sticky bottom-0 z-50 w-full border-t bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80">
-        <div className="container flex items-center justify-around py-2">
-          <Button
-            variant={currentPath === '/' ? 'default' : 'ghost'}
-            size="sm"
-            onClick={() => navigate({ to: '/' })}
-            className="flex-col h-auto py-2 px-4 gap-1"
-          >
-            <Home className="h-5 w-5" />
-            <span className="text-xs">Feed</span>
-          </Button>
-          <Button
-            variant={currentPath === '/add' ? 'default' : 'ghost'}
-            size="sm"
-            onClick={() => navigate({ to: '/add' })}
-            className="flex-col h-auto py-2 px-4 gap-1"
-          >
-            <Plus className="h-5 w-5" />
-            <span className="text-xs">Sign</span>
-          </Button>
-          <Button
-            variant={currentPath === '/world-map' ? 'default' : 'ghost'}
-            size="sm"
-            onClick={() => navigate({ to: '/world-map' })}
-            className="flex-col h-auto py-2 px-4 gap-1"
-          >
-            <MapPin className="h-5 w-5" />
-            <span className="text-xs">World</span>
-          </Button>
-          <Button
-            variant={currentPath === '/at-map' ? 'default' : 'ghost'}
-            size="sm"
-            onClick={() => navigate({ to: '/at-map' })}
-            className="flex-col h-auto py-2 px-4 gap-1"
-          >
-            <Mountain className="h-5 w-5" />
-            <span className="text-xs">AT</span>
-          </Button>
+              <Icon className="w-5 h-5" />
+              {label}
+            </button>
+          ))}
         </div>
       </nav>
 
-      <AboutDialog open={showAbout} onOpenChange={setShowAbout} />
+      {/* Footer */}
+      <footer className="fixed bottom-16 left-0 right-0 pointer-events-none">
+        {/* intentionally empty - attribution in page footer */}
+      </footer>
     </div>
   );
 }

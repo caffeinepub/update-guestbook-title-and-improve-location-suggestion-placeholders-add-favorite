@@ -1,326 +1,358 @@
-import { useState } from 'react';
-import { useNavigate } from '@tanstack/react-router';
-import { useAddEntry } from '../hooks/useQueries';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Separator } from '@/components/ui/separator';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Loader2, MapPin, Mountain, Locate } from 'lucide-react';
-import type { Location } from '../backend';
-import type { GeocodingResult } from '../lib/geocoding';
-import PlaceSearchField from '../components/PlaceSearchField';
-import { encodeLocationPlaceName } from '../lib/guestbookFormat';
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { useNavigate } from "@tanstack/react-router";
+import { AlertCircle, Loader2, MapPin } from "lucide-react";
+import type React from "react";
+import { useState } from "react";
+import PlaceSearchField from "../components/PlaceSearchField";
+import { useActor } from "../hooks/useActor";
+import { useInternetIdentity } from "../hooks/useInternetIdentity";
+import { useAddEntry } from "../hooks/useQueries";
+import type { GeocodingResult } from "../lib/geocoding";
+
+const POPULAR_TRAILS = [
+  { value: "", label: "Select a trail (optional)" },
+  { value: "Appalachian Trail (USA)", label: "Appalachian Trail (USA)" },
+  { value: "Pacific Crest Trail (USA)", label: "Pacific Crest Trail (USA)" },
+  {
+    value: "Continental Divide Trail (USA)",
+    label: "Continental Divide Trail (USA)",
+  },
+  { value: "Te Araroa (New Zealand)", label: "Te Araroa (New Zealand)" },
+  { value: "Camino de Santiago (Spain)", label: "Camino de Santiago (Spain)" },
+  {
+    value: "Tour du Mont Blanc (Europe)",
+    label: "Tour du Mont Blanc (Europe)",
+  },
+  { value: "GR20 (Corsica, France)", label: "GR20 (Corsica, France)" },
+  {
+    value: "West Highland Way (Scotland)",
+    label: "West Highland Way (Scotland)",
+  },
+  {
+    value: "Milford Track (New Zealand)",
+    label: "Milford Track (New Zealand)",
+  },
+  { value: "Overland Track (Australia)", label: "Overland Track (Australia)" },
+  {
+    value: "Everest Base Camp Trek (Nepal)",
+    label: "Everest Base Camp Trek (Nepal)",
+  },
+  { value: "Inca Trail (Peru)", label: "Inca Trail (Peru)" },
+  { value: "John Muir Trail (USA)", label: "John Muir Trail (USA)" },
+  { value: "Long Trail (Vermont, USA)", label: "Long Trail (Vermont, USA)" },
+  { value: "Florida Trail (USA)", label: "Florida Trail (USA)" },
+  {
+    value: "Ice Age Trail (Wisconsin, USA)",
+    label: "Ice Age Trail (Wisconsin, USA)",
+  },
+  { value: "other", label: "Another trail…" },
+];
 
 export default function AddEntryPage() {
   const navigate = useNavigate();
-  const addEntry = useAddEntry();
+  const { identity } = useInternetIdentity();
+  const { isFetching: actorFetching } = useActor();
 
-  const [name, setName] = useState('');
-  const [trailName, setTrailName] = useState('');
-  const [comment, setComment] = useState('');
-  const [error, setError] = useState('');
+  const [name, setName] = useState("");
+  const [trailName, setTrailName] = useState("");
+  const [comment, setComment] = useState("");
+  const [currentLocation, setCurrentLocation] =
+    useState<GeocodingResult | null>(null);
+  const [favoritePlace, setFavoritePlace] = useState<GeocodingResult | null>(
+    null,
+  );
+  const [selectedTrail, setSelectedTrail] = useState("");
+  const [customTrail, setCustomTrail] = useState("");
+  const [geoError, setGeoError] = useState<string | null>(null);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
 
-  // Current location state
-  const [currentLat, setCurrentLat] = useState('');
-  const [currentLon, setCurrentLon] = useState('');
-  const [currentPlaceName, setCurrentPlaceName] = useState('');
-  const [gettingLocation, setGettingLocation] = useState(false);
+  // identity is available for ownership tracking but sign-in is not required
+  void identity;
 
-  // Favorite place state
-  const [favLat, setFavLat] = useState('');
-  const [favLon, setFavLon] = useState('');
-  const [favPlaceName, setFavPlaceName] = useState('');
+  const addEntryMutation = useAddEntry();
 
-  const handleGetCurrentLocation = () => {
+  const handleUseMyLocation = () => {
+    setGeoError(null);
     if (!navigator.geolocation) {
-      setError('Geolocation is not supported by your browser');
+      setGeoError("Geolocation is not supported by your browser.");
       return;
     }
-
-    setGettingLocation(true);
-    setError('');
-
     navigator.geolocation.getCurrentPosition(
-      (position) => {
-        setCurrentLat(position.coords.latitude.toFixed(6));
-        setCurrentLon(position.coords.longitude.toFixed(6));
-        setCurrentPlaceName('');
-        setGettingLocation(false);
+      (pos) => {
+        setCurrentLocation({
+          displayName: `${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)}`,
+          latitude: pos.coords.latitude,
+          longitude: pos.coords.longitude,
+        });
       },
       (err) => {
-        setError(`Unable to get location: ${err.message}`);
-        setGettingLocation(false);
-      }
+        if (err.code === err.PERMISSION_DENIED) {
+          setGeoError(
+            "Location permission denied. Please search for your location manually.",
+          );
+        } else {
+          setGeoError(
+            "Unable to retrieve your location. Please search manually.",
+          );
+        }
+      },
     );
-  };
-
-  const handleSelectCurrentPlace = (result: GeocodingResult) => {
-    setCurrentLat(result.latitude.toFixed(6));
-    setCurrentLon(result.longitude.toFixed(6));
-    setCurrentPlaceName(result.displayName);
-  };
-
-  const handleSelectFavoritePlace = (result: GeocodingResult) => {
-    setFavLat(result.latitude.toFixed(6));
-    setFavLon(result.longitude.toFixed(6));
-    setFavPlaceName(result.displayName);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setSubmitError(null);
 
     if (!comment.trim()) {
-      setError('Please enter a comment');
+      setSubmitError("Please enter a comment.");
       return;
     }
 
-    const currentLocation: Location | null =
-      currentLat && currentLon
-        ? { latitude: parseFloat(currentLat), longitude: parseFloat(currentLon) }
-        : null;
-
-    const favoritePlace: Location | null =
-      favLat && favLon
-        ? { latitude: parseFloat(favLat), longitude: parseFloat(favLon) }
-        : null;
-
-    // Encode place names into comment
-    let enrichedComment = comment;
-    if (currentLocation && currentPlaceName) {
-      enrichedComment = encodeLocationPlaceName(enrichedComment, currentPlaceName, 'current');
+    if (actorFetching) {
+      setSubmitError(
+        "Still connecting to the network. Please wait a moment and try again.",
+      );
+      return;
     }
-    if (favoritePlace && favPlaceName) {
-      enrichedComment = encodeLocationPlaceName(enrichedComment, favPlaceName, 'favorite');
+
+    // Build the enriched comment that encodes place names
+    let enrichedComment = comment.trim();
+    if (currentLocation) {
+      enrichedComment += `\n[loc:${currentLocation.displayName}]`;
+    }
+    if (favoritePlace) {
+      enrichedComment += `\n[fav:${favoritePlace.displayName}]`;
+    }
+    const trailLabel =
+      selectedTrail === "other" ? customTrail.trim() : selectedTrail;
+    if (trailLabel) {
+      enrichedComment += `\n[trail:${trailLabel}]`;
     }
 
     try {
-      await addEntry.mutateAsync({
-        name,
-        trailName,
+      await addEntryMutation.mutateAsync({
+        name: name.trim() || null,
+        trailName: trailName.trim() || null,
         comment: enrichedComment,
-        currentLocation,
-        favoritePlace,
+        currentLocation: currentLocation
+          ? {
+              latitude: currentLocation.latitude,
+              longitude: currentLocation.longitude,
+            }
+          : null,
+        favoritePlace: favoritePlace
+          ? {
+              latitude: favoritePlace.latitude,
+              longitude: favoritePlace.longitude,
+            }
+          : null,
       });
-      navigate({ to: '/' });
-    } catch (err: any) {
-      setError(err.message || 'Failed to add entry');
+      setSubmitSuccess(true);
+      setTimeout(() => navigate({ to: "/" }), 1500);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      setSubmitError(msg || "Failed to submit entry. Please try again.");
     }
   };
 
+  if (submitSuccess) {
+    return (
+      <div className="max-w-lg mx-auto px-4 py-12 text-center">
+        <div className="bg-card border border-border rounded-2xl p-8 shadow-sm">
+          <div className="text-4xl mb-4">🥾</div>
+          <h2 className="text-2xl font-bold text-foreground mb-2">
+            Entry Saved!
+          </h2>
+          <p className="text-muted-foreground">
+            Your guestbook entry has been saved. Redirecting…
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  const isSubmitDisabled = addEntryMutation.isPending || actorFetching;
+
   return (
-    <div className="max-w-2xl mx-auto pb-20">
-      <h2 className="text-2xl font-bold mb-6">Sign the Guest Book</h2>
+    <div className="max-w-lg mx-auto px-4 py-8">
+      <h1 className="text-2xl font-bold text-foreground mb-1">
+        Sign the Guestbook
+      </h1>
+      <p className="text-muted-foreground mb-6 text-sm">
+        Share your trail story with the VTH community.
+      </p>
 
-      <form onSubmit={handleSubmit}>
-        <Card>
-          <CardHeader>
-            <CardTitle>Your Entry</CardTitle>
-            <CardDescription>
-              Share your connection to the Appalachian Trail
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            {/* Name Fields */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="name">Name (optional)</Label>
-                <Input
-                  id="name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Your name"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="trailName">Trail Name (optional)</Label>
-                <Input
-                  id="trailName"
-                  value={trailName}
-                  onChange={(e) => setTrailName(e.target.value)}
-                  placeholder="Your trail name"
-                />
-              </div>
-            </div>
+      {actorFetching && (
+        <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4 bg-muted rounded-lg px-3 py-2">
+          <Loader2 className="w-4 h-4 animate-spin shrink-0" />
+          <span>Connecting to the network…</span>
+        </div>
+      )}
 
-            {/* Comment */}
-            <div className="space-y-2">
-              <Label htmlFor="comment">Comment *</Label>
-              <Textarea
-                id="comment"
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-                placeholder="Share your story, memories, or connection to the trail..."
-                rows={5}
-                required
-              />
-            </div>
+      <form onSubmit={handleSubmit} className="space-y-5">
+        <div>
+          <Label htmlFor="name">
+            Your Name <span className="text-muted-foreground">(optional)</span>
+          </Label>
+          <Input
+            id="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Trail name or real name"
+            className="mt-1"
+          />
+        </div>
 
-            <Separator />
+        <div>
+          <Label htmlFor="trailName">
+            Trail Name / Alias{" "}
+            <span className="text-muted-foreground">(optional)</span>
+          </Label>
+          <Input
+            id="trailName"
+            value={trailName}
+            onChange={(e) => setTrailName(e.target.value)}
+            placeholder="e.g. Ridgerunner, Blaze"
+            className="mt-1"
+          />
+        </div>
 
-            {/* Current Location */}
-            <div className="space-y-3">
-              <div className="flex items-center gap-2">
-                <MapPin className="h-5 w-5 text-primary" />
-                <Label className="text-base font-semibold">Current Location (optional)</Label>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Where are you signing from?
-              </p>
+        <div>
+          <Label htmlFor="comment">
+            Your Message <span className="text-destructive">*</span>
+          </Label>
+          <Textarea
+            id="comment"
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            placeholder="Share your trail story, thoughts, or greetings…"
+            rows={4}
+            className="mt-1"
+            required
+          />
+        </div>
 
-              <PlaceSearchField
-                label="Search for your location"
-                placeholder="My home town"
-                onSelect={handleSelectCurrentPlace}
-              />
-
-              <div className="flex items-center gap-2">
-                <Button
+        <div>
+          <Label>
+            Current Location{" "}
+            <span className="text-muted-foreground">(optional)</span>
+          </Label>
+          <div className="mt-1 space-y-2">
+            {currentLocation && (
+              <div className="flex items-center gap-2 text-sm bg-muted rounded-lg px-3 py-2">
+                <MapPin className="w-3 h-3 text-primary shrink-0" />
+                <span className="flex-1 truncate text-foreground">
+                  {currentLocation.displayName}
+                </span>
+                <button
                   type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={handleGetCurrentLocation}
-                  disabled={gettingLocation}
+                  onClick={() => setCurrentLocation(null)}
+                  className="text-muted-foreground hover:text-destructive text-xs ml-1"
                 >
-                  {gettingLocation ? (
-                    <>
-                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                      Getting location...
-                    </>
-                  ) : (
-                    <>
-                      <Locate className="h-4 w-4 mr-2" />
-                      Use my location
-                    </>
-                  )}
-                </Button>
+                  ✕
+                </button>
               </div>
+            )}
+            <PlaceSearchField
+              label=""
+              placeholder="Search for your current location…"
+              onSelect={(result) => setCurrentLocation(result)}
+            />
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={handleUseMyLocation}
+              className="flex items-center gap-1"
+            >
+              <MapPin className="w-3 h-3" />
+              Use My GPS Location
+            </Button>
+            {geoError && <p className="text-destructive text-xs">{geoError}</p>}
+          </div>
+        </div>
 
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-2">
-                  <Label htmlFor="currentLat" className="text-sm">
-                    Latitude
-                  </Label>
-                  <Input
-                    id="currentLat"
-                    type="number"
-                    step="any"
-                    value={currentLat}
-                    onChange={(e) => {
-                      setCurrentLat(e.target.value);
-                      setCurrentPlaceName('');
-                    }}
-                    placeholder="e.g., 40.7128"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="currentLon" className="text-sm">
-                    Longitude
-                  </Label>
-                  <Input
-                    id="currentLon"
-                    type="number"
-                    step="any"
-                    value={currentLon}
-                    onChange={(e) => {
-                      setCurrentLon(e.target.value);
-                      setCurrentPlaceName('');
-                    }}
-                    placeholder="e.g., -74.0060"
-                  />
-                </div>
-              </div>
-            </div>
+        <div>
+          <Label>
+            Favorite Location on the Trail{" "}
+            <span className="text-muted-foreground">(optional)</span>
+          </Label>
+          <div className="mt-1 space-y-2">
+            {/* Trail selector dropdown */}
+            <select
+              data-ocid="favorite.trail_select"
+              value={selectedTrail}
+              onChange={(e) => setSelectedTrail(e.target.value)}
+              className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring"
+            >
+              {POPULAR_TRAILS.map((trail) => (
+                <option key={trail.value} value={trail.value}>
+                  {trail.label}
+                </option>
+              ))}
+            </select>
 
-            <Separator />
-
-            {/* Favorite AT Place */}
-            <div className="space-y-3">
-              <div className="flex items-center gap-2">
-                <Mountain className="h-5 w-5 text-primary" />
-                <Label className="text-base font-semibold">Favorite AT Place (optional)</Label>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Mark your favorite spot on the Appalachian Trail
-              </p>
-
-              <PlaceSearchField
-                label="Search for AT location"
-                placeholder="e.g., Springer Mtn, Mt. Katahdin"
-                onSelect={handleSelectFavoritePlace}
+            {/* Custom trail input when "Another trail…" is selected */}
+            {selectedTrail === "other" && (
+              <Input
+                data-ocid="favorite.custom_trail.input"
+                value={customTrail}
+                onChange={(e) => setCustomTrail(e.target.value)}
+                placeholder="Enter trail name…"
+                className="mt-1"
               />
-
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-2">
-                  <Label htmlFor="favLat" className="text-sm">
-                    Latitude
-                  </Label>
-                  <Input
-                    id="favLat"
-                    type="number"
-                    step="any"
-                    value={favLat}
-                    onChange={(e) => {
-                      setFavLat(e.target.value);
-                      setFavPlaceName('');
-                    }}
-                    placeholder="e.g., 34.6267"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="favLon" className="text-sm">
-                    Longitude
-                  </Label>
-                  <Input
-                    id="favLon"
-                    type="number"
-                    step="any"
-                    value={favLon}
-                    onChange={(e) => {
-                      setFavLon(e.target.value);
-                      setFavPlaceName('');
-                    }}
-                    placeholder="e.g., -84.1937"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {error && (
-              <Alert variant="destructive">
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
             )}
 
-            <div className="flex gap-3">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => navigate({ to: '/' })}
-                className="flex-1"
-              >
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                disabled={addEntry.isPending}
-                className="flex-1"
-              >
-                {addEntry.isPending ? (
-                  <>
-                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                    Signing...
-                  </>
-                ) : (
-                  'Sign Guest Book'
-                )}
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+            {favoritePlace && (
+              <div className="flex items-center gap-2 text-sm bg-muted rounded-lg px-3 py-2">
+                <MapPin className="w-3 h-3 text-amber-600 shrink-0" />
+                <span className="flex-1 truncate text-foreground">
+                  {favoritePlace.displayName}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setFavoritePlace(null)}
+                  className="text-muted-foreground hover:text-destructive text-xs ml-1"
+                >
+                  ✕
+                </button>
+              </div>
+            )}
+            <PlaceSearchField
+              label=""
+              placeholder="Search for your favorite trail spot…"
+              onSelect={(result) => setFavoritePlace(result)}
+            />
+          </div>
+        </div>
+
+        {submitError && (
+          <Alert variant="destructive">
+            <AlertCircle className="h-4 w-4" />
+            <AlertDescription>{submitError}</AlertDescription>
+          </Alert>
+        )}
+
+        <Button type="submit" className="w-full" disabled={isSubmitDisabled}>
+          {addEntryMutation.isPending ? (
+            <>
+              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              Saving…
+            </>
+          ) : actorFetching ? (
+            <>
+              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              Connecting…
+            </>
+          ) : (
+            "Sign the Guestbook"
+          )}
+        </Button>
       </form>
     </div>
   );

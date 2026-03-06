@@ -19,8 +19,8 @@ interface NominatimResult {
   importance?: number;
 }
 
-const NOMINATIM_BASE_URL = 'https://nominatim.openstreetmap.org';
-const USER_AGENT = 'ATGuestbook/1.0';
+const NOMINATIM_BASE_URL = "https://nominatim.openstreetmap.org";
+const USER_AGENT = "ATGuestbook/1.0";
 
 /**
  * Search for places by name and return candidate results.
@@ -30,32 +30,34 @@ const USER_AGENT = 'ATGuestbook/1.0';
  */
 export async function searchPlaces(query: string): Promise<GeocodingResult[]> {
   if (!query || query.trim().length === 0) {
-    throw new Error('Search query cannot be empty');
+    throw new Error("Search query cannot be empty");
   }
 
   const trimmedQuery = query.trim();
-  
+
   try {
     const url = new URL(`${NOMINATIM_BASE_URL}/search`);
-    url.searchParams.set('q', trimmedQuery);
-    url.searchParams.set('format', 'json');
-    url.searchParams.set('limit', '5');
-    url.searchParams.set('addressdetails', '1');
+    url.searchParams.set("q", trimmedQuery);
+    url.searchParams.set("format", "json");
+    url.searchParams.set("limit", "5");
+    url.searchParams.set("addressdetails", "1");
 
     const response = await fetch(url.toString(), {
       headers: {
-        'User-Agent': USER_AGENT,
+        "User-Agent": USER_AGENT,
       },
     });
 
     if (!response.ok) {
-      throw new Error(`Geocoding service returned ${response.status}: ${response.statusText}`);
+      throw new Error(
+        `Geocoding service returned ${response.status}: ${response.statusText}`,
+      );
     }
 
     const data: NominatimResult[] = await response.json();
 
     if (!Array.isArray(data)) {
-      throw new Error('Invalid response from geocoding service');
+      throw new Error("Invalid response from geocoding service");
     }
 
     if (data.length === 0) {
@@ -65,8 +67,8 @@ export async function searchPlaces(query: string): Promise<GeocodingResult[]> {
     // Normalize results
     return data.map((result) => ({
       displayName: result.display_name,
-      latitude: parseFloat(result.lat),
-      longitude: parseFloat(result.lon),
+      latitude: Number.parseFloat(result.lat),
+      longitude: Number.parseFloat(result.lon),
       type: result.type,
       importance: result.importance,
     }));
@@ -74,6 +76,6 @@ export async function searchPlaces(query: string): Promise<GeocodingResult[]> {
     if (error instanceof Error) {
       throw error;
     }
-    throw new Error('Failed to search for location. Please try again.');
+    throw new Error("Failed to search for location. Please try again.");
   }
 }

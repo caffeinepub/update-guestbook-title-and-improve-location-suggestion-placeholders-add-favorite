@@ -1,61 +1,76 @@
-import { RouterProvider, createRouter, createRoute, createRootRoute } from '@tanstack/react-router';
-import AppLayout from './components/AppLayout';
-import GuestbookFeedPage from './pages/GuestbookFeedPage';
-import AddEntryPage from './pages/AddEntryPage';
-import EntryDetailPage from './pages/EntryDetailPage';
-import WorldMapPage from './pages/WorldMapPage';
-import ATMapPage from './pages/ATMapPage';
+import { Toaster } from "@/components/ui/sonner";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+  RouterProvider,
+  createRootRoute,
+  createRoute,
+  createRouter,
+} from "@tanstack/react-router";
+import React from "react";
+import AppLayout from "./components/AppLayout";
+import ATMapPage from "./pages/ATMapPage";
+import AddEntryPage from "./pages/AddEntryPage";
+import EntryDetailPage from "./pages/EntryDetailPage";
+import GuestbookFeedPage from "./pages/GuestbookFeedPage";
+import WorldMapPage from "./pages/WorldMapPage";
+
+const queryClient = new QueryClient();
 
 const rootRoute = createRootRoute({
   component: AppLayout,
 });
 
-const indexRoute = createRoute({
+const feedRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/',
+  path: "/",
   component: GuestbookFeedPage,
 });
 
 const addRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/add',
+  path: "/add",
   component: AddEntryPage,
 });
 
-const entryRoute = createRoute({
+const entryDetailRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/entry/$entryId',
+  path: "/entry/$timestamp",
   component: EntryDetailPage,
 });
 
 const worldMapRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/world-map',
+  path: "/world-map",
   component: WorldMapPage,
 });
 
 const atMapRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/at-map',
+  path: "/at-map",
   component: ATMapPage,
 });
 
 const routeTree = rootRoute.addChildren([
-  indexRoute,
+  feedRoute,
   addRoute,
-  entryRoute,
+  entryDetailRoute,
   worldMapRoute,
   atMapRoute,
 ]);
 
 const router = createRouter({ routeTree });
 
-declare module '@tanstack/react-router' {
+declare module "@tanstack/react-router" {
   interface Register {
     router: typeof router;
   }
 }
 
 export default function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+      <Toaster />
+    </QueryClientProvider>
+  );
 }

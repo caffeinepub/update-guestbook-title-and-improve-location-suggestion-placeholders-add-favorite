@@ -1,12 +1,11 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useActor } from './useActor';
-import type { GuestbookEntry, Location, Time } from '../backend';
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import type { GuestbookEntry, Location, UserProfile } from "../backend";
+import { useActor } from "./useActor";
 
 export function useGetAllEntries() {
   const { actor, isFetching } = useActor();
-
   return useQuery<GuestbookEntry[]>({
-    queryKey: ['entries'],
+    queryKey: ["getAllEntries"],
     queryFn: async () => {
       if (!actor) return [];
       return actor.getAllEntries();
@@ -17,9 +16,8 @@ export function useGetAllEntries() {
 
 export function useGetEntriesWithLocation() {
   const { actor, isFetching } = useActor();
-
   return useQuery<GuestbookEntry[]>({
-    queryKey: ['entries-with-location'],
+    queryKey: ["getEntriesWithLocation"],
     queryFn: async () => {
       if (!actor) return [];
       return actor.getEntriesWithLocation();
@@ -30,9 +28,8 @@ export function useGetEntriesWithLocation() {
 
 export function useGetEntriesWithFavoritePlace() {
   const { actor, isFetching } = useActor();
-
   return useQuery<GuestbookEntry[]>({
-    queryKey: ['entries-with-favorite-place'],
+    queryKey: ["getEntriesWithFavoritePlace"],
     queryFn: async () => {
       if (!actor) return [];
       return actor.getEntriesWithFavoritePlace();
@@ -41,10 +38,39 @@ export function useGetEntriesWithFavoritePlace() {
   });
 }
 
-export function useAddEntry() {
-  const { actor } = useActor();
-  const queryClient = useQueryClient();
+export function useGetCallerUserProfile() {
+  const { actor, isFetching: actorFetching } = useActor();
+  const query = useQuery<UserProfile | null>({
+    queryKey: ["currentUserProfile"],
+    queryFn: async () => {
+      if (!actor) throw new Error("Actor not available");
+      return actor.getCallerUserProfile();
+    },
+    enabled: !!actor && !actorFetching,
+    retry: false,
+  });
+  return {
+    ...query,
+    isLoading: actorFetching || query.isLoading,
+    isFetched: !!actor && query.isFetched,
+  };
+}
 
+export function useIsCallerAdmin() {
+  const { actor, isFetching } = useActor();
+  return useQuery<boolean>({
+    queryKey: ["isCallerAdmin"],
+    queryFn: async () => {
+      if (!actor) return false;
+      return actor.isCallerAdmin();
+    },
+    enabled: !!actor && !isFetching,
+  });
+}
+
+export function useAddEntry() {
+  const { actor, isFetching: actorFetching } = useActor();
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async ({
       name,
@@ -53,82 +79,126 @@ export function useAddEntry() {
       currentLocation,
       favoritePlace,
     }: {
-      name: string;
-      trailName: string;
+      name: string | null;
+      trailName: string | null;
       comment: string;
       currentLocation: Location | null;
       favoritePlace: Location | null;
     }) => {
-      if (!actor) throw new Error('Actor not initialized');
-      
-      return actor.addEntry(
-        name.trim() || null,
-        trailName.trim() || null,
+      if (actorFetching)
+        throw new Error(
+          "Still connecting to the network. Please wait a moment and try again.",
+        );
+      if (!actor)
+        throw new Error(
+          "Not connected. Please refresh the page and try again.",
+        );
+      await actor.addEntry(
+        name,
+        trailName,
         comment,
         currentLocation,
-        favoritePlace
+        favoritePlace,
       );
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['entries'] });
-      queryClient.invalidateQueries({ queryKey: ['entries-with-location'] });
-      queryClient.invalidateQueries({ queryKey: ['entries-with-favorite-place'] });
+      queryClient.invalidateQueries({ queryKey: ["getAllEntries"] });
+      queryClient.invalidateQueries({ queryKey: ["getEntriesWithLocation"] });
+      queryClient.invalidateQueries({
+        queryKey: ["getEntriesWithFavoritePlace"],
+      });
     },
   });
 }
 
 export function useUpdateEntry() {
-  const { actor } = useActor();
+  const { actor, isFetching: actorFetching } = useActor();
   const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: async ({
       timestamp,
       name,
       trailName,
-      comment,
+      newComment,
       currentLocation,
       favoritePlace,
     }: {
-      timestamp: Time;
-      name: string;
-      trailName: string;
-      comment: string;
+      timestamp: bigint;
+      name: string | null;
+      trailName: string | null;
+      newComment: string;
       currentLocation: Location | null;
       favoritePlace: Location | null;
     }) => {
-      if (!actor) throw new Error('Actor not initialized');
-      
-      return actor.updateEntry(
+      if (actorFetching)
+        throw new Error(
+          "Still connecting to the network. Please wait a moment and try again.",
+        );
+      if (!actor)
+        throw new Error(
+          "Not connected. Please refresh the page and try again.",
+        );
+      await actor.updateEntry(
         timestamp,
-        name.trim() || null,
-        trailName.trim() || null,
-        comment,
+        name,
+        trailName,
+        newComment,
         currentLocation,
-        favoritePlace
+        favoritePlace,
       );
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['entries'] });
-      queryClient.invalidateQueries({ queryKey: ['entries-with-location'] });
-      queryClient.invalidateQueries({ queryKey: ['entries-with-favorite-place'] });
+      queryClient.invalidateQueries({ queryKey: ["getAllEntries"] });
+      queryClient.invalidateQueries({ queryKey: ["getEntriesWithLocation"] });
+      queryClient.invalidateQueries({
+        queryKey: ["getEntriesWithFavoritePlace"],
+      });
     },
   });
 }
 
 export function useDeleteEntry() {
-  const { actor } = useActor();
+  const { actor, isFetching: actorFetching } = useActor();
   const queryClient = useQueryClient();
-
   return useMutation({
-    mutationFn: async (timestamp: Time) => {
-      if (!actor) throw new Error('Actor not initialized');
-      return actor.deleteEntry(timestamp);
+    mutationFn: async (timestamp: bigint) => {
+      if (actorFetching)
+        throw new Error(
+          "Still connecting to the network. Please wait a moment and try again.",
+        );
+      if (!actor)
+        throw new Error(
+          "Not connected. Please refresh the page and try again.",
+        );
+      await actor.deleteEntry(timestamp);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['entries'] });
-      queryClient.invalidateQueries({ queryKey: ['entries-with-location'] });
-      queryClient.invalidateQueries({ queryKey: ['entries-with-favorite-place'] });
+      queryClient.invalidateQueries({ queryKey: ["getAllEntries"] });
+      queryClient.invalidateQueries({ queryKey: ["getEntriesWithLocation"] });
+      queryClient.invalidateQueries({
+        queryKey: ["getEntriesWithFavoritePlace"],
+      });
+    },
+  });
+}
+
+export function useSaveCallerUserProfile() {
+  const { actor, isFetching: actorFetching } = useActor();
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (profile: UserProfile) => {
+      if (actorFetching)
+        throw new Error(
+          "Still connecting to the network. Please wait a moment and try again.",
+        );
+      if (!actor)
+        throw new Error(
+          "Not connected. Please refresh the page and try again.",
+        );
+      await actor.saveCallerUserProfile(profile);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["currentUserProfile"] });
     },
   });
 }

@@ -4,32 +4,45 @@
 
 @layer base {
   :root {
-    /* Warm earthy palette - Light mode */
-    --background: 88% 0.02 85;
-    --foreground: 25% 0.02 85;
-    --card: 92% 0.02 85;
-    --card-foreground: 25% 0.02 85;
-    --popover: 92% 0.02 85;
-    --popover-foreground: 25% 0.02 85;
-    --primary: 48% 0.15 35;
-    --primary-foreground: 95% 0.02 85;
-    --secondary: 75% 0.08 85;
-    --secondary-foreground: 25% 0.02 85;
-    --muted: 82% 0.04 85;
-    --muted-foreground: 45% 0.02 85;
-    --accent: 65% 0.12 120;
-    --accent-foreground: 25% 0.02 85;
-    --destructive: 55% 0.20 25;
-    --destructive-foreground: 95% 0.02 85;
-    --border: 78% 0.04 85;
-    --input: 78% 0.04 85;
-    --ring: 48% 0.15 35;
-    --chart-1: 48% 0.15 35;
-    --chart-2: 65% 0.12 120;
-    --chart-3: 55% 0.20 25;
-    --chart-4: 75% 0.08 85;
-    --chart-5: 45% 0.10 60;
+    /* Beige/earthy palette - Light mode */
+    --background: 94% 0.03 80;
+    --foreground: 22% 0.04 50;
+    --card: 97% 0.02 80;
+    --card-foreground: 22% 0.04 50;
+    --popover: 97% 0.02 80;
+    --popover-foreground: 22% 0.04 50;
+    /* primary = forest green */
+    --primary: 38% 0.14 145;
+    --primary-foreground: 97% 0.01 80;
+    --secondary: 88% 0.04 80;
+    --secondary-foreground: 22% 0.04 50;
+    --muted: 90% 0.03 80;
+    --muted-foreground: 48% 0.04 80;
+    /* accent = forest green */
+    --accent: 45% 0.14 145;
+    --accent-foreground: 97% 0.01 80;
+    --destructive: 50% 0.22 25;
+    --destructive-foreground: 97% 0.01 80;
+    --border: 85% 0.04 75;
+    --input: 85% 0.04 75;
+    --ring: 38% 0.14 145;
+    --chart-1: 38% 0.14 145;
+    --chart-2: 52% 0.2 28;
+    --chart-3: 50% 0.22 25;
+    --chart-4: 75% 0.06 80;
+    --chart-5: 45% 0.1 60;
     --radius: 0.5rem;
+
+    /* Logo-specific tokens - Light mode */
+    /* Header banner: warm beige background */
+    --logo-bg: 92% 0.04 80;
+    --logo-border: 82% 0.06 75;
+    /* Emblem badge: deep forest green */
+    --logo-emblem: 28% 0.12 145;
+    /* Wordmark "VTH Guest Book": burnt red */
+    --logo-title: 42% 0.2 28;
+    /* Subtitle "Vicarious Thru-Hikers": forest green */
+    --logo-subtitle: 38% 0.14 145;
   }
 
   .dark {
@@ -48,16 +61,27 @@
     --muted-foreground: 65% 0.02 85;
     --accent: 55% 0.12 120;
     --accent-foreground: 88% 0.02 85;
-    --destructive: 50% 0.20 25;
+    --destructive: 50% 0.2 25;
     --destructive-foreground: 88% 0.02 85;
     --border: 32% 0.04 85;
     --input: 32% 0.04 85;
     --ring: 58% 0.15 35;
     --chart-1: 58% 0.15 35;
     --chart-2: 55% 0.12 120;
-    --chart-3: 50% 0.20 25;
+    --chart-3: 50% 0.2 25;
     --chart-4: 42% 0.08 85;
-    --chart-5: 48% 0.10 60;
+    --chart-5: 48% 0.1 60;
+
+    /* Logo-specific tokens - Dark mode */
+    /* Emblem badge: deep amber-brown background */
+    --logo-bg: 38% 0.12 50;
+    --logo-border: 48% 0.14 52;
+    /* Emblem text: bright warm cream for contrast on dark amber */
+    --logo-emblem: 92% 0.04 85;
+    /* Wordmark "VTH": warm golden amber */
+    --logo-title: 72% 0.16 55;
+    /* Subtitle "Guest Book": soft sage green */
+    --logo-subtitle: 68% 0.1 145;
   }
 }
 

@@ -1,12 +1,3 @@
-import { useState } from 'react';
-import { useNavigate, useParams } from '@tanstack/react-router';
-import { useGetAllEntries, useDeleteEntry } from '../hooks/useQueries';
-import { useInternetIdentity } from '../hooks/useInternetIdentity';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
-import { Skeleton } from '@/components/ui/skeleton';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -16,251 +7,204 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
-import { ArrowLeft, MapPin, Mountain, User, Tag, Edit, Trash2 } from 'lucide-react';
-import { getAuthorLabel, formatTimestamp, formatCoordinates, stripPlaceNames } from '../lib/guestbookFormat';
-import EditEntryDialog from '../components/EditEntryDialog';
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { useNavigate, useParams } from "@tanstack/react-router";
+import { ArrowLeft, Loader2, MapPin, Pencil, Trash2 } from "lucide-react";
+import React, { useState } from "react";
+import type { GuestbookEntry } from "../backend";
+import EditEntryDialog from "../components/EditEntryDialog";
+import { useInternetIdentity } from "../hooks/useInternetIdentity";
+import {
+  useDeleteEntry,
+  useGetAllEntries,
+  useIsCallerAdmin,
+} from "../hooks/useQueries";
+import {
+  decodeComment,
+  decodePlaceNames,
+  formatAuthorLabel,
+  formatTimestamp,
+} from "../lib/guestbookFormat";
 
 export default function EntryDetailPage() {
+  const { timestamp } = useParams({ from: "/entry/$timestamp" });
   const navigate = useNavigate();
-  const { entryId } = useParams({ from: '/entry/$entryId' });
-  const { data: entries, isLoading } = useGetAllEntries();
-  const deleteEntry = useDeleteEntry();
   const { identity } = useInternetIdentity();
-  
-  const [showEditDialog, setShowEditDialog] = useState(false);
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const { data: entries, isLoading } = useGetAllEntries();
+  const { data: isAdmin } = useIsCallerAdmin();
+  const deleteEntry = useDeleteEntry();
+  const [editOpen, setEditOpen] = useState(false);
 
-  if (isLoading) {
-    return (
-      <div className="max-w-2xl mx-auto pb-20">
-        <Button variant="ghost" onClick={() => navigate({ to: '/' })} className="mb-4">
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          Back to Feed
-        </Button>
-        <Card>
-          <CardHeader>
-            <Skeleton className="h-8 w-48" />
-          </CardHeader>
-          <CardContent>
-            <Skeleton className="h-32 w-full" />
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  const sortedEntries = [...(entries || [])].sort((a, b) => 
-    Number(b.timestamp - a.timestamp)
+  const entry = entries?.find(
+    (e: GuestbookEntry) => e.timestamp.toString() === timestamp,
   );
-  const entry = sortedEntries[parseInt(entryId)];
 
-  if (!entry) {
-    return (
-      <div className="max-w-2xl mx-auto pb-20">
-        <Button variant="ghost" onClick={() => navigate({ to: '/' })} className="mb-4">
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          Back to Feed
-        </Button>
-        <Card>
-          <CardContent className="py-12 text-center">
-            <p className="text-muted-foreground">Entry not found</p>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
+  const isOwner =
+    identity && entry
+      ? entry.creator.toString() === identity.getPrincipal().toString()
+      : false;
 
-  const isEntryCreator = identity && entry.creator.toString() === identity.getPrincipal().toString();
+  const canModify = isOwner || isAdmin;
 
   const handleDelete = async () => {
+    if (!entry) return;
     try {
       await deleteEntry.mutateAsync(entry.timestamp);
-      navigate({ to: '/' });
-    } catch (err: any) {
-      console.error('Failed to delete entry:', err);
-      alert('Failed to delete entry. You may not have permission to delete this entry.');
+      navigate({ to: "/" });
+    } catch (err) {
+      console.error("Delete failed:", err);
     }
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (!entry) {
+    return (
+      <div className="max-w-lg mx-auto px-4 py-12 text-center">
+        <p className="text-muted-foreground">Entry not found.</p>
+        <Button
+          variant="ghost"
+          onClick={() => navigate({ to: "/" })}
+          className="mt-4"
+        >
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Back to Feed
+        </Button>
+      </div>
+    );
+  }
+
+  const { cleanComment } = decodeComment(entry.comment);
+  const { currentLocationName, favoritePlaceName } = decodePlaceNames(
+    entry.comment,
+  );
+
   return (
-    <div className="max-w-2xl mx-auto pb-20">
-      <Button variant="ghost" onClick={() => navigate({ to: '/' })} className="mb-4">
-        <ArrowLeft className="h-4 w-4 mr-2" />
+    <div className="max-w-lg mx-auto px-4 py-8">
+      <Button
+        variant="ghost"
+        onClick={() => navigate({ to: "/" })}
+        className="mb-6 -ml-2"
+      >
+        <ArrowLeft className="w-4 h-4 mr-2" />
         Back to Feed
       </Button>
 
-      <Card>
-        <CardHeader>
-          <div className="flex items-start justify-between gap-4">
-            <div className="flex-1">
-              <CardTitle className="text-2xl mb-2">
-                {getAuthorLabel(entry)}
-              </CardTitle>
-              <p className="text-sm text-muted-foreground">
-                {formatTimestamp(entry.timestamp)}
-              </p>
-            </div>
-            <div className="flex gap-2 flex-wrap justify-end">
-              {entry.currentLocation && (
-                <Badge variant="secondary">
-                  <MapPin className="h-3 w-3 mr-1" />
-                  World Map
-                </Badge>
-              )}
-              {entry.favoritePlace && (
-                <Badge variant="secondary">
-                  <Mountain className="h-3 w-3 mr-1" />
-                  AT Map
-                </Badge>
-              )}
-            </div>
-          </div>
-        </CardHeader>
-
-        <Separator />
-
-        <CardContent className="pt-6 space-y-6">
-          {/* Comment */}
+      <div className="bg-card border border-border rounded-2xl p-6 shadow-sm">
+        <div className="flex items-start justify-between gap-4 mb-4">
           <div>
-            <h3 className="text-sm font-semibold mb-2 text-muted-foreground">Comment</h3>
-            <p className="text-base whitespace-pre-wrap">{stripPlaceNames(entry.comment)}</p>
+            <h1 className="text-xl font-bold text-foreground">
+              {entry.name || formatAuthorLabel(entry.creator)}
+            </h1>
+            {entry.trailName && (
+              <p className="text-sm text-primary font-medium">
+                🥾 {entry.trailName}
+              </p>
+            )}
+            <p className="text-xs text-muted-foreground mt-1">
+              {formatTimestamp(entry.timestamp)}
+            </p>
           </div>
 
-          {/* Details */}
-          {(entry.name || entry.trailName) && (
-            <>
-              <Separator />
-              <div className="space-y-3">
-                <h3 className="text-sm font-semibold text-muted-foreground">Details</h3>
-                {entry.name && (
-                  <div className="flex items-center gap-2 text-sm">
-                    <User className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-muted-foreground">Name:</span>
-                    <span className="font-medium">{entry.name}</span>
-                  </div>
-                )}
-                {entry.trailName && (
-                  <div className="flex items-center gap-2 text-sm">
-                    <Tag className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-muted-foreground">Trail Name:</span>
-                    <span className="font-medium">{entry.trailName}</span>
-                  </div>
-                )}
-              </div>
-            </>
-          )}
+          {canModify && (
+            <div className="flex gap-2 shrink-0">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setEditOpen(true)}
+                className="flex items-center gap-1"
+              >
+                <Pencil className="w-3 h-3" />
+                Edit
+              </Button>
 
-          {/* Locations */}
-          {(entry.currentLocation || entry.favoritePlace) && (
-            <>
-              <Separator />
-              <div className="space-y-3">
-                <h3 className="text-sm font-semibold text-muted-foreground">Locations</h3>
-                {entry.currentLocation && (
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2 text-sm">
-                      <MapPin className="h-4 w-4 text-primary" />
-                      <span className="font-medium">Current Location</span>
-                    </div>
-                    <p className="text-sm text-muted-foreground ml-6">
-                      {formatCoordinates(
-                        entry.currentLocation.latitude,
-                        entry.currentLocation.longitude
-                      )}
-                    </p>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => navigate({ to: '/world-map' })}
-                      className="ml-6 mt-2"
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    className="flex items-center gap-1"
+                  >
+                    <Trash2 className="w-3 h-3" />
+                    Delete
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Delete Entry</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Are you sure you want to delete this guestbook entry? This
+                      action cannot be undone.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={handleDelete}
+                      className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                     >
-                      View on World Map
-                    </Button>
-                  </div>
-                )}
-                {entry.favoritePlace && (
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2 text-sm">
-                      <Mountain className="h-4 w-4 text-primary" />
-                      <span className="font-medium">Favorite AT Place</span>
-                    </div>
-                    <p className="text-sm text-muted-foreground ml-6">
-                      {formatCoordinates(
-                        entry.favoritePlace.latitude,
-                        entry.favoritePlace.longitude
+                      {deleteEntry.isPending ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        "Delete"
                       )}
-                    </p>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => navigate({ to: '/at-map' })}
-                      className="ml-6 mt-2"
-                    >
-                      View on AT Map
-                    </Button>
-                  </div>
-                )}
-              </div>
-            </>
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </div>
           )}
+        </div>
 
-          {/* Action Buttons - Only show if user is the creator */}
-          {isEntryCreator && (
-            <>
-              <Separator />
-              <div className="flex gap-3">
-                <Button
-                  variant="outline"
-                  onClick={() => setShowEditDialog(true)}
-                  className="flex-1"
-                >
-                  <Edit className="h-4 w-4 mr-2" />
-                  Edit Entry
-                </Button>
-                <Button
-                  variant="destructive"
-                  onClick={() => setShowDeleteDialog(true)}
-                  className="flex-1"
-                >
-                  <Trash2 className="h-4 w-4 mr-2" />
-                  Delete Entry
-                </Button>
-              </div>
-            </>
-          )}
-        </CardContent>
-      </Card>
+        <p className="text-foreground leading-relaxed whitespace-pre-wrap mb-4">
+          {cleanComment}
+        </p>
 
-      {isEntryCreator && (
-        <>
-          <EditEntryDialog
-            entry={entry}
-            open={showEditDialog}
-            onOpenChange={setShowEditDialog}
-          />
+        {(currentLocationName || entry.currentLocation) && (
+          <div className="flex items-center gap-2 text-sm text-muted-foreground border-t border-border pt-3 mt-3">
+            <MapPin className="w-4 h-4 text-primary shrink-0" />
+            <span>
+              <span className="font-medium text-foreground">
+                Current Location:{" "}
+              </span>
+              {currentLocationName ||
+                (entry.currentLocation
+                  ? `${entry.currentLocation.latitude.toFixed(4)}, ${entry.currentLocation.longitude.toFixed(4)}`
+                  : "")}
+            </span>
+          </div>
+        )}
 
-          <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Delete Entry?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete your guest book entry.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction
-                  onClick={handleDelete}
-                  disabled={deleteEntry.isPending}
-                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                >
-                  {deleteEntry.isPending ? 'Deleting...' : 'Delete'}
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-        </>
+        {(favoritePlaceName || entry.favoritePlace) && (
+          <div className="flex items-center gap-2 text-sm text-muted-foreground border-t border-border pt-3 mt-3">
+            <MapPin className="w-4 h-4 text-amber-600 shrink-0" />
+            <span>
+              <span className="font-medium text-foreground">
+                Favorite Trail Spot:{" "}
+              </span>
+              {favoritePlaceName ||
+                (entry.favoritePlace
+                  ? `${entry.favoritePlace.latitude.toFixed(4)}, ${entry.favoritePlace.longitude.toFixed(4)}`
+                  : "")}
+            </span>
+          </div>
+        )}
+      </div>
+
+      {editOpen && (
+        <EditEntryDialog
+          entry={entry}
+          open={editOpen}
+          onOpenChange={setEditOpen}
+        />
       )}
     </div>
   );
