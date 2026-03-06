@@ -167,7 +167,7 @@ export default function EntryDetailPage() {
           <div className="flex items-center gap-2 text-sm text-muted-foreground border-t border-border pt-3 mt-3">
             <MapPin className="w-4 h-4 text-amber-600 shrink-0" />
             <span>
-              <span className="font-medium text-foreground">Favorite AT Spot: </span>
+              <span className="font-medium text-foreground">Favorite Trail Spot: </span>
               {favoritePlaceName ||
                 (entry.favoritePlace
                   ? `${entry.favoritePlace.latitude.toFixed(4)}, ${entry.favoritePlace.longitude.toFixed(4)}`

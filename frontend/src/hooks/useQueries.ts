@@ -69,7 +69,7 @@ export function useIsCallerAdmin() {
 }
 
 export function useAddEntry() {
-  const { actor } = useActor();
+  const { actor, isFetching: actorFetching } = useActor();
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async ({
@@ -85,7 +85,8 @@ export function useAddEntry() {
       currentLocation: Location | null;
       favoritePlace: Location | null;
     }) => {
-      if (!actor) throw new Error('Actor not available');
+      if (actorFetching) throw new Error('Still connecting to the network. Please wait a moment and try again.');
+      if (!actor) throw new Error('Not connected. Please refresh the page and try again.');
       await actor.addEntry(name, trailName, comment, currentLocation, favoritePlace);
     },
     onSuccess: () => {
@@ -97,7 +98,7 @@ export function useAddEntry() {
 }
 
 export function useUpdateEntry() {
-  const { actor } = useActor();
+  const { actor, isFetching: actorFetching } = useActor();
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async ({
@@ -115,7 +116,8 @@ export function useUpdateEntry() {
       currentLocation: Location | null;
       favoritePlace: Location | null;
     }) => {
-      if (!actor) throw new Error('Actor not available');
+      if (actorFetching) throw new Error('Still connecting to the network. Please wait a moment and try again.');
+      if (!actor) throw new Error('Not connected. Please refresh the page and try again.');
       await actor.updateEntry(timestamp, name, trailName, newComment, currentLocation, favoritePlace);
     },
     onSuccess: () => {
@@ -127,11 +129,12 @@ export function useUpdateEntry() {
 }
 
 export function useDeleteEntry() {
-  const { actor } = useActor();
+  const { actor, isFetching: actorFetching } = useActor();
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (timestamp: bigint) => {
-      if (!actor) throw new Error('Actor not available');
+      if (actorFetching) throw new Error('Still connecting to the network. Please wait a moment and try again.');
+      if (!actor) throw new Error('Not connected. Please refresh the page and try again.');
       await actor.deleteEntry(timestamp);
     },
     onSuccess: () => {
@@ -143,11 +146,12 @@ export function useDeleteEntry() {
 }
 
 export function useSaveCallerUserProfile() {
-  const { actor } = useActor();
+  const { actor, isFetching: actorFetching } = useActor();
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (profile: UserProfile) => {
-      if (!actor) throw new Error('Actor not available');
+      if (actorFetching) throw new Error('Still connecting to the network. Please wait a moment and try again.');
+      if (!actor) throw new Error('Not connected. Please refresh the page and try again.');
       await actor.saveCallerUserProfile(profile);
     },
     onSuccess: () => {

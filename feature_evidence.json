@@ -2,14 +2,12 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-update-the-main-app-title-from-vth-guest-book-to-vth-guest-book-vicarious-thru-hiker-everywhere-it-appears-across-the-application-including-the-header-in-applayout-tsx-the-aboutdialog-tsx-modal-howtousedialog-tsx-createaccountdialog-tsx-the-html-page-title-in-index-html-and-any-other-component-or-page-that-displays-the-app-name",
-      "featureTitle": "Update the main app title from 'VTH: Guest Book' to 'VTH Guest Book: Vicarious Thru-Hiker' everywhere it appears across the application, including the header in AppLayout.tsx, the AboutDialog.tsx modal, HowToUseDialog.tsx, CreateAccountDialog.tsx, the HTML page title in index.html, and any other component or page that displays the app name.",
+      "featureId": "feature-rename-the-label-favorite-at-location-to-favorite-location-on-the-trail-everywhere-it-appears-in-the-frontend-including-in-the-addentrypage-form-any-placeholder-or-helper-text-and-any-related-labels-in-entrydetailpage-guestbookfeedpage-or-other-components",
+      "featureTitle": "Rename the label 'Favorite AT Location' to 'Favorite Location on the Trail' everywhere it appears in the frontend, including in the AddEntryPage form, any placeholder or helper text, and any related labels in EntryDetailPage, GuestbookFeedPage, or other components.",
       "files": [
-        "frontend/index.html",
-        "frontend/src/components/AboutDialog.tsx",
-        "frontend/src/components/AppLayout.tsx",
-        "frontend/src/components/CreateAccountDialog.tsx",
-        "frontend/src/components/HowToUseDialog.tsx"
+        "frontend/src/components/EditEntryDialog.tsx",
+        "frontend/src/pages/AddEntryPage.tsx",
+        "frontend/src/pages/EntryDetailPage.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -25,11 +23,11 @@
       "confidence": "high"
     },
     {
-      "featureId": "feature-redesign-the-vth-avatar-logo-to-prominently-accentuate-the-vth-initials-the-new-avatar-should-make-vth-the-focal-point-with-bold-legible-lettering-styled-to-evoke-the-outdoors-hiking-theme-e-g-rugged-serif-or-bold-condensed-sans-serif-earthy-tones-replace-the-existing-avatar-image-with-the-new-generated-asset-in-all-locations-where-the-avatar-appears-including-the-header-in-applayout-tsx-and-the-aboutdialog-tsx-modal",
-      "featureTitle": "Redesign the VTH avatar/logo to prominently accentuate the 'VTH' initials. The new avatar should make 'VTH' the focal point with bold, legible lettering styled to evoke the outdoors/hiking theme (e.g., rugged serif or bold condensed sans-serif, earthy tones). Replace the existing avatar image with the new generated asset in all locations where the avatar appears, including the header in AppLayout.tsx and the AboutDialog.tsx modal.",
+      "featureId": "feature-fix-the-actor-not-available-error-that-occurs-when-a-user-attempts-to-add-a-location-while-signing-the-guest-book-investigate-and-resolve-the-actor-initialization-or-availability-check-in-the-relevant-mutation-query-hooks-usequeries-ts-useactor-ts-usage-in-addentrypage-so-that-the-actor-is-properly-awaited-or-re-fetched-before-the-location-submission-is-attempted",
+      "featureTitle": "Fix the 'Actor not available' error that occurs when a user attempts to add a location while signing the guest book. Investigate and resolve the actor initialization or availability check in the relevant mutation/query hooks (useQueries.ts, useActor.ts usage in AddEntryPage) so that the actor is properly awaited or re-fetched before the location submission is attempted.",
       "files": [
-        "frontend/src/components/AboutDialog.tsx",
-        "frontend/src/components/AppLayout.tsx"
+        "frontend/src/hooks/useQueries.ts",
+        "frontend/src/pages/AddEntryPage.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",

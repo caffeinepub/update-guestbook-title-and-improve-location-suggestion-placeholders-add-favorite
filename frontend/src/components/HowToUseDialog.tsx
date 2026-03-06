@@ -18,15 +18,15 @@ export default function HowToUseDialog({ open, onOpenChange }: HowToUseDialogPro
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-xl">How to Use VTH Guest Book: Vicarious Thru-Hiker</DialogTitle>
+          <DialogTitle className="text-xl">How to Use VTH Guest Book: Vicarious Thru-Hikers</DialogTitle>
           <DialogDescription className="sr-only">
-            Instructions for using the VTH Guest Book: Vicarious Thru-Hiker app
+            Instructions for using the VTH Guest Book: Vicarious Thru-Hikers app
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 py-2">
           <p className="text-sm text-muted-foreground">
-            Welcome to the <strong>VTH Guest Book: Vicarious Thru-Hiker</strong>! Here's how to get the most out of it:
+            Welcome to the <strong>VTH Guest Book: Vicarious Thru-Hikers</strong>! Here's how to get the most out of it:
           </p>
 
           <div className="space-y-4">
@@ -39,7 +39,7 @@ export default function HowToUseDialog({ open, onOpenChange }: HowToUseDialogPro
                 <p className="text-xs text-muted-foreground leading-relaxed">
                   Tap <strong>"+ Sign"</strong> or the pen icon in the bottom nav. Log in with
                   Internet Identity, then fill in your name, trail name, and a message. You can
-                  also add your current location and favorite AT spot.
+                  also add your current location and favorite trail spot.
                 </p>
               </div>
             </div>
@@ -66,7 +66,7 @@ export default function HowToUseDialog({ open, onOpenChange }: HowToUseDialogPro
                 <p className="text-sm font-semibold text-foreground">Explore the Maps</p>
                 <p className="text-xs text-muted-foreground leading-relaxed">
                   The <strong>World Map</strong> shows where all hikers are located. The{' '}
-                  <strong>AT Map</strong> shows favorite spots along the Appalachian Trail. Click
+                  <strong>Trail Map</strong> shows favorite spots along any hiking trail. Click
                   any pin to jump to that hiker's guestbook entry.
                 </p>
               </div>

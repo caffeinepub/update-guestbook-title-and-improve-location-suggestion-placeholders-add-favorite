@@ -1,67 +1,56 @@
 {
   "kind": "build_request",
-  "title": "Update app title and redesign VTH avatar branding across all pages",
+  "title": "Rename 'Favorite AT Location' label and fix 'Actor not available' error in Add Entry form",
   "projectName": "VTH Guest Book",
-  "priority": "normal",
+  "priority": "high",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Update the main app title from 'VTH: Guest Book' to 'VTH Guest Book: Vicarious Thru-Hiker' everywhere it appears across the application, including the header in AppLayout.tsx, the AboutDialog.tsx modal, HowToUseDialog.tsx, CreateAccountDialog.tsx, the HTML page title in index.html, and any other component or page that displays the app name.",
+      "text": "Rename the label 'Favorite AT Location' to 'Favorite Location on the Trail' everywhere it appears in the frontend, including in the AddEntryPage form, any placeholder or helper text, and any related labels in EntryDetailPage, GuestbookFeedPage, or other components.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-latest"
+          "msg-4"
         ],
         "quotes": [
-          "Change the main title from \"VTH: Guest Book\" to \"VTH Guest Book: Vicarious Thru-Hiker\"",
-          "do this for each page, such as the About popup modal"
+          "Change \"Favorite AT Location\" to \"Favorite Location on the Trail\""
         ]
       },
       "acceptanceCriteria": [
-        "The header in AppLayout.tsx shows 'VTH Guest Book: Vicarious Thru-Hiker'",
-        "The AboutDialog.tsx modal title reads 'VTH Guest Book: Vicarious Thru-Hiker'",
-        "The HTML <title> tag in index.html reads 'VTH Guest Book: Vicarious Thru-Hiker'",
-        "No instance of the old title 'VTH: Guest Book' remains anywhere in the UI",
-        "All dialogs (HowToUse, CreateAccount, About) reflect the updated title where applicable"
+        "The string 'Favorite AT Location' no longer appears anywhere in the UI",
+        "The label 'Favorite Location on the Trail' is displayed wherever the favorite place field is referenced in the AddEntryPage form",
+        "All other locations (detail page, feed badges, dialogs) that previously showed 'Favorite AT Location' now show 'Favorite Location on the Trail'"
       ]
     },
     {
       "id": "REQ-2",
-      "text": "Redesign the VTH avatar/logo to prominently accentuate the 'VTH' initials. The new avatar should make 'VTH' the focal point with bold, legible lettering styled to evoke the outdoors/hiking theme (e.g., rugged serif or bold condensed sans-serif, earthy tones). Replace the existing avatar image with the new generated asset in all locations where the avatar appears, including the header in AppLayout.tsx and the AboutDialog.tsx modal.",
-      "target": "frontend",
+      "text": "Fix the 'Actor not available' error that occurs when a user attempts to add a location while signing the guest book. Investigate and resolve the actor initialization or availability check in the relevant mutation/query hooks (useQueries.ts, useActor.ts usage in AddEntryPage) so that the actor is properly awaited or re-fetched before the location submission is attempted.",
+      "target": "both",
       "source": {
         "messageIds": [
-          "msg-latest"
+          "msg-4"
         ],
         "quotes": [
-          "remake the avatar to accentuate 'VTH'",
-          "do this for each page, such as the About popup modal"
+          "When signing the guest book and adding a location, it reads, \"Actor not available\""
         ]
       },
       "acceptanceCriteria": [
-        "The new avatar prominently displays 'VTH' as the primary visual element",
-        "The avatar is rendered in the sticky header in AppLayout.tsx",
-        "The avatar is rendered inside the AboutDialog.tsx modal",
-        "The avatar uses the new generated image asset from frontend/public/assets/generated",
-        "The avatar style is consistent across all locations it appears"
+        "An authenticated user can add a location when signing the guest book without seeing any 'Actor not available' error",
+        "The add-entry form submission with a favorite location completes successfully and the entry appears in the feed with the location data",
+        "If the actor is not yet initialized, the UI shows an appropriate loading or login prompt rather than an error message"
       ]
     }
   ],
   "constraints": [
-    "Do not modify any files under frontend/src/hooks/ (useInternetIdentity.ts, useActor.ts) or frontend/src/main.tsx",
-    "Do not alter the backend schema or Motoko logic",
-    "Do not change the color palette defined in frontend/src/index.css or tailwind.config.js"
+    "Do not modify files under frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, or frontend/src/components/ui"
   ],
   "nonGoals": [
-    "Changing navigation routes or page structure",
-    "Adding new features or dialogs",
-    "Modifying backend data models or guestbook logic",
-    "Redesigning layout or overall visual theme beyond the avatar and title"
+    "Redesigning the Add Entry form layout",
+    "Changing any other AT-related labels beyond 'Favorite AT Location'",
+    "Modifying backend data models or stored entry schema"
   ],
   "imageRequirements": {
-    "required": [
-      "Bold outdoor-themed logo badge with large stylized 'VTH' initials in rugged condensed lettering, earthy green and brown tones, mountain silhouette or trail motif in the background (vth-avatar.dim_256x256.png)"
-    ],
+    "required": [],
     "edits": []
   }
 }

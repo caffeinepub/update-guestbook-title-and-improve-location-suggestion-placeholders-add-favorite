@@ -56,7 +56,7 @@ export default function ATMapPage() {
 
     if (validEntries.length === 0) return;
 
-    // Create custom SVG pin icon (brown/earthy for AT)
+    // Create custom SVG pin icon (brown/earthy for trail map)
     const pinIcon = L.divIcon({
       className: '',
       html: `<svg width="28" height="36" viewBox="0 0 28 36" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -109,8 +109,8 @@ export default function ATMapPage() {
   return (
     <div className="flex flex-col h-full bg-background">
       <div className="px-4 pt-4 pb-2">
-        <h1 className="text-xl font-bold text-foreground">AT Map</h1>
-        <p className="text-sm text-muted-foreground">Favorite places along the Appalachian Trail</p>
+        <h1 className="text-xl font-bold text-foreground">Trail Map</h1>
+        <p className="text-sm text-muted-foreground">Favorite places along the trail</p>
       </div>
 
       <div
@@ -129,7 +129,7 @@ export default function ATMapPage() {
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
             <div className="bg-card/90 rounded-lg px-4 py-3 text-center shadow">
               <p className="text-muted-foreground text-sm">No favorite places yet.</p>
-              <p className="text-muted-foreground text-xs mt-1">Add an entry with your favorite AT place!</p>
+              <p className="text-muted-foreground text-xs mt-1">Add an entry with your favorite trail place!</p>
             </div>
           </div>
         )}

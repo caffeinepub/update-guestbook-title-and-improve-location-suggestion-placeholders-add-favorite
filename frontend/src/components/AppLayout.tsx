@@ -21,7 +21,7 @@ export default function AppLayout() {
     { path: '/', label: 'Feed', icon: BookOpen },
     { path: '/add', label: 'Sign', icon: PenLine },
     { path: '/world-map', label: 'World', icon: Globe },
-    { path: '/at-map', label: 'AT Map', icon: Map },
+    { path: '/at-map', label: 'Trail Map', icon: Map },
   ];
 
   const isActive = (path: string) => {
@@ -40,12 +40,12 @@ export default function AppLayout() {
             className="flex items-center gap-3 hover:opacity-90 transition-opacity"
             aria-label="Go to home"
           >
-            {/* VTH Avatar badge */}
-            <div className="flex items-center justify-center w-11 h-11 rounded-xl bg-logo-emblem border-2 border-logo-border shadow-sm overflow-hidden">
+            {/* VTH Avatar badge — forced square */}
+            <div className="flex-shrink-0 w-11 h-11 aspect-square rounded-xl bg-logo-emblem border-2 border-logo-border shadow-sm overflow-hidden">
               <img
                 src="/assets/generated/vth-avatar.dim_256x256.png"
-                alt="VTH – Vicarious Thru-Hiker emblem"
-                className="w-11 h-11 object-cover"
+                alt="VTH – Vicarious Thru-Hikers emblem"
+                className="w-full h-full object-cover block"
               />
             </div>
             {/* Wordmark */}
@@ -57,7 +57,7 @@ export default function AppLayout() {
                 VTH Guest Book
               </span>
               <span className="text-logo-subtitle text-xs tracking-wide font-medium">
-                Vicarious Thru-Hiker
+                Vicarious Thru-Hikers
               </span>
             </div>
           </button>

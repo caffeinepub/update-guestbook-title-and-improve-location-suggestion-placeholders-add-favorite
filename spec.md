@@ -1,10 +1,11 @@
 # Specification
 
 ## Summary
-**Goal:** Update the app title everywhere it appears and redesign the VTH avatar to prominently feature the "VTH" initials with an outdoor/hiking theme.
+**Goal:** Rename the "Favorite AT Location" label to "Favorite Location on the Trail" throughout the UI, and fix the "Actor not available" error that occurs when a user tries to add a location while signing the guest book.
 
 **Planned changes:**
-- Replace all instances of "VTH: Guest Book" with "VTH Guest Book: Vicarious Thru-Hiker" across AppLayout.tsx, AboutDialog.tsx, HowToUseDialog.tsx, CreateAccountDialog.tsx, index.html, and any other component displaying the app name
-- Replace the existing VTH avatar/logo image with a new bold outdoor-themed badge prominently displaying "VTH" initials in all locations it appears (header in AppLayout.tsx, AboutDialog.tsx modal)
+- Replace all occurrences of the string "Favorite AT Location" with "Favorite Location on the Trail" in the AddEntryPage form, EntryDetailPage, GuestbookFeedPage, and any other components where it appears
+- Investigate and fix the "Actor not available" error in the add-entry flow by ensuring the actor is properly initialized or awaited before a location submission is attempted
+- If the actor is not yet ready, display an appropriate loading state or login prompt instead of an error
 
-**User-visible outcome:** The app title reads "VTH Guest Book: Vicarious Thru-Hiker" throughout the UI, and the VTH avatar prominently showcases the "VTH" initials with a rugged hiking-themed style in the header and About modal.
+**User-visible outcome:** Users see "Favorite Location on the Trail" everywhere the favorite place field is referenced, and can successfully add a location when signing the guest book without encountering an "Actor not available" error.

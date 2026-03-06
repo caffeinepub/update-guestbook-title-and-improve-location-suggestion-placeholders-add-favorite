@@ -1,66 +1,57 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Update app title and redesign VTH avatar branding across all pages",
+  "title": "Rename 'Favorite AT Location' label and fix 'Actor not available' error in Add Entry form",
   "requirements": [
     {
       "id": "REQ-1",
-      "summary": "Update the main app title from 'VTH: Guest Book' to 'VTH Guest Book: Vicarious Thru-Hiker' everywhere it appears",
+      "summary": "Rename the label 'Favorite AT Location' to 'Favorite Location on the Trail' everywhere it appears in the frontend UI",
       "acceptanceCriteria": [
-        "The header in AppLayout.tsx shows 'VTH Guest Book: Vicarious Thru-Hiker'",
-        "The AboutDialog.tsx modal title reads 'VTH Guest Book: Vicarious Thru-Hiker'",
-        "The HTML <title> tag in index.html reads 'VTH Guest Book: Vicarious Thru-Hiker'",
-        "No instance of the old title 'VTH: Guest Book' remains anywhere in the UI",
-        "All dialogs (HowToUse, CreateAccount, About) reflect the updated title where applicable"
+        "The string 'Favorite AT Location' no longer appears anywhere in the UI",
+        "The label 'Favorite Location on the Trail' is displayed wherever the favorite place field is referenced in the AddEntryPage form",
+        "All other locations (detail page, feed badges, dialogs) that previously showed 'Favorite AT Location' now show 'Favorite Location on the Trail'"
       ],
       "file_operations": [
         {
-          "path": "frontend/index.html",
+          "path": "frontend/src/pages/AddEntryPage.tsx",
           "operation": "modify",
-          "description": "Update the <title> tag from 'VTH: Guest Book' to 'VTH Guest Book: Vicarious Thru-Hiker' to reflect the new app branding in the browser tab."
+          "description": "Update all occurrences of 'Favorite AT Location' to 'Favorite Location on the Trail' in form labels, placeholders, helper text, and button text for the favorite place search field and related UI elements"
         },
         {
-          "path": "frontend/src/components/AppLayout.tsx",
+          "path": "frontend/src/pages/EntryDetailPage.tsx",
           "operation": "modify",
-          "description": "Update the header text from 'VTH: Guest Book' to 'VTH Guest Book: Vicarious Thru-Hiker' to display the new title in the sticky header across all pages."
+          "description": "Update any labels or text that display 'Favorite AT Location' to 'Favorite Location on the Trail' when showing entry details with favorite place data"
         },
         {
-          "path": "frontend/src/components/AboutDialog.tsx",
+          "path": "frontend/src/pages/GuestbookFeedPage.tsx",
           "operation": "modify",
-          "description": "Update the dialog title and any references to the app name from 'VTH: Guest Book' to 'VTH Guest Book: Vicarious Thru-Hiker' in the About modal content."
+          "description": "Update any badges, tooltips, or labels that reference 'Favorite AT Location' to 'Favorite Location on the Trail' in the feed entry preview cards"
         },
         {
-          "path": "frontend/src/components/HowToUseDialog.tsx",
+          "path": "frontend/src/components/EditEntryDialog.tsx",
           "operation": "modify",
-          "description": "Update any references to the app name from 'VTH: Guest Book' to 'VTH Guest Book: Vicarious Thru-Hiker' in the usage instructions dialog."
-        },
-        {
-          "path": "frontend/src/components/CreateAccountDialog.tsx",
-          "operation": "modify",
-          "description": "Update any references to the app name from 'VTH: Guest Book' to 'VTH Guest Book: Vicarious Thru-Hiker' in the account creation/login dialog content."
+          "description": "Update the favorite place field label from 'Favorite AT Location' to 'Favorite Location on the Trail' in the edit entry form"
         }
       ]
     },
     {
       "id": "REQ-2",
-      "summary": "Redesign the VTH avatar/logo to prominently accentuate the 'VTH' initials with outdoor-themed styling",
+      "summary": "Fix the 'Actor not available' error that occurs when adding a location while signing the guest book",
       "acceptanceCriteria": [
-        "The new avatar prominently displays 'VTH' as the primary visual element",
-        "The avatar is rendered in the sticky header in AppLayout.tsx",
-        "The avatar is rendered inside the AboutDialog.tsx modal",
-        "The avatar uses the new generated image asset from frontend/public/assets/generated",
-        "The avatar style is consistent across all locations it appears"
+        "An authenticated user can add a location when signing the guest book without seeing any 'Actor not available' error",
+        "The add-entry form submission with a favorite location completes successfully and the entry appears in the feed with the location data",
+        "If the actor is not yet initialized, the UI shows an appropriate loading or login prompt rather than an error message"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/AppLayout.tsx",
+          "path": "frontend/src/pages/AddEntryPage.tsx",
           "operation": "modify",
-          "description": "Replace the existing VTH logo image source with the new generated avatar frontend/public/assets/generated/vth-avatar.dim_256x256.png in the sticky header. Update the img src attribute and ensure the alt text describes the new VTH initials-focused design."
+          "description": "Update the form submission handler to properly check actor availability before attempting to submit. Add conditional rendering to disable the submit button or show a loading state when the actor is fetching. Ensure the useAddEntry mutation hook properly handles actor initialization state from useActor before executing the mutation"
         },
         {
-          "path": "frontend/src/components/AboutDialog.tsx",
+          "path": "frontend/src/hooks/useQueries.ts",
           "operation": "modify",
-          "description": "Replace the existing VTH logo image source with the new generated avatar frontend/public/assets/generated/vth-avatar.dim_256x256.png in the About dialog. Update the img src attribute and ensure the alt text describes the new VTH initials-focused design."
+          "description": "Review and update the useAddEntry mutation hook to ensure it properly waits for actor availability and handles the case where actor is not yet initialized. Add proper error handling that provides user-friendly messages instead of exposing raw 'Actor not available' errors. Ensure the mutation is disabled when actorFetching is true"
         }
       ]
     }

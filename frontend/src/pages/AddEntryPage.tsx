@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from '@tanstack/react-router';
 import { useInternetIdentity } from '../hooks/useInternetIdentity';
 import { useAddEntry } from '../hooks/useQueries';
+import { useActor } from '../hooks/useActor';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -14,6 +15,7 @@ import { MapPin, Loader2, AlertCircle, LogIn } from 'lucide-react';
 export default function AddEntryPage() {
   const navigate = useNavigate();
   const { identity, login, loginStatus } = useInternetIdentity();
+  const { isFetching: actorFetching } = useActor();
   const isAuthenticated = !!identity;
   const isLoggingIn = loginStatus === 'logging-in';
 
@@ -58,6 +60,11 @@ export default function AddEntryPage() {
 
     if (!comment.trim()) {
       setSubmitError('Please enter a comment.');
+      return;
+    }
+
+    if (actorFetching) {
+      setSubmitError('Still connecting to the network. Please wait a moment and try again.');
       return;
     }
 
@@ -131,12 +138,21 @@ export default function AddEntryPage() {
     );
   }
 
+  const isSubmitDisabled = addEntryMutation.isPending || actorFetching;
+
   return (
     <div className="max-w-lg mx-auto px-4 py-8">
       <h1 className="text-2xl font-bold text-foreground mb-1">Sign the Guestbook</h1>
       <p className="text-muted-foreground mb-6 text-sm">
         Share your trail story with the VTH community.
       </p>
+
+      {actorFetching && (
+        <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4 bg-muted rounded-lg px-3 py-2">
+          <Loader2 className="w-4 h-4 animate-spin shrink-0" />
+          <span>Connecting to the network…</span>
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} className="space-y-5">
         <div>
@@ -212,7 +228,7 @@ export default function AddEntryPage() {
         </div>
 
         <div>
-          <Label>Favorite AT Location <span className="text-muted-foreground">(optional)</span></Label>
+          <Label>Favorite Location on the Trail <span className="text-muted-foreground">(optional)</span></Label>
           <div className="mt-1 space-y-2">
             {favoritePlace && (
               <div className="flex items-center gap-2 text-sm bg-muted rounded-lg px-3 py-2">
@@ -229,7 +245,7 @@ export default function AddEntryPage() {
             )}
             <PlaceSearchField
               label=""
-              placeholder="Search for your favorite AT spot…"
+              placeholder="Search for your favorite trail spot…"
               onSelect={(result) => setFavoritePlace(result)}
             />
           </div>
@@ -245,12 +261,17 @@ export default function AddEntryPage() {
         <Button
           type="submit"
           className="w-full"
-          disabled={addEntryMutation.isPending}
+          disabled={isSubmitDisabled}
         >
           {addEntryMutation.isPending ? (
             <>
               <Loader2 className="w-4 h-4 mr-2 animate-spin" />
               Saving…
+            </>
+          ) : actorFetching ? (
+            <>
+              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              Connecting…
             </>
           ) : (
             'Sign the Guestbook'

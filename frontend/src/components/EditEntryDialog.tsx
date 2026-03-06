@@ -176,7 +176,7 @@ export default function EditEntryDialog({ entry, open, onOpenChange }: EditEntry
           </div>
 
           <div>
-            <Label>Favorite AT Location <span className="text-muted-foreground text-xs">(optional)</span></Label>
+            <Label>Favorite Location on the Trail <span className="text-muted-foreground text-xs">(optional)</span></Label>
             <div className="mt-1 space-y-2">
               {favoritePlace && (
                 <div className="flex items-center gap-2 text-sm bg-muted rounded-lg px-3 py-2">
@@ -193,7 +193,7 @@ export default function EditEntryDialog({ entry, open, onOpenChange }: EditEntry
               )}
               <PlaceSearchField
                 label=""
-                placeholder="Search for your favorite AT spot…"
+                placeholder="Search for your favorite trail spot…"
                 onSelect={(result) => setFavoritePlace(result)}
               />
             </div>
