@@ -5,26 +5,26 @@
 @layer base {
   :root {
     /* Warm beige/earthy palette - Light mode */
-    --background: 93% 0.025 75;
+    --background: 91% 0.04 80;
     --foreground: 22% 0.04 50;
-    --card: 96% 0.018 75;
+    --card: 94% 0.03 80;
     --card-foreground: 22% 0.04 50;
-    --popover: 96% 0.018 75;
+    --popover: 94% 0.03 80;
     --popover-foreground: 22% 0.04 50;
     /* primary = forest green */
     --primary: 38% 0.14 145;
     --primary-foreground: 97% 0.01 80;
-    --secondary: 88% 0.04 80;
+    --secondary: 87% 0.05 80;
     --secondary-foreground: 22% 0.04 50;
-    --muted: 89% 0.025 75;
-    --muted-foreground: 48% 0.04 80;
+    --muted: 88% 0.04 78;
+    --muted-foreground: 46% 0.05 70;
     /* accent = forest green */
     --accent: 45% 0.14 145;
     --accent-foreground: 97% 0.01 80;
     --destructive: 50% 0.22 25;
     --destructive-foreground: 97% 0.01 80;
-    --border: 84% 0.04 75;
-    --input: 84% 0.04 75;
+    --border: 82% 0.05 75;
+    --input: 82% 0.05 75;
     --ring: 38% 0.14 145;
     --chart-1: 38% 0.14 145;
     --chart-2: 52% 0.2 28;
@@ -35,14 +35,14 @@
 
     /* Logo-specific tokens - Light mode */
     /* Header banner: warm beige background */
-    --logo-bg: 91% 0.03 75;
-    --logo-border: 80% 0.06 72;
+    --logo-bg: 90% 0.04 80;
+    --logo-border: 79% 0.07 72;
     /* Emblem badge: deep forest green */
     --logo-emblem: 28% 0.12 145;
     /* Wordmark "VTH Guest Book": burnt red */
-    --logo-title: 42% 0.2 28;
+    --logo-title: 40% 0.22 28;
     /* Subtitle "Vicarious Thru-Hikers": forest green */
-    --logo-subtitle: 38% 0.14 145;
+    --logo-subtitle: 36% 0.16 145;
   }
 
   .dark {
