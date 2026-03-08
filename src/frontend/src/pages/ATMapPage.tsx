@@ -58,8 +58,6 @@ export default function ATMapPage() {
 
     const validEntries = entries.filter((e) => e.favoritePlace != null);
 
-    if (validEntries.length === 0) return;
-
     // Create custom SVG pin icon (brown/earthy for trail map)
     const pinIcon = L.divIcon({
       className: "",
@@ -93,7 +91,7 @@ export default function ATMapPage() {
         <div style="font-family:sans-serif;min-width:140px;">
           <div style="font-weight:bold;font-size:14px;color:#1a1a1a;">${authorName}</div>
           <div style="color:#8B4513;font-size:13px;margin-top:2px;">📍 ${placeName}</div>
-          <a href="/entry/${timestamp}" style="color:#8B4513;font-size:12px;font-weight:600;cursor:pointer;text-decoration:underline;margin-top:6px;display:block;" onclick="event.preventDefault(); window.history.pushState(null,'','/entry/${timestamp}'); window.dispatchEvent(new PopStateEvent('popstate'));">View Entry →</a>
+          <a href="#" class="vth-entry-link" data-ts="${timestamp}" style="color:#8B4513;font-size:12px;font-weight:600;cursor:pointer;text-decoration:underline;margin-top:6px;display:block;">View Entry →</a>
         </div>
       `;
 
@@ -105,11 +103,36 @@ export default function ATMapPage() {
     }
 
     // Fit map to show all pins
-    if (bounds.length === 1) {
+    if (validEntries.length === 1) {
       map.setView(bounds[0], 8);
-    } else if (bounds.length > 1) {
+    } else if (validEntries.length > 1) {
       map.fitBounds(bounds, { padding: [40, 40] });
     }
+
+    // Single delegate handler for all popup "View Entry" links
+    const onPopupOpen = (e: any) => {
+      const container = e.popup.getElement();
+      if (!container) return;
+      const link = container.querySelector(".vth-entry-link");
+      if (link) {
+        link.addEventListener("click", (evt: Event) => {
+          evt.preventDefault();
+          const ts = (link as HTMLElement).dataset.ts;
+          if (ts) {
+            (window as any).__vthRouter?.navigate({
+              to: "/entry/$timestamp",
+              params: { timestamp: ts },
+            });
+          }
+        });
+      }
+    };
+
+    map.on("popupopen", onPopupOpen);
+
+    return () => {
+      map.off("popupopen", onPopupOpen);
+    };
   }, [mapReady, entries]);
 
   return (

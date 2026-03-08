@@ -4,27 +4,27 @@
 
 @layer base {
   :root {
-    /* Beige/earthy palette - Light mode */
-    --background: 94% 0.03 80;
+    /* Warm beige/earthy palette - Light mode */
+    --background: 93% 0.025 75;
     --foreground: 22% 0.04 50;
-    --card: 97% 0.02 80;
+    --card: 96% 0.018 75;
     --card-foreground: 22% 0.04 50;
-    --popover: 97% 0.02 80;
+    --popover: 96% 0.018 75;
     --popover-foreground: 22% 0.04 50;
     /* primary = forest green */
     --primary: 38% 0.14 145;
     --primary-foreground: 97% 0.01 80;
     --secondary: 88% 0.04 80;
     --secondary-foreground: 22% 0.04 50;
-    --muted: 90% 0.03 80;
+    --muted: 89% 0.025 75;
     --muted-foreground: 48% 0.04 80;
     /* accent = forest green */
     --accent: 45% 0.14 145;
     --accent-foreground: 97% 0.01 80;
     --destructive: 50% 0.22 25;
     --destructive-foreground: 97% 0.01 80;
-    --border: 85% 0.04 75;
-    --input: 85% 0.04 75;
+    --border: 84% 0.04 75;
+    --input: 84% 0.04 75;
     --ring: 38% 0.14 145;
     --chart-1: 38% 0.14 145;
     --chart-2: 52% 0.2 28;
@@ -35,8 +35,8 @@
 
     /* Logo-specific tokens - Light mode */
     /* Header banner: warm beige background */
-    --logo-bg: 92% 0.04 80;
-    --logo-border: 82% 0.06 75;
+    --logo-bg: 91% 0.03 75;
+    --logo-border: 80% 0.06 72;
     /* Emblem badge: deep forest green */
     --logo-emblem: 28% 0.12 145;
     /* Wordmark "VTH Guest Book": burnt red */

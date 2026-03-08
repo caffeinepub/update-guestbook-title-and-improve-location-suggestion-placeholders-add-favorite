@@ -60,6 +60,9 @@ const routeTree = rootRoute.addChildren([
 
 const router = createRouter({ routeTree });
 
+// Expose router globally so Leaflet popup links can navigate via TanStack Router
+(window as any).__vthRouter = router;
+
 declare module "@tanstack/react-router" {
   interface Register {
     router: typeof router;
