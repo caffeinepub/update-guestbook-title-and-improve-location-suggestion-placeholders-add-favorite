@@ -67,6 +67,7 @@ actor {
 
   let entries = Map.empty<Text, GuestbookEntry>();
 
+  // Anyone (including anonymous) can add an entry — no login required
   public shared ({ caller }) func addEntry(
     name : ?Text,
     trailName : ?Text,
@@ -74,10 +75,6 @@ actor {
     currentLocation : ?Location,
     favoritePlace : ?Location,
   ) : async () {
-    if (not AccessControl.hasPermission(accessControlState, caller, #user)) {
-      Runtime.trap("Unauthorized: Only authenticated users can add entries");
-    };
-
     if (Text.equal(comment.trim(#char ' '), "")) {
       Runtime.trap("Comment cannot be empty.");
     };
@@ -103,10 +100,6 @@ actor {
     currentLocation : ?Location,
     favoritePlace : ?Location,
   ) : async () {
-    if (not AccessControl.hasPermission(accessControlState, caller, #user)) {
-      Runtime.trap("Unauthorized: Only authenticated users can update entries");
-    };
-
     if (Text.equal(newComment.trim(#char ' '), "")) {
       Runtime.trap("Comment cannot be empty.");
     };
@@ -132,7 +125,7 @@ actor {
         // Add updated entry with new comment as key
         let updatedEntry : GuestbookEntry = {
           timestamp;
-          creator = existingEntry.creator; // Preserve original creator
+          creator = existingEntry.creator;
           name;
           trailName;
           comment = newComment;
@@ -145,10 +138,6 @@ actor {
   };
 
   public shared ({ caller }) func deleteEntry(timestamp : Time.Time) : async () {
-    if (not AccessControl.hasPermission(accessControlState, caller, #user)) {
-      Runtime.trap("Unauthorized: Only authenticated users can delete entries");
-    };
-
     // Find the entry by timestamp
     let entryResult = entries.entries().toArray().find(
       func((_, entry)) { entry.timestamp == timestamp }
