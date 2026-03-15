@@ -50,13 +50,21 @@ export default function AppLayout() {
               />
             </div>
             {/* Wordmark */}
-            <div className="flex flex-col leading-none gap-0.5">
-              <span
-                className="text-logo-title font-extrabold tracking-widest uppercase"
-                style={{ fontSize: "1.25rem", letterSpacing: "0.2em" }}
-              >
-                VTH Guest Book
-              </span>
+            <div className="flex flex-col leading-none gap-1">
+              <div className="flex items-baseline gap-2">
+                <span
+                  className="text-logo-title font-black tracking-widest uppercase"
+                  style={{ fontSize: "1.75rem", letterSpacing: "0.15em" }}
+                >
+                  VTH
+                </span>
+                <span
+                  className="text-logo-subtitle font-semibold tracking-wide uppercase"
+                  style={{ fontSize: "0.7rem", letterSpacing: "0.12em" }}
+                >
+                  Guest Book
+                </span>
+              </div>
               <span className="text-logo-subtitle text-xs tracking-wide font-medium">
                 Vicarious Thru-Hikers
               </span>
