@@ -4,84 +4,61 @@
 
 @layer base {
   :root {
-    /* Warm beige/earthy palette - Light mode */
-    --background: 91% 0.04 80;
-    --foreground: 22% 0.04 50;
-    --card: 94% 0.03 80;
-    --card-foreground: 22% 0.04 50;
-    --popover: 94% 0.03 80;
-    --popover-foreground: 22% 0.04 50;
+    /* Warm parchment/trail journal palette - using HSL for broad compatibility */
+    --background: 38 40% 94%;
+    --foreground: 20 30% 18%;
+    --card: 38 35% 96%;
+    --card-foreground: 20 30% 18%;
+    --popover: 38 35% 96%;
+    --popover-foreground: 20 30% 18%;
     /* primary = forest green */
-    --primary: 38% 0.14 145;
-    --primary-foreground: 97% 0.01 80;
-    --secondary: 87% 0.05 80;
-    --secondary-foreground: 22% 0.04 50;
-    --muted: 88% 0.04 78;
-    --muted-foreground: 46% 0.05 70;
+    --primary: 128 38% 32%;
+    --primary-foreground: 0 0% 97%;
+    --secondary: 38 20% 88%;
+    --secondary-foreground: 20 30% 18%;
+    --muted: 38 20% 90%;
+    --muted-foreground: 25 15% 45%;
     /* accent = forest green */
-    --accent: 45% 0.14 145;
-    --accent-foreground: 97% 0.01 80;
-    --destructive: 50% 0.22 25;
-    --destructive-foreground: 97% 0.01 80;
-    --border: 82% 0.05 75;
-    --input: 82% 0.05 75;
-    --ring: 38% 0.14 145;
-    --chart-1: 38% 0.14 145;
-    --chart-2: 52% 0.2 28;
-    --chart-3: 50% 0.22 25;
-    --chart-4: 75% 0.06 80;
-    --chart-5: 45% 0.1 60;
+    --accent: 128 35% 38%;
+    --accent-foreground: 0 0% 97%;
+    --destructive: 10 70% 42%;
+    --destructive-foreground: 0 0% 97%;
+    --border: 35 25% 80%;
+    --input: 35 25% 80%;
+    --ring: 128 38% 32%;
+    --chart-1: 128 38% 32%;
+    --chart-2: 18 65% 42%;
+    --chart-3: 10 70% 42%;
+    --chart-4: 38 30% 70%;
+    --chart-5: 30 25% 48%;
     --radius: 0.5rem;
-
-    /* Logo-specific tokens - Light mode */
-    /* Header banner: warm beige background */
-    --logo-bg: 90% 0.04 80;
-    --logo-border: 79% 0.07 72;
-    /* Emblem badge: deep forest green */
-    --logo-emblem: 28% 0.12 145;
-    /* Wordmark "VTH Guest Book": burnt red */
-    --logo-title: 40% 0.22 28;
-    /* Subtitle "Vicarious Thru-Hikers": forest green */
-    --logo-subtitle: 36% 0.16 145;
   }
 
   .dark {
-    /* Warm earthy palette - Dark mode */
-    --background: 20% 0.02 85;
-    --foreground: 88% 0.02 85;
-    --card: 24% 0.02 85;
-    --card-foreground: 88% 0.02 85;
-    --popover: 24% 0.02 85;
-    --popover-foreground: 88% 0.02 85;
-    --primary: 58% 0.15 35;
-    --primary-foreground: 20% 0.02 85;
-    --secondary: 32% 0.08 85;
-    --secondary-foreground: 88% 0.02 85;
-    --muted: 28% 0.04 85;
-    --muted-foreground: 65% 0.02 85;
-    --accent: 55% 0.12 120;
-    --accent-foreground: 88% 0.02 85;
-    --destructive: 50% 0.2 25;
-    --destructive-foreground: 88% 0.02 85;
-    --border: 32% 0.04 85;
-    --input: 32% 0.04 85;
-    --ring: 58% 0.15 35;
-    --chart-1: 58% 0.15 35;
-    --chart-2: 55% 0.12 120;
-    --chart-3: 50% 0.2 25;
-    --chart-4: 42% 0.08 85;
-    --chart-5: 48% 0.1 60;
-
-    /* Logo-specific tokens - Dark mode */
-    /* Emblem badge: deep amber-brown background */
-    --logo-bg: 38% 0.12 50;
-    --logo-border: 48% 0.14 52;
-    /* Emblem text: bright warm cream for contrast on dark amber */
-    --logo-emblem: 92% 0.04 85;
-    /* Wordmark "VTH": warm golden amber */
-    --logo-title: 72% 0.16 55;
-    /* Subtitle "Guest Book": soft sage green */
-    --logo-subtitle: 68% 0.1 145;
+    --background: 20 15% 14%;
+    --foreground: 38 20% 88%;
+    --card: 20 12% 18%;
+    --card-foreground: 38 20% 88%;
+    --popover: 20 12% 18%;
+    --popover-foreground: 38 20% 88%;
+    --primary: 18 60% 50%;
+    --primary-foreground: 20 15% 14%;
+    --secondary: 20 10% 28%;
+    --secondary-foreground: 38 20% 88%;
+    --muted: 20 10% 22%;
+    --muted-foreground: 35 10% 58%;
+    --accent: 128 30% 48%;
+    --accent-foreground: 38 20% 88%;
+    --destructive: 10 65% 45%;
+    --destructive-foreground: 38 20% 88%;
+    --border: 20 10% 28%;
+    --input: 20 10% 28%;
+    --ring: 18 60% 50%;
+    --chart-1: 18 60% 50%;
+    --chart-2: 128 30% 48%;
+    --chart-3: 10 65% 45%;
+    --chart-4: 30 20% 40%;
+    --chart-5: 30 20% 42%;
   }
 }
 
@@ -114,15 +91,15 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: oklch(var(--muted));
+  background: hsl(var(--muted));
   border-radius: var(--radius);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: oklch(var(--muted-foreground) / 0.3);
+  background: hsl(var(--muted-foreground) / 0.3);
   border-radius: var(--radius);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: oklch(var(--muted-foreground) / 0.5);
+  background: hsl(var(--muted-foreground) / 0.5);
 }

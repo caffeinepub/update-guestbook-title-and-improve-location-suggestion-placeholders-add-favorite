@@ -5,6 +5,15 @@ import React from "react";
 import { useInternetIdentity } from "../hooks/useInternetIdentity";
 import HamburgerMenu from "./HamburgerMenu";
 
+// Brand color constants — explicit hex for reliable cross-browser rendering
+const BRAND = {
+  headerBg: "#e8d9bc", // warm amber sand
+  headerBorder: "#c9a96e", // golden tan
+  emblemBg: "#8B3A2A", // terracotta / burnt sienna
+  titleColor: "#7B2D1F", // deep burnt red
+  subtitleColor: "#2D5A27", // forest green
+};
+
 export default function AppLayout() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -30,9 +39,18 @@ export default function AppLayout() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div
+      className="min-h-screen flex flex-col"
+      style={{ backgroundColor: "#f5ede0" }}
+    >
       {/* Header */}
-      <header className="sticky top-0 z-40 bg-logo-bg border-b border-logo-border shadow-logo">
+      <header
+        className="sticky top-0 z-40 border-b shadow-md"
+        style={{
+          backgroundColor: BRAND.headerBg,
+          borderColor: BRAND.headerBorder,
+        }}
+      >
         <div className="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between">
           {/* Logo area */}
           <button
@@ -40,44 +58,65 @@ export default function AppLayout() {
             onClick={() => navigate({ to: "/" })}
             className="flex items-center gap-3 hover:opacity-90 transition-opacity"
             aria-label="Go to home"
+            data-ocid="nav.link"
           >
-            {/* VTH Avatar badge — forced square */}
-            <div className="flex-shrink-0 w-11 h-11 aspect-square rounded-xl bg-logo-emblem border-2 border-logo-border shadow-sm overflow-hidden">
-              <img
-                src="/assets/generated/vth-avatar.dim_256x256.png"
-                alt="VTH – Vicarious Thru-Hikers emblem"
-                className="w-full h-full object-cover block"
-              />
+            {/* VTH Emblem Badge */}
+            <div
+              className="flex-shrink-0 w-12 h-12 rounded-xl border-2 flex items-center justify-center shadow"
+              style={{
+                backgroundColor: BRAND.emblemBg,
+                borderColor: BRAND.headerBorder,
+              }}
+            >
+              <span
+                className="font-black text-white tracking-tight leading-none select-none"
+                style={{ fontSize: "1.2rem", letterSpacing: "-0.02em" }}
+              >
+                VTH
+              </span>
             </div>
             {/* Wordmark */}
             <div className="flex flex-col leading-none gap-1">
               <div className="flex items-baseline gap-2">
                 <span
-                  className="text-logo-title font-black tracking-widest uppercase"
-                  style={{ fontSize: "1.75rem", letterSpacing: "0.15em" }}
+                  className="font-black tracking-widest uppercase"
+                  style={{
+                    fontSize: "2.2rem",
+                    letterSpacing: "0.12em",
+                    color: BRAND.titleColor,
+                  }}
                 >
                   VTH
                 </span>
                 <span
-                  className="text-logo-subtitle font-semibold tracking-wide uppercase"
-                  style={{ fontSize: "0.7rem", letterSpacing: "0.12em" }}
+                  className="font-semibold tracking-wide uppercase"
+                  style={{
+                    fontSize: "0.68rem",
+                    letterSpacing: "0.1em",
+                    color: BRAND.subtitleColor,
+                  }}
                 >
                   Guest Book
                 </span>
               </div>
-              <span className="text-logo-subtitle text-xs tracking-wide font-medium">
+              <span
+                className="font-medium text-xs tracking-wide"
+                style={{ color: BRAND.subtitleColor }}
+              >
                 Vicarious Thru-Hikers
               </span>
             </div>
           </button>
 
-          {/* Right side: logout if authenticated + hamburger */}
+          {/* Right side */}
           <div className="flex items-center gap-2">
             {isAuthenticated && (
               <button
                 type="button"
                 onClick={handleLogout}
-                className="text-xs text-logo-subtitle hover:text-logo-title transition-colors px-2 py-1 rounded"
+                className="text-xs px-2 py-1 rounded transition-colors hover:opacity-80"
+                style={{ color: BRAND.subtitleColor }}
+                data-ocid="nav.button"
               >
                 Logout
               </button>
@@ -93,18 +132,21 @@ export default function AppLayout() {
       </main>
 
       {/* Bottom navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 z-40 bg-card border-t border-border">
+      <nav
+        className="fixed bottom-0 left-0 right-0 z-40 border-t"
+        style={{ backgroundColor: "#f5ede0", borderColor: BRAND.headerBorder }}
+      >
         <div className="max-w-2xl mx-auto flex">
           {navItems.map(({ path, label, icon: Icon }) => (
             <button
               type="button"
               key={path}
               onClick={() => navigate({ to: path })}
-              className={`flex-1 flex flex-col items-center gap-1 py-3 text-xs font-medium transition-colors ${
-                isActive(path)
-                  ? "text-primary"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
+              data-ocid="nav.link"
+              className="flex-1 flex flex-col items-center gap-1 py-3 text-xs font-medium transition-colors"
+              style={{
+                color: isActive(path) ? BRAND.emblemBg : "#888",
+              }}
             >
               <Icon className="w-5 h-5" />
               {label}
@@ -112,11 +154,6 @@ export default function AppLayout() {
           ))}
         </div>
       </nav>
-
-      {/* Footer */}
-      <footer className="fixed bottom-16 left-0 right-0 pointer-events-none">
-        {/* intentionally empty - attribution in page footer */}
-      </footer>
     </div>
   );
 }
