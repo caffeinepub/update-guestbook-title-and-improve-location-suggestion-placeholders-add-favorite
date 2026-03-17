@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import React, { useState, useRef, useEffect } from "react";
 import AboutDialog from "./AboutDialog";
@@ -40,35 +39,50 @@ export default function HamburgerMenu() {
   return (
     <>
       <div className="relative" ref={menuRef}>
-        <Button
-          variant="ghost"
-          size="icon"
+        <button
+          type="button"
           onClick={() => setMenuOpen((v) => !v)}
           aria-label="Open menu"
-          className="text-logo-title hover:bg-white/10"
+          className="w-9 h-9 flex items-center justify-center rounded-md transition-opacity hover:opacity-70"
+          style={{ color: "#7B2D1F" }}
         >
           {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-        </Button>
+        </button>
 
         {menuOpen && (
-          <div className="absolute right-0 top-full mt-2 w-52 bg-card border border-border rounded-xl shadow-lg z-50 overflow-hidden">
+          <div
+            className="absolute right-0 top-full mt-2 w-52 rounded-xl border shadow-lg z-50 overflow-hidden"
+            style={{
+              backgroundColor: "#f5ede0",
+              borderColor: "#c9a96e",
+            }}
+          >
             <button
               type="button"
-              className="w-full text-left px-4 py-3 text-sm font-medium text-foreground hover:bg-muted transition-colors"
+              className="w-full text-left px-4 py-3 text-sm font-medium transition-colors hover:opacity-80"
+              style={{ color: "#3d2b1a" }}
               onClick={openAbout}
             >
               📖 About VTH Guest Book
             </button>
             <button
               type="button"
-              className="w-full text-left px-4 py-3 text-sm font-medium text-foreground hover:bg-muted transition-colors border-t border-border"
+              className="w-full text-left px-4 py-3 text-sm font-medium transition-colors hover:opacity-80"
+              style={{
+                color: "#3d2b1a",
+                borderTop: "1px solid #c9a96e",
+              }}
               onClick={openCreateAccount}
             >
               🔑 Create Account / Login
             </button>
             <button
               type="button"
-              className="w-full text-left px-4 py-3 text-sm font-medium text-foreground hover:bg-muted transition-colors border-t border-border"
+              className="w-full text-left px-4 py-3 text-sm font-medium transition-colors hover:opacity-80"
+              style={{
+                color: "#3d2b1a",
+                borderTop: "1px solid #c9a96e",
+              }}
               onClick={openHowToUse}
             >
               🗺️ How to Use

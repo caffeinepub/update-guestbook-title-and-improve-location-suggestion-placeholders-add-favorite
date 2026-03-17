@@ -338,21 +338,26 @@ export default function AddEntryPage() {
           </Alert>
         )}
 
-        <Button type="submit" className="w-full" disabled={isSubmitDisabled}>
+        <button
+          type="submit"
+          disabled={isSubmitDisabled}
+          className="w-full h-10 rounded-md px-4 text-sm font-semibold transition-opacity disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center gap-2"
+          style={{ backgroundColor: "#7B2D1F", color: "#ffffff" }}
+        >
           {addEntryMutation.isPending ? (
             <>
-              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              <Loader2 className="w-4 h-4 animate-spin" />
               Saving…
             </>
           ) : actorFetching ? (
             <>
-              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              <Loader2 className="w-4 h-4 animate-spin" />
               Connecting…
             </>
           ) : (
             "Sign the Guestbook"
           )}
-        </Button>
+        </button>
       </form>
     </div>
   );
