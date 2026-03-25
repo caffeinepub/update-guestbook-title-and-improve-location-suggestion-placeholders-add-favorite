@@ -43,12 +43,13 @@ export default function AppLayout() {
       className="min-h-screen flex flex-col"
       style={{ backgroundColor: "#f5ede0" }}
     >
-      {/* Header */}
+      {/* Header — z-index 1100 to sit above Leaflet map controls (max ~800) */}
       <header
-        className="sticky top-0 z-40 border-b shadow-md"
+        className="sticky top-0 border-b shadow-md"
         style={{
           backgroundColor: BRAND.headerBg,
           borderColor: BRAND.headerBorder,
+          zIndex: 1100,
         }}
       >
         <div className="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between">
@@ -131,10 +132,14 @@ export default function AppLayout() {
         <Outlet />
       </main>
 
-      {/* Bottom navigation */}
+      {/* Bottom navigation — z-index 1100 to match header */}
       <nav
-        className="fixed bottom-0 left-0 right-0 z-40 border-t"
-        style={{ backgroundColor: "#f5ede0", borderColor: BRAND.headerBorder }}
+        className="fixed bottom-0 left-0 right-0 border-t"
+        style={{
+          backgroundColor: "#f5ede0",
+          borderColor: BRAND.headerBorder,
+          zIndex: 1100,
+        }}
       >
         <div className="max-w-2xl mx-auto flex">
           {navItems.map(({ path, label, icon: Icon }) => (

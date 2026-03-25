@@ -51,10 +51,11 @@ export default function HamburgerMenu() {
 
         {menuOpen && (
           <div
-            className="absolute right-0 top-full mt-2 w-52 rounded-xl border shadow-lg z-50 overflow-hidden"
+            className="absolute right-0 top-full mt-2 w-52 rounded-xl border shadow-lg overflow-hidden"
             style={{
               backgroundColor: "#f5ede0",
               borderColor: "#c9a96e",
+              zIndex: 1200,
             }}
           >
             <button

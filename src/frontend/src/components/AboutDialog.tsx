@@ -15,69 +15,100 @@ interface AboutDialogProps {
 export default function AboutDialog({ open, onOpenChange }: AboutDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md">
-        <DialogHeader>
-          <DialogTitle className="text-xl">
-            About VTH Guest Book: Vicarious Thru-Hikers
-          </DialogTitle>
+      <DialogContent
+        className="max-w-md max-h-[85vh] flex flex-col overflow-hidden"
+        style={{ zIndex: 99999 }}
+      >
+        <DialogHeader className="flex-shrink-0">
+          <DialogTitle className="text-xl">About VTH Guest Book</DialogTitle>
           <DialogDescription className="sr-only">
             About the VTH Guest Book: Vicarious Thru-Hikers project
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-4 py-2 text-sm text-foreground leading-relaxed">
-          {/* VTH Avatar prominently displayed — forced square */}
+        <div className="overflow-y-auto flex-1 space-y-4 py-2 text-sm text-foreground leading-relaxed pr-1">
+          {/* VTH Logo prominently displayed */}
           <div className="flex flex-col items-center gap-2">
-            <div className="w-24 h-24 aspect-square rounded-2xl overflow-hidden border-2 border-logo-border shadow-logo bg-logo-emblem flex-shrink-0">
-              <img
-                src="/assets/generated/vth-avatar.dim_256x256.png"
-                alt="VTH – Vicarious Thru-Hikers avatar"
-                className="w-full h-full object-cover block"
-              />
-            </div>
-            <div className="text-center leading-none">
-              <p
-                className="font-extrabold tracking-widest uppercase text-logo-title"
-                style={{ fontSize: "1.1rem", letterSpacing: "0.2em" }}
+            <div
+              className="flex flex-col items-center justify-center rounded-2xl border-2 shadow-md flex-shrink-0"
+              style={{
+                width: "96px",
+                height: "96px",
+                backgroundColor: "#7B2D1F",
+                borderColor: "#c9a96e",
+              }}
+            >
+              <span
+                style={{
+                  color: "#f5ede0",
+                  fontWeight: 900,
+                  fontSize: "2rem",
+                  letterSpacing: "0.05em",
+                  lineHeight: 1,
+                  fontFamily: "Georgia, serif",
+                }}
               >
                 VTH
-              </p>
-              <p className="text-xs text-logo-subtitle font-medium tracking-wide">
+              </span>
+              <span
+                style={{
+                  color: "#c9a96e",
+                  fontSize: "0.5rem",
+                  fontWeight: 600,
+                  letterSpacing: "0.15em",
+                  textTransform: "uppercase",
+                  lineHeight: 1.2,
+                  textAlign: "center",
+                }}
+              >
+                Guest Book
+              </span>
+              <span
+                style={{
+                  color: "#f5ede0",
+                  fontSize: "0.4rem",
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  lineHeight: 1.2,
+                  textAlign: "center",
+                  opacity: 0.85,
+                }}
+              >
                 Vicarious Thru-Hikers
-              </p>
+              </span>
             </div>
           </div>
 
           <p>
-            <strong>Vicarious Thru-Hikers (VTH)</strong> is a community for
-            those who love the Appalachian Trail — whether you've hiked every
-            mile or just dream of doing so someday.
+            The <strong>Vicarious Thru-Hikers (VTH)</strong> is a community for
+            those who love trails, hiking and the hikers who hike them.
           </p>
 
           <p>
             A <em>vicarious thru-hiker</em> is someone who experiences the trail
             through the stories, photos, and journeys of others. We follow
             along, cheer on the hikers, and share in the adventure from wherever
-            we are in the world.
+            we are in the world. And in this way, a VTH also experiences the
+            trail in their own unique way. <strong>You are a VTH.</strong>
           </p>
 
           <p>
             The <strong>VTH Guest Book</strong> is a place for the community to
             leave their mark — share where you are, your favorite trail spot,
-            and a message for fellow trail lovers. Your entry is pinned on the
-            world map so the whole community can see where VTH members are
-            located.
+            and a message or story for fellow trail lovers.
           </p>
 
           <p>
             This app is built on the <strong>Internet Computer</strong>, a
-            decentralized blockchain network, ensuring your entries are
-            permanent, censorship-resistant, and owned by the community — not a
-            corporation.
+            decentralized blockchain network. It was built with love by{" "}
+            <strong>Railroad McCoy</strong>.
           </p>
 
-          <p className="text-xs text-muted-foreground border-t border-border pt-3">
-            🥾 Happy trails, wherever you are!
+          <p
+            className="border-t border-border pt-3 font-medium"
+            style={{ color: "#5a7a3a" }}
+          >
+            Keep on hikin'.
           </p>
         </div>
       </DialogContent>

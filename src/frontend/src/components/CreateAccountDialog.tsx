@@ -34,8 +34,11 @@ export default function CreateAccountDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md">
-        <DialogHeader>
+      <DialogContent
+        className="max-w-md max-h-[85vh] flex flex-col overflow-hidden"
+        style={{ zIndex: 99999 }}
+      >
+        <DialogHeader className="flex-shrink-0">
           <DialogTitle className="text-xl">Create Account / Login</DialogTitle>
           <DialogDescription className="sr-only">
             Learn about Internet Identity and create your account for VTH Guest
@@ -43,7 +46,7 @@ export default function CreateAccountDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-4 py-2">
+        <div className="overflow-y-auto flex-1 space-y-4 py-2 pr-1">
           <p className="text-sm text-foreground leading-relaxed">
             The <strong>VTH Guest Book: Vicarious Thru-Hiker</strong> runs on
             the <strong>Internet Computer</strong> — a decentralized blockchain
@@ -84,7 +87,7 @@ export default function CreateAccountDialog({
               <Globe className="w-5 h-5 text-primary mt-0.5 shrink-0" />
               <div>
                 <p className="text-sm font-semibold text-foreground">
-                  Decentralized & Permanent
+                  Decentralized &amp; Permanent
                 </p>
                 <p className="text-xs text-muted-foreground">
                   Your guestbook entries are stored on-chain — no company can

@@ -19,8 +19,11 @@ export default function HowToUseDialog({
 }: HowToUseDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md">
-        <DialogHeader>
+      <DialogContent
+        className="max-w-md max-h-[85vh] flex flex-col overflow-hidden"
+        style={{ zIndex: 99999 }}
+      >
+        <DialogHeader className="flex-shrink-0">
           <DialogTitle className="text-xl">
             How to Use VTH Guest Book: Vicarious Thru-Hikers
           </DialogTitle>
@@ -29,7 +32,7 @@ export default function HowToUseDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-4 py-2">
+        <div className="overflow-y-auto flex-1 space-y-4 py-2 pr-1">
           <p className="text-sm text-muted-foreground">
             Welcome to the{" "}
             <strong>VTH Guest Book: Vicarious Thru-Hikers</strong>! Here's how
@@ -47,9 +50,9 @@ export default function HowToUseDialog({
                 </p>
                 <p className="text-xs text-muted-foreground leading-relaxed">
                   Tap <strong>"+ Sign"</strong> or the pen icon in the bottom
-                  nav. Log in with Internet Identity, then fill in your name,
-                  trail name, and a message. You can also add your current
-                  location and favorite trail spot.
+                  nav. Fill in your name, trail name, and a message. You can
+                  also add your current location and favorite trail spot — no
+                  account required.
                 </p>
               </div>
             </div>
