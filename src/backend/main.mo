@@ -1,21 +1,24 @@
-import Array "mo:core/Array";
-import Iter "mo:core/Iter";
-import Time "mo:core/Time";
-import Order "mo:core/Order";
-import Text "mo:core/Text";
 import Map "mo:core/Map";
 import Principal "mo:core/Principal";
+import Time "mo:core/Time";
+import Array "mo:core/Array";
+import Iter "mo:core/Iter";
 import Runtime "mo:core/Runtime";
+import Text "mo:core/Text";
 import Int "mo:core/Int";
+import Order "mo:core/Order";
+import Migration "migration";
 import MixinAuthorization "authorization/MixinAuthorization";
 import AccessControl "authorization/access-control";
 
+// GuestBook app (with data migration)
+(with migration = Migration.run)
 actor {
   // Initialize the access control system
   let accessControlState = AccessControl.initState();
   include MixinAuthorization(accessControlState);
 
-  // User Profile System
+  // GuestBook User Profile System
   public type UserProfile = {
     name : Text;
   };
@@ -23,8 +26,8 @@ actor {
   let userProfiles = Map.empty<Principal, UserProfile>();
 
   public query ({ caller }) func getCallerUserProfile() : async ?UserProfile {
-    if (not AccessControl.hasPermission(accessControlState, caller, #user)) {
-      Runtime.trap("Unauthorized: Only users can access profiles");
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("Unauthorized: Only users can save profiles");
     };
     userProfiles.get(caller);
   };
@@ -37,13 +40,13 @@ actor {
   };
 
   public shared ({ caller }) func saveCallerUserProfile(profile : UserProfile) : async () {
-    if (not AccessControl.hasPermission(accessControlState, caller, #user)) {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
       Runtime.trap("Unauthorized: Only users can save profiles");
     };
     userProfiles.add(caller, profile);
   };
 
-  // Guestbook Types
+  // GuestBook Types
   type Location = {
     latitude : Float;
     longitude : Float;
@@ -67,7 +70,7 @@ actor {
 
   let entries = Map.empty<Text, GuestbookEntry>();
 
-  // Anyone (including anonymous) can add an entry — no login required
+  // Anyone (including anonymous) can add an entry - no login required
   public shared ({ caller }) func addEntry(
     name : ?Text,
     trailName : ?Text,
@@ -174,3 +177,4 @@ actor {
     );
   };
 };
+

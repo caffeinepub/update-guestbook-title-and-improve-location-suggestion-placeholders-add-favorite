@@ -55,7 +55,7 @@ const POPULAR_TRAILS = [
 export default function AddEntryPage() {
   const navigate = useNavigate();
   const { identity } = useInternetIdentity();
-  const { isFetching: actorFetching } = useActor();
+  const { actor, isFetching: actorFetching } = useActor();
 
   const [name, setName] = useState("");
   const [trailName, setTrailName] = useState("");
@@ -164,7 +164,7 @@ export default function AddEntryPage() {
     return (
       <div className="max-w-lg mx-auto px-4 py-12 text-center">
         <div className="bg-card border border-border rounded-2xl p-8 shadow-sm">
-          <div className="text-4xl mb-4">🥾</div>
+          <div className="text-4xl mb-4">🥞</div>
           <h2 className="text-2xl font-bold text-foreground mb-2">
             Entry Saved!
           </h2>
@@ -176,7 +176,9 @@ export default function AddEntryPage() {
     );
   }
 
-  const isSubmitDisabled = addEntryMutation.isPending || actorFetching;
+  const isActorUnavailable = !actor && !actorFetching;
+  const isSubmitDisabled =
+    addEntryMutation.isPending || actorFetching || isActorUnavailable;
 
   return (
     <div className="max-w-lg mx-auto px-4 py-8">
@@ -192,6 +194,20 @@ export default function AddEntryPage() {
           <Loader2 className="w-4 h-4 animate-spin shrink-0" />
           <span>Connecting to the network…</span>
         </div>
+      )}
+
+      {isActorUnavailable && (
+        <Alert
+          variant="destructive"
+          className="mb-4"
+          data-ocid="addentry.error_state"
+        >
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>
+            Unable to connect to the network. Please refresh the page and try
+            again.
+          </AlertDescription>
+        </Alert>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-5">
@@ -341,6 +357,7 @@ export default function AddEntryPage() {
         <button
           type="submit"
           disabled={isSubmitDisabled}
+          data-ocid="addentry.submit_button"
           className="w-full h-10 rounded-md px-4 text-sm font-semibold transition-opacity disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center gap-2"
           style={{ backgroundColor: "#7B2D1F", color: "#ffffff" }}
         >
@@ -354,6 +371,8 @@ export default function AddEntryPage() {
               <Loader2 className="w-4 h-4 animate-spin" />
               Connecting…
             </>
+          ) : isActorUnavailable ? (
+            "Network Unavailable"
           ) : (
             "Sign the Guestbook"
           )}
