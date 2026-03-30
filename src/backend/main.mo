@@ -7,12 +7,12 @@ import Runtime "mo:core/Runtime";
 import Text "mo:core/Text";
 import Int "mo:core/Int";
 import Order "mo:core/Order";
-import Migration "migration";
+
 import MixinAuthorization "authorization/MixinAuthorization";
 import AccessControl "authorization/access-control";
 
 // GuestBook app (with data migration)
-(with migration = Migration.run)
+
 actor {
   // Initialize the access control system
   let accessControlState = AccessControl.initState();
