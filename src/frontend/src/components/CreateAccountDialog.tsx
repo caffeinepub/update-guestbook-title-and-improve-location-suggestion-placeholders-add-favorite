@@ -35,23 +35,25 @@ export default function CreateAccountDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className="max-w-md max-h-[85vh] flex flex-col overflow-hidden"
-        style={{ zIndex: 99999 }}
+        className="max-w-md flex flex-col overflow-hidden"
+        style={{ zIndex: 99999, maxHeight: "85vh" }}
       >
         <DialogHeader className="flex-shrink-0">
           <DialogTitle className="text-xl">Create Account / Login</DialogTitle>
           <DialogDescription className="sr-only">
-            Learn about Internet Identity and create your account for VTH Guest
-            Book: Vicarious Thru-Hiker
+            Learn about Internet Identity and create your account
           </DialogDescription>
         </DialogHeader>
 
-        <div className="overflow-y-auto flex-1 space-y-4 py-2 pr-1">
+        <div
+          className="flex-1 space-y-4 py-2 pr-1"
+          style={{ overflowY: "auto" }}
+        >
           <p className="text-sm text-foreground leading-relaxed">
             The <strong>VTH Guest Book: Vicarious Thru-Hiker</strong> runs on
-            the <strong>Internet Computer</strong> — a decentralized blockchain
-            network that hosts apps and data without traditional servers or
-            cloud providers.
+            the <strong>Internet Computer</strong> &#8212; a decentralized
+            blockchain network that hosts apps and data without traditional
+            servers or cloud providers.
           </p>
 
           <div className="space-y-3">
@@ -62,7 +64,7 @@ export default function CreateAccountDialog({
                   Internet Identity
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  Your account uses <strong>Internet Identity</strong> — a
+                  Your account uses <strong>Internet Identity</strong> &#8212; a
                   secure, passwordless authentication system. No email, no
                   password, no personal data collected.
                 </p>
@@ -76,9 +78,9 @@ export default function CreateAccountDialog({
                   Private by Design
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  Your identity is cryptographically secured using your device's
-                  biometrics or security key. No one can impersonate you or
-                  access your account.
+                  Your identity is cryptographically secured using your
+                  device&#39;s biometrics or security key. No one can
+                  impersonate you or access your account.
                 </p>
               </div>
             </div>
@@ -90,8 +92,8 @@ export default function CreateAccountDialog({
                   Decentralized &amp; Permanent
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  Your guestbook entries are stored on-chain — no company can
-                  delete them or shut down the service. The trail lives on
+                  Your guestbook entries are stored on-chain &#8212; no company
+                  can delete them or shut down the service. The trail lives on
                   forever.
                 </p>
               </div>
@@ -100,28 +102,29 @@ export default function CreateAccountDialog({
 
           {isAuthenticated ? (
             <div className="bg-muted rounded-lg px-4 py-3 text-sm text-center text-foreground">
-              ✅ You are already logged in!
+              &#x2705; You are already logged in!
             </div>
           ) : (
             <Button
               className="w-full mt-2"
               onClick={handleLogin}
               disabled={isLoggingIn}
+              data-ocid="createaccount.submit_button"
             >
               {isLoggingIn ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Connecting…
+                  Connecting&#8230;
                 </>
               ) : (
-                "🔑 Login / Create Identity"
+                "&#x1F511; Login / Create Identity"
               )}
             </Button>
           )}
 
           <p className="text-xs text-muted-foreground text-center">
             First time? Internet Identity will guide you through creating a
-            secure identity using your device's built-in authentication.
+            secure identity using your device&#39;s built-in authentication.
           </p>
         </div>
       </DialogContent>

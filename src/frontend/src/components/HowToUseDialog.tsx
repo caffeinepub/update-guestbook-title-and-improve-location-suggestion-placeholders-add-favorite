@@ -20,23 +20,26 @@ export default function HowToUseDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className="max-w-md max-h-[85vh] flex flex-col overflow-hidden"
-        style={{ zIndex: 99999 }}
+        className="max-w-md flex flex-col overflow-hidden"
+        style={{ zIndex: 99999, maxHeight: "85vh" }}
       >
         <DialogHeader className="flex-shrink-0">
           <DialogTitle className="text-xl">
-            How to Use VTH Guest Book: Vicarious Thru-Hikers
+            How to Use VTH Guest Book
           </DialogTitle>
           <DialogDescription className="sr-only">
             Instructions for using the VTH Guest Book: Vicarious Thru-Hikers app
           </DialogDescription>
         </DialogHeader>
 
-        <div className="overflow-y-auto flex-1 space-y-4 py-2 pr-1">
+        <div
+          className="flex-1 space-y-4 py-2 pr-1"
+          style={{ overflowY: "auto" }}
+        >
           <p className="text-sm text-muted-foreground">
             Welcome to the{" "}
-            <strong>VTH Guest Book: Vicarious Thru-Hikers</strong>! Here's how
-            to get the most out of it:
+            <strong>VTH Guest Book: Vicarious Thru-Hikers</strong>! Here&#39;s
+            how to get the most out of it:
           </p>
 
           <div className="space-y-4">
@@ -49,10 +52,10 @@ export default function HowToUseDialog({
                   Sign the Guestbook
                 </p>
                 <p className="text-xs text-muted-foreground leading-relaxed">
-                  Tap <strong>"+ Sign"</strong> or the pen icon in the bottom
-                  nav. Fill in your name, trail name, and a message. You can
-                  also add your current location and favorite trail spot — no
-                  account required.
+                  Tap <strong>&#34;+ Sign&#34;</strong> or the pen icon in the
+                  bottom nav. Fill in your name, trail name, and a message. You
+                  can also add your current location and favorite trail spot
+                  &#8212; no account required.
                 </p>
               </div>
             </div>
@@ -67,7 +70,7 @@ export default function HowToUseDialog({
                 </p>
                 <p className="text-xs text-muted-foreground leading-relaxed">
                   When adding an entry, use{" "}
-                  <strong>"Use My GPS Location"</strong> for automatic
+                  <strong>&#34;Use My GPS Location&#34;</strong> for automatic
                   detection, or search for a place by name. Your pin will appear
                   on the World Map for all to see.
                 </p>
@@ -85,8 +88,8 @@ export default function HowToUseDialog({
                 <p className="text-xs text-muted-foreground leading-relaxed">
                   The <strong>World Map</strong> shows where all hikers are
                   located. The <strong>Trail Map</strong> shows favorite spots
-                  along any hiking trail. Click any pin to jump to that hiker's
-                  guestbook entry.
+                  along any hiking trail. Click any pin to jump to that
+                  hiker&#39;s guestbook entry.
                 </p>
               </div>
             </div>
@@ -102,7 +105,8 @@ export default function HowToUseDialog({
                 <p className="text-xs text-muted-foreground leading-relaxed">
                   The <strong>Feed</strong> tab shows all entries in reverse
                   chronological order. Tap any entry to read the full message.
-                  If you're logged in, you can edit or delete your own entries.
+                  If you&#39;re logged in, you can edit or delete your own
+                  entries.
                 </p>
               </div>
             </div>

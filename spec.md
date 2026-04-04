@@ -1,22 +1,33 @@
-# VTH Guest Book
+# VTH Guest Book: Vicarious Thru-Hiker
 
 ## Current State
-The app is a guestbook for Vicarious Thru-Hikers with a feed, add-entry form, entry detail page, world map (Leaflet), and trail map (Leaflet). The color scheme in `src/frontend/src/index.css` already has beige background, burnt red title, and forest green accent tokens defined. The "View Entry" link in map popups uses `window.history.pushState` + `PopStateEvent` which does NOT trigger TanStack Router navigation, causing "entry not found" errors.
+
+The project has a full implementation in `src/` covering:
+- Motoko backend with GuestbookEntry, anonymous addEntry, updateEntry, deleteEntry, getAllEntries, getEntriesWithLocation, getEntriesWithFavoritePlace, user profiles, and role-based admin authorization
+- React frontend with 5 pages: GuestbookFeed, AddEntry, EntryDetail, WorldMap, ATMap (Trail Map)
+- Leaflet + OpenStreetMap interactive maps with SVG pin icons and clickable popups routing to entries
+- HamburgerMenu with About, CreateAccount, HowToUse dialogs (all scrollable, z-index above maps)
+- Warm beige/burnt red/forest green HSL color theme
+- PlaceSearchField with Nominatim geocoding
+- Trail dropdown with 17 popular trails + custom entry
+- Edit/Delete for owners and admins
+
+The problem: Persistent IC0508 (canister stopped) and IC0537 (no wasm module) errors on the backend canister, and the live URL vth.caffeine.xyz is not accessible. The backend canister has become non-functional and needs a fresh deployment.
 
 ## Requested Changes (Diff)
 
 ### Add
-- Nothing new to add.
+- Nothing new; this is a clean rebuild of all existing features
 
 ### Modify
-- **Fix "View Entry" navigation in WorldMapPage.tsx and ATMapPage.tsx**: Replace the broken `window.history.pushState` + `PopStateEvent` approach with Leaflet's `popupopen` event listener. On popup open, find the `.view-entry-link` anchor element and attach a real click handler that calls `router.navigate({ to: "/entry/$timestamp", params: { timestamp } })`. Import `getRouterContext` or use `useNavigate` from TanStack Router via a React ref approach. Since these are non-React Leaflet popup contexts, the best approach is to use `window.__vthRouter` (set in App.tsx) or use a module-level router reference.
-- **Color scheme**: Ensure `src/frontend/src/index.css` background is a warm beige (slightly warmer/more visible beige tint), burnt red logo title, and forest green primary/accent colors. The existing values look close — tweak background to be a more noticeable warm beige (e.g., `oklch(93% 0.025 75)`), keep burnt red title (`oklch(42% 0.2 28)`), keep forest green primary (`oklch(38% 0.14 145)`).
+- Fresh Motoko backend canister (new canister ID, resolves IC0508/IC0537)
+- Rebuild all frontend code identically from current implementation
 
 ### Remove
-- The broken `onclick="event.preventDefault(); window.history.pushState..."` inline handlers from popup HTML strings in both map pages.
+- Broken/stale canister bindings
 
 ## Implementation Plan
-1. In `App.tsx`, expose the router instance on `window.__vthRouter` so Leaflet popup click handlers can call it.
-2. In `WorldMapPage.tsx`: Change the "View Entry" anchor to use `class="view-entry-link"` and `data-ts="${timestamp}"`. After calling `.bindPopup()`, listen for the map's `popupopen` event. In that handler, find `.view-entry-link` in the popup DOM and attach a click handler that calls `(window as any).__vthRouter.navigate(...)`.
-3. In `ATMapPage.tsx`: Same fix as WorldMapPage.
-4. In `src/frontend/src/index.css`: Ensure background is a noticeable warm beige, burnt red title, forest green accents — adjust if current values look washed out.
+
+1. Generate fresh Motoko backend with all existing functionality (guestbook entries, anonymous posting, admin controls, location data)
+2. Rebuild all frontend components exactly as they exist, ensuring all dialogs have z-index 99999 to appear above Leaflet maps, HSL color tokens, and proper actor initialization
+3. Deploy fresh draft and publish live

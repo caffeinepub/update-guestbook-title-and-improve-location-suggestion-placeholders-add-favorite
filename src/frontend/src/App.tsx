@@ -13,9 +13,7 @@ import EntryDetailPage from "./pages/EntryDetailPage";
 import GuestbookFeedPage from "./pages/GuestbookFeedPage";
 import WorldMapPage from "./pages/WorldMapPage";
 
-const rootRoute = createRootRoute({
-  component: AppLayout,
-});
+const rootRoute = createRootRoute({ component: AppLayout });
 
 const feedRoute = createRoute({
   getParentRoute: () => rootRoute,

@@ -187,14 +187,8 @@ export function useSaveCallerUserProfile() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (profile: UserProfile) => {
-      if (actorFetching)
-        throw new Error(
-          "Still connecting to the network. Please wait a moment and try again.",
-        );
-      if (!actor)
-        throw new Error(
-          "Not connected. Please refresh the page and try again.",
-        );
+      if (actorFetching) throw new Error("Still connecting to the network.");
+      if (!actor) throw new Error("Not connected.");
       await actor.saveCallerUserProfile(profile);
     },
     onSuccess: () => {

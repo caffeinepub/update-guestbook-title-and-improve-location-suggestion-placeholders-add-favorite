@@ -103,6 +103,11 @@ actor {
     currentLocation : ?Location,
     favoritePlace : ?Location,
   ) : async () {
+    // Only authenticated users and admins can update entries
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("Unauthorized: Only authenticated users can update entries");
+    };
+
     if (Text.equal(newComment.trim(#char ' '), "")) {
       Runtime.trap("Comment cannot be empty.");
     };
@@ -141,6 +146,11 @@ actor {
   };
 
   public shared ({ caller }) func deleteEntry(timestamp : Time.Time) : async () {
+    // Only authenticated users and admins can delete entries
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("Unauthorized: Only authenticated users can delete entries");
+    };
+
     // Find the entry by timestamp
     let entryResult = entries.entries().toArray().find(
       func((_, entry)) { entry.timestamp == timestamp }
@@ -177,4 +187,3 @@ actor {
     );
   };
 };
-

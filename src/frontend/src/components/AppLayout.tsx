@@ -7,11 +7,11 @@ import HamburgerMenu from "./HamburgerMenu";
 
 // Brand color constants — explicit hex for reliable cross-browser rendering
 const BRAND = {
-  headerBg: "#e8d9bc", // warm amber sand
-  headerBorder: "#c9a96e", // golden tan
-  emblemBg: "#8B3A2A", // terracotta / burnt sienna
-  titleColor: "#7B2D1F", // deep burnt red
-  subtitleColor: "#2D5A27", // forest green
+  headerBg: "#e8d9bc",
+  headerBorder: "#c9a96e",
+  emblemBg: "#8B3A2A",
+  titleColor: "#7B2D1F",
+  subtitleColor: "#2D5A27",
 };
 
 export default function AppLayout() {
@@ -61,17 +61,19 @@ export default function AppLayout() {
             aria-label="Go to home"
             data-ocid="nav.link"
           >
-            {/* VTH Emblem Badge */}
+            {/* VTH Emblem Badge — 48x48 */}
             <div
-              className="flex-shrink-0 w-12 h-12 rounded-xl border-2 flex items-center justify-center shadow"
+              className="flex-shrink-0 rounded-xl border-2 flex items-center justify-center shadow"
               style={{
+                width: "48px",
+                height: "48px",
                 backgroundColor: BRAND.emblemBg,
                 borderColor: BRAND.headerBorder,
               }}
             >
               <span
-                className="font-black text-white tracking-tight leading-none select-none"
-                style={{ fontSize: "1.2rem", letterSpacing: "-0.02em" }}
+                className="font-black text-white select-none"
+                style={{ fontSize: "1.1rem", letterSpacing: "-0.02em" }}
               >
                 VTH
               </span>

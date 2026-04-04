@@ -1,5 +1,5 @@
 import { Menu, X } from "lucide-react";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import AboutDialog from "./AboutDialog";
 import CreateAccountDialog from "./CreateAccountDialog";
 import HowToUseDialog from "./HowToUseDialog";
@@ -27,10 +27,12 @@ export default function HamburgerMenu() {
     setMenuOpen(false);
     setAboutOpen(true);
   };
+
   const openCreateAccount = () => {
     setMenuOpen(false);
     setCreateAccountOpen(true);
   };
+
   const openHowToUse = () => {
     setMenuOpen(false);
     setHowToUseOpen(true);
@@ -43,6 +45,7 @@ export default function HamburgerMenu() {
           type="button"
           onClick={() => setMenuOpen((v) => !v)}
           aria-label="Open menu"
+          data-ocid="nav.button"
           className="w-9 h-9 flex items-center justify-center rounded-md transition-opacity hover:opacity-70"
           style={{ color: "#7B2D1F" }}
         >
@@ -64,29 +67,23 @@ export default function HamburgerMenu() {
               style={{ color: "#3d2b1a" }}
               onClick={openAbout}
             >
-              📖 About VTH Guest Book
+              &#x1F4D6; About VTH Guest Book
             </button>
             <button
               type="button"
               className="w-full text-left px-4 py-3 text-sm font-medium transition-colors hover:opacity-80"
-              style={{
-                color: "#3d2b1a",
-                borderTop: "1px solid #c9a96e",
-              }}
+              style={{ color: "#3d2b1a", borderTop: "1px solid #c9a96e" }}
               onClick={openCreateAccount}
             >
-              🔑 Create Account / Login
+              &#x1F511; Create Account / Login
             </button>
             <button
               type="button"
               className="w-full text-left px-4 py-3 text-sm font-medium transition-colors hover:opacity-80"
-              style={{
-                color: "#3d2b1a",
-                borderTop: "1px solid #c9a96e",
-              }}
+              style={{ color: "#3d2b1a", borderTop: "1px solid #c9a96e" }}
               onClick={openHowToUse}
             >
-              🗺️ How to Use
+              &#x1F5FA;&#xFE0F; How to Use
             </button>
           </div>
         )}

@@ -42,8 +42,6 @@ export default function PlaceSearchField({
     try {
       const searchResults = await searchPlaces(query);
       setResults(searchResults);
-
-      // If only one result, auto-select it
       if (searchResults.length === 1) {
         handleSelect(searchResults[0]);
       }
@@ -65,15 +63,18 @@ export default function PlaceSearchField({
 
   return (
     <div className="space-y-2">
-      <Label htmlFor={`place-search-${label}`} className="text-sm">
-        {label}
-      </Label>
+      {label && (
+        <Label htmlFor={`place-search-${label}`} className="text-sm">
+          {label}
+        </Label>
+      )}
       <div className="flex gap-2">
         <Input
-          id={`place-search-${label}`}
+          id={`place-search-${label || "field"}`}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder={placeholder}
+          data-ocid="addentry.search_input"
           onKeyDown={(e) => {
             if (e.key === "Enter") {
               e.preventDefault();
@@ -87,6 +88,7 @@ export default function PlaceSearchField({
           size="default"
           onClick={handleSearch}
           disabled={isSearching || !query.trim()}
+          data-ocid="addentry.button"
         >
           {isSearching ? (
             <Loader2 className="h-4 w-4 animate-spin" />
@@ -96,7 +98,6 @@ export default function PlaceSearchField({
         </Button>
       </div>
 
-      {/* Search results selection */}
       {results.length > 1 && (
         <div className="space-y-2">
           <Label className="text-sm">Select a location</Label>

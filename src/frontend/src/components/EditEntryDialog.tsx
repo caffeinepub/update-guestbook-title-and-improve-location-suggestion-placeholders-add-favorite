@@ -42,7 +42,6 @@ export default function EditEntryDialog({
   );
   const [error, setError] = useState<string | null>(null);
 
-  // Re-initialize form fields whenever the dialog opens or entry changes
   useEffect(() => {
     if (open) {
       const { cleanComment } = decodeComment(entry.comment);
@@ -127,7 +126,10 @@ export default function EditEntryDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+      <DialogContent
+        className="max-w-lg"
+        style={{ zIndex: 99999, maxHeight: "90vh", overflowY: "auto" }}
+      >
         <DialogHeader>
           <DialogTitle>Edit Entry</DialogTitle>
         </DialogHeader>
@@ -192,13 +194,13 @@ export default function EditEntryDialog({
                     onClick={() => setCurrentLocation(null)}
                     className="text-muted-foreground hover:text-destructive text-xs ml-1"
                   >
-                    ✕
+                    &#x2715;
                   </button>
                 </div>
               )}
               <PlaceSearchField
                 label=""
-                placeholder="Search for your current location…"
+                placeholder="Search for your current location\u2026"
                 onSelect={(result) => setCurrentLocation(result)}
               />
             </div>
@@ -221,20 +223,20 @@ export default function EditEntryDialog({
                     onClick={() => setFavoritePlace(null)}
                     className="text-muted-foreground hover:text-destructive text-xs ml-1"
                   >
-                    ✕
+                    &#x2715;
                   </button>
                 </div>
               )}
               <PlaceSearchField
                 label=""
-                placeholder="Search for your favorite trail spot…"
+                placeholder="Search for your favorite trail spot\u2026"
                 onSelect={(result) => setFavoritePlace(result)}
               />
             </div>
           </div>
 
           {error && (
-            <Alert variant="destructive">
+            <Alert variant="destructive" data-ocid="editentry.error_state">
               <AlertCircle className="h-4 w-4" />
               <AlertDescription>{error}</AlertDescription>
             </Alert>
@@ -245,14 +247,19 @@ export default function EditEntryDialog({
               type="button"
               variant="outline"
               onClick={() => onOpenChange(false)}
+              data-ocid="editentry.cancel_button"
             >
               Cancel
             </Button>
-            <Button type="submit" disabled={updateEntry.isPending}>
+            <Button
+              type="submit"
+              disabled={updateEntry.isPending}
+              data-ocid="editentry.save_button"
+            >
               {updateEntry.isPending ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Saving…
+                  Saving&#8230;
                 </>
               ) : (
                 "Save Changes"

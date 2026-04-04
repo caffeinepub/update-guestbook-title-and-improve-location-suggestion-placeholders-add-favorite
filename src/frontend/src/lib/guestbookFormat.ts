@@ -1,13 +1,12 @@
-import type { Principal } from "@dfinity/principal";
+import type { Principal } from "@icp-sdk/core/principal";
 
 export function formatAuthorLabel(creator: Principal): string {
   const str = creator.toString();
   if (str.length <= 12) return str;
-  return `${str.slice(0, 6)}…${str.slice(-4)}`;
+  return `${str.slice(0, 6)}\u2026${str.slice(-4)}`;
 }
 
 export function formatTimestamp(timestamp: bigint): string {
-  // ICP timestamps are in nanoseconds
   const ms = Number(timestamp / 1_000_000n);
   const date = new Date(ms);
   return date.toLocaleDateString("en-US", {
@@ -22,17 +21,18 @@ export function formatTimestamp(timestamp: bigint): string {
 export function formatCoordinates(lat: number, lon: number): string {
   const latDir = lat >= 0 ? "N" : "S";
   const lonDir = lon >= 0 ? "E" : "W";
-  return `${Math.abs(lat).toFixed(4)}°${latDir}, ${Math.abs(lon).toFixed(4)}°${lonDir}`;
+  return `${Math.abs(lat).toFixed(4)}\u00b0${latDir}, ${Math.abs(lon).toFixed(4)}\u00b0${lonDir}`;
 }
 
 /**
  * Decodes the comment field, stripping out encoded place name tags.
- * Returns the clean comment text without the [loc:...] and [fav:...] markers.
+ * Returns the clean comment text without the [loc:...], [fav:...], and [trail:...] markers.
  */
 export function decodeComment(comment: string): { cleanComment: string } {
   const cleanComment = comment
     .replace(/\n\[loc:[^\]]*\]/g, "")
     .replace(/\n\[fav:[^\]]*\]/g, "")
+    .replace(/\n\[trail:[^\]]*\]/g, "")
     .trim();
   return { cleanComment };
 }
@@ -43,11 +43,14 @@ export function decodeComment(comment: string): { cleanComment: string } {
 export function decodePlaceNames(comment: string): {
   currentLocationName: string | null;
   favoritePlaceName: string | null;
+  trailLabel: string | null;
 } {
   const locMatch = comment.match(/\[loc:([^\]]+)\]/);
   const favMatch = comment.match(/\[fav:([^\]]+)\]/);
+  const trailMatch = comment.match(/\[trail:([^\]]+)\]/);
   return {
     currentLocationName: locMatch ? locMatch[1] : null,
     favoritePlaceName: favMatch ? favMatch[1] : null,
+    trailLabel: trailMatch ? trailMatch[1] : null,
   };
 }

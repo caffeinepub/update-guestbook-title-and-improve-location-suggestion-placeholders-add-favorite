@@ -59,7 +59,10 @@ export default function GuestbookFeedPage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center py-20">
+      <div
+        className="flex items-center justify-center py-20"
+        data-ocid="feed.loading_state"
+      >
         <Loader2 className="w-8 h-8 animate-spin text-primary" />
       </div>
     );
@@ -69,7 +72,10 @@ export default function GuestbookFeedPage() {
 
   if (sortedEntries.length === 0) {
     return (
-      <div className="max-w-lg mx-auto px-4 py-16 text-center">
+      <div
+        className="max-w-lg mx-auto px-4 py-16 text-center"
+        data-ocid="feed.empty_state"
+      >
         <BookOpen className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
         <h2 className="text-xl font-semibold text-foreground mb-2">
           No entries yet
@@ -77,7 +83,10 @@ export default function GuestbookFeedPage() {
         <p className="text-muted-foreground mb-6">
           Be the first to sign the VTH Guest Book!
         </p>
-        <Button onClick={() => navigate({ to: "/add" })}>
+        <Button
+          onClick={() => navigate({ to: "/add" })}
+          data-ocid="feed.primary_button"
+        >
           Sign the Guestbook
         </Button>
       </div>
@@ -88,26 +97,32 @@ export default function GuestbookFeedPage() {
     <div className="max-w-lg mx-auto px-4 py-6 space-y-4">
       <div className="flex items-center justify-between mb-2">
         <h1 className="text-xl font-bold text-foreground">Recent Entries</h1>
-        <Button size="sm" onClick={() => navigate({ to: "/add" })}>
+        <Button
+          size="sm"
+          onClick={() => navigate({ to: "/add" })}
+          data-ocid="feed.primary_button"
+        >
           + Sign
         </Button>
       </div>
 
-      {sortedEntries.map((entry) => {
+      {sortedEntries.map((entry, index) => {
         const { cleanComment } = decodeComment(entry.comment);
         const { currentLocationName, favoritePlaceName } = decodePlaceNames(
           entry.comment,
         );
         const preview =
           cleanComment.length > 160
-            ? `${cleanComment.slice(0, 160)}…`
+            ? `${cleanComment.slice(0, 160)}\u2026`
             : cleanComment;
         const isDeleting = deletingTimestamp === entry.timestamp;
+        const itemIndex = index + 1;
 
         return (
           <div
             key={entry.timestamp.toString()}
             className="bg-card border border-border rounded-2xl p-4 shadow-sm"
+            data-ocid={`feed.item.${itemIndex}`}
           >
             <div className="flex items-start justify-between gap-2">
               <button
@@ -119,6 +134,7 @@ export default function GuestbookFeedPage() {
                     params: { timestamp: entry.timestamp.toString() },
                   })
                 }
+                data-ocid={`feed.item.${itemIndex}`}
               >
                 <div className="flex items-center gap-2 mb-1">
                   <span className="font-semibold text-foreground text-sm">
@@ -126,7 +142,7 @@ export default function GuestbookFeedPage() {
                   </span>
                   {entry.trailName && (
                     <span className="text-xs text-primary font-medium">
-                      🥾 {entry.trailName}
+                      &#x1F97E; {entry.trailName}
                     </span>
                   )}
                 </div>
@@ -165,6 +181,7 @@ export default function GuestbookFeedPage() {
                       setEditEntry(entry);
                     }}
                     title="Edit entry"
+                    data-ocid={`feed.item.${itemIndex}`}
                   >
                     <Pencil className="w-3 h-3" />
                   </Button>
@@ -177,6 +194,7 @@ export default function GuestbookFeedPage() {
                         className="h-7 w-7 text-destructive hover:text-destructive"
                         onClick={(e) => e.stopPropagation()}
                         title="Delete entry"
+                        data-ocid={`feed.delete_button.${itemIndex}`}
                       >
                         {isDeleting ? (
                           <Loader2 className="w-3 h-3 animate-spin" />
@@ -185,7 +203,7 @@ export default function GuestbookFeedPage() {
                         )}
                       </Button>
                     </AlertDialogTrigger>
-                    <AlertDialogContent>
+                    <AlertDialogContent style={{ zIndex: 99999 }}>
                       <AlertDialogHeader>
                         <AlertDialogTitle>Delete Entry</AlertDialogTitle>
                         <AlertDialogDescription>
@@ -194,10 +212,13 @@ export default function GuestbookFeedPage() {
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogCancel data-ocid="feed.cancel_button">
+                          Cancel
+                        </AlertDialogCancel>
                         <AlertDialogAction
                           onClick={() => handleDelete(entry)}
                           className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                          data-ocid="feed.confirm_button"
                         >
                           Delete
                         </AlertDialogAction>
@@ -220,6 +241,19 @@ export default function GuestbookFeedPage() {
           }}
         />
       )}
+
+      {/* Footer */}
+      <footer className="text-center text-xs text-muted-foreground pt-4 pb-2">
+        &#169; {new Date().getFullYear()}. Built with &#x2764; using{" "}
+        <a
+          href={`https://caffeine.ai?utm_source=caffeine-footer&utm_medium=referral&utm_content=${encodeURIComponent(window.location.hostname)}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline hover:opacity-80"
+        >
+          caffeine.ai
+        </a>
+      </footer>
     </div>
   );
 }

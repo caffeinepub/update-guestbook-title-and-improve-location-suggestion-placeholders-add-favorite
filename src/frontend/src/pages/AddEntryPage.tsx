@@ -9,7 +9,6 @@ import type React from "react";
 import { useState } from "react";
 import PlaceSearchField from "../components/PlaceSearchField";
 import { useActor } from "../hooks/useActor";
-import { useInternetIdentity } from "../hooks/useInternetIdentity";
 import { useAddEntry } from "../hooks/useQueries";
 import type { GeocodingResult } from "../lib/geocoding";
 
@@ -49,12 +48,11 @@ const POPULAR_TRAILS = [
     value: "Ice Age Trail (Wisconsin, USA)",
     label: "Ice Age Trail (Wisconsin, USA)",
   },
-  { value: "other", label: "Another trail…" },
+  { value: "other", label: "Another trail\u2026" },
 ];
 
 export default function AddEntryPage() {
   const navigate = useNavigate();
-  const { identity } = useInternetIdentity();
   const { actor, isFetching: actorFetching } = useActor();
 
   const [name, setName] = useState("");
@@ -70,9 +68,6 @@ export default function AddEntryPage() {
   const [geoError, setGeoError] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitSuccess, setSubmitSuccess] = useState(false);
-
-  // identity is available for ownership tracking but sign-in is not required
-  void identity;
 
   const addEntryMutation = useAddEntry();
 
@@ -120,7 +115,7 @@ export default function AddEntryPage() {
       return;
     }
 
-    // Build the enriched comment that encodes place names
+    // Build enriched comment with encoded place names
     let enrichedComment = comment.trim();
     if (currentLocation) {
       enrichedComment += `\n[loc:${currentLocation.displayName}]`;
@@ -162,14 +157,17 @@ export default function AddEntryPage() {
 
   if (submitSuccess) {
     return (
-      <div className="max-w-lg mx-auto px-4 py-12 text-center">
+      <div
+        className="max-w-lg mx-auto px-4 py-12 text-center"
+        data-ocid="addentry.success_state"
+      >
         <div className="bg-card border border-border rounded-2xl p-8 shadow-sm">
-          <div className="text-4xl mb-4">🥞</div>
+          <div className="text-4xl mb-4">&#x1F393;</div>
           <h2 className="text-2xl font-bold text-foreground mb-2">
             Entry Saved!
           </h2>
           <p className="text-muted-foreground">
-            Your guestbook entry has been saved. Redirecting…
+            Your guestbook entry has been saved. Redirecting&#8230;
           </p>
         </div>
       </div>
@@ -190,9 +188,12 @@ export default function AddEntryPage() {
       </p>
 
       {actorFetching && (
-        <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4 bg-muted rounded-lg px-3 py-2">
+        <div
+          className="flex items-center gap-2 text-sm text-muted-foreground mb-4 bg-muted rounded-lg px-3 py-2"
+          data-ocid="addentry.loading_state"
+        >
           <Loader2 className="w-4 h-4 animate-spin shrink-0" />
-          <span>Connecting to the network…</span>
+          <span>Connecting to the network&#8230;</span>
         </div>
       )}
 
@@ -221,6 +222,7 @@ export default function AddEntryPage() {
             onChange={(e) => setName(e.target.value)}
             placeholder="Trail name or real name"
             className="mt-1"
+            data-ocid="addentry.input"
           />
         </div>
 
@@ -235,6 +237,7 @@ export default function AddEntryPage() {
             onChange={(e) => setTrailName(e.target.value)}
             placeholder="e.g. Ridgerunner, Blaze"
             className="mt-1"
+            data-ocid="addentry.input"
           />
         </div>
 
@@ -246,10 +249,11 @@ export default function AddEntryPage() {
             id="comment"
             value={comment}
             onChange={(e) => setComment(e.target.value)}
-            placeholder="Share your trail story, thoughts, or greetings…"
+            placeholder="Share your trail story, thoughts, or greetings\u2026"
             rows={4}
             className="mt-1"
             required
+            data-ocid="addentry.textarea"
           />
         </div>
 
@@ -270,13 +274,13 @@ export default function AddEntryPage() {
                   onClick={() => setCurrentLocation(null)}
                   className="text-muted-foreground hover:text-destructive text-xs ml-1"
                 >
-                  ✕
+                  &#x2715;
                 </button>
               </div>
             )}
             <PlaceSearchField
               label=""
-              placeholder="Search for your current location…"
+              placeholder="Search for your current location\u2026"
               onSelect={(result) => setCurrentLocation(result)}
             />
             <Button
@@ -285,6 +289,7 @@ export default function AddEntryPage() {
               size="sm"
               onClick={handleUseMyLocation}
               className="flex items-center gap-1"
+              data-ocid="addentry.button"
             >
               <MapPin className="w-3 h-3" />
               Use My GPS Location
@@ -301,7 +306,7 @@ export default function AddEntryPage() {
           <div className="mt-1 space-y-2">
             {/* Trail selector dropdown */}
             <select
-              data-ocid="favorite.trail_select"
+              data-ocid="addentry.select"
               value={selectedTrail}
               onChange={(e) => setSelectedTrail(e.target.value)}
               className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring"
@@ -313,13 +318,13 @@ export default function AddEntryPage() {
               ))}
             </select>
 
-            {/* Custom trail input when "Another trail…" is selected */}
+            {/* Custom trail input when "Another trail\u2026" is selected */}
             {selectedTrail === "other" && (
               <Input
-                data-ocid="favorite.custom_trail.input"
+                data-ocid="addentry.input"
                 value={customTrail}
                 onChange={(e) => setCustomTrail(e.target.value)}
-                placeholder="Enter trail name…"
+                placeholder="Enter trail name\u2026"
                 className="mt-1"
               />
             )}
@@ -335,20 +340,20 @@ export default function AddEntryPage() {
                   onClick={() => setFavoritePlace(null)}
                   className="text-muted-foreground hover:text-destructive text-xs ml-1"
                 >
-                  ✕
+                  &#x2715;
                 </button>
               </div>
             )}
             <PlaceSearchField
               label=""
-              placeholder="Search for your favorite trail spot…"
+              placeholder="Search for your favorite trail spot\u2026"
               onSelect={(result) => setFavoritePlace(result)}
             />
           </div>
         </div>
 
         {submitError && (
-          <Alert variant="destructive">
+          <Alert variant="destructive" data-ocid="addentry.error_state">
             <AlertCircle className="h-4 w-4" />
             <AlertDescription>{submitError}</AlertDescription>
           </Alert>
@@ -364,12 +369,12 @@ export default function AddEntryPage() {
           {addEntryMutation.isPending ? (
             <>
               <Loader2 className="w-4 h-4 animate-spin" />
-              Saving…
+              Saving&#8230;
             </>
           ) : actorFetching ? (
             <>
               <Loader2 className="w-4 h-4 animate-spin" />
-              Connecting…
+              Connecting&#8230;
             </>
           ) : isActorUnavailable ? (
             "Network Unavailable"

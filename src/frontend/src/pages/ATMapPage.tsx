@@ -15,8 +15,6 @@ export default function ATMapPage() {
   // Initialize Leaflet map
   useEffect(() => {
     if (!mapContainerRef.current || mapInstanceRef.current) return;
-
-    // Guard: wait for Leaflet CDN to be available
     if (typeof L === "undefined") return;
 
     const map = L.map(mapContainerRef.current, {
@@ -58,7 +56,7 @@ export default function ATMapPage() {
 
     const validEntries = entries.filter((e) => e.favoritePlace != null);
 
-    // Create custom SVG pin icon (brown/earthy for trail map)
+    // Brown SVG pin icon for Trail Map
     const pinIcon = L.divIcon({
       className: "",
       html: `<svg width="28" height="36" viewBox="0 0 28 36" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -90,8 +88,8 @@ export default function ATMapPage() {
       const popupContent = `
         <div style="font-family:sans-serif;min-width:140px;">
           <div style="font-weight:bold;font-size:14px;color:#1a1a1a;">${authorName}</div>
-          <div style="color:#8B4513;font-size:13px;margin-top:2px;">📍 ${placeName}</div>
-          <a href="#" class="vth-entry-link" data-ts="${timestamp}" style="color:#8B4513;font-size:12px;font-weight:600;cursor:pointer;text-decoration:underline;margin-top:6px;display:block;">View Entry →</a>
+          <div style="color:#8B4513;font-size:13px;margin-top:2px;">&#x1F4CD; ${placeName}</div>
+          <a href="#" class="vth-entry-link" data-ts="${timestamp}" style="color:#8B4513;font-size:12px;font-weight:600;cursor:pointer;text-decoration:underline;margin-top:6px;display:block;">View Entry &#x2192;</a>
         </div>
       `;
 
@@ -149,8 +147,13 @@ export default function ATMapPage() {
         style={{ minHeight: 360 }}
       >
         {isLoading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-muted/60 z-10">
-            <span className="text-muted-foreground text-sm">Loading map…</span>
+          <div
+            className="absolute inset-0 flex items-center justify-center bg-muted/60 z-10"
+            data-ocid="trailmap.loading_state"
+          >
+            <span className="text-muted-foreground text-sm">
+              Loading map&#8230;
+            </span>
           </div>
         )}
 
@@ -163,7 +166,10 @@ export default function ATMapPage() {
         {!isLoading &&
           entries.filter((e) => e.favoritePlace != null).length === 0 &&
           mapReady && (
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
+            <div
+              className="absolute inset-0 flex items-center justify-center pointer-events-none z-10"
+              data-ocid="trailmap.empty_state"
+            >
               <div className="bg-card/90 rounded-lg px-4 py-3 text-center shadow">
                 <p className="text-muted-foreground text-sm">
                   No favorite places yet.

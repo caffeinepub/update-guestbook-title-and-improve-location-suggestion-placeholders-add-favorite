@@ -60,7 +60,10 @@ export default function EntryDetailPage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center py-20">
+      <div
+        className="flex items-center justify-center py-20"
+        data-ocid="entrydetail.loading_state"
+      >
         <Loader2 className="w-8 h-8 animate-spin text-primary" />
       </div>
     );
@@ -68,12 +71,16 @@ export default function EntryDetailPage() {
 
   if (!entry) {
     return (
-      <div className="max-w-lg mx-auto px-4 py-12 text-center">
+      <div
+        className="max-w-lg mx-auto px-4 py-12 text-center"
+        data-ocid="entrydetail.empty_state"
+      >
         <p className="text-muted-foreground">Entry not found.</p>
         <Button
           variant="ghost"
           onClick={() => navigate({ to: "/" })}
           className="mt-4"
+          data-ocid="entrydetail.link"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to Feed
@@ -93,6 +100,7 @@ export default function EntryDetailPage() {
         variant="ghost"
         onClick={() => navigate({ to: "/" })}
         className="mb-6 -ml-2"
+        data-ocid="entrydetail.link"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
         Back to Feed
@@ -106,7 +114,7 @@ export default function EntryDetailPage() {
             </h1>
             {entry.trailName && (
               <p className="text-sm text-primary font-medium">
-                🥾 {entry.trailName}
+                &#x1F97E; {entry.trailName}
               </p>
             )}
             <p className="text-xs text-muted-foreground mt-1">
@@ -121,6 +129,7 @@ export default function EntryDetailPage() {
                 size="sm"
                 onClick={() => setEditOpen(true)}
                 className="flex items-center gap-1"
+                data-ocid="entrydetail.edit_button"
               >
                 <Pencil className="w-3 h-3" />
                 Edit
@@ -132,12 +141,13 @@ export default function EntryDetailPage() {
                     variant="destructive"
                     size="sm"
                     className="flex items-center gap-1"
+                    data-ocid="entrydetail.delete_button"
                   >
                     <Trash2 className="w-3 h-3" />
                     Delete
                   </Button>
                 </AlertDialogTrigger>
-                <AlertDialogContent>
+                <AlertDialogContent style={{ zIndex: 99999 }}>
                   <AlertDialogHeader>
                     <AlertDialogTitle>Delete Entry</AlertDialogTitle>
                     <AlertDialogDescription>
@@ -146,10 +156,13 @@ export default function EntryDetailPage() {
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogCancel data-ocid="entrydetail.cancel_button">
+                      Cancel
+                    </AlertDialogCancel>
                     <AlertDialogAction
                       onClick={handleDelete}
                       className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                      data-ocid="entrydetail.confirm_button"
                     >
                       {deleteEntry.isPending ? (
                         <Loader2 className="w-4 h-4 animate-spin" />
