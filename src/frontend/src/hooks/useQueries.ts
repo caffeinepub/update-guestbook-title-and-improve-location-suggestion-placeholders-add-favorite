@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import type { GuestbookEntry, Location, UserProfile } from "../backend";
+import type { GuestbookEntry, Location, UserProfile } from "../types/guestbook";
 import { useActor } from "./useActor";
 
 export function useGetAllEntries() {

@@ -61,10 +61,20 @@ export default function HamburgerMenu() {
               zIndex: 1200,
             }}
           >
+            <a
+              href="https://vicariousthruhiker.vercel.app"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block w-full text-left px-4 py-3 text-sm font-medium transition-colors hover:opacity-80"
+              style={{ color: "#3d2b1a" }}
+              data-ocid="nav.home-link"
+            >
+              &#x1F3E0; Vicarious Thru-Hiker
+            </a>
             <button
               type="button"
               className="w-full text-left px-4 py-3 text-sm font-medium transition-colors hover:opacity-80"
-              style={{ color: "#3d2b1a" }}
+              style={{ color: "#3d2b1a", borderTop: "1px solid #c9a96e" }}
               onClick={openAbout}
             >
               &#x1F4D6; About VTH Guest Book

@@ -13,10 +13,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { AlertCircle, Loader2, MapPin } from "lucide-react";
 import type React from "react";
 import { useEffect, useState } from "react";
-import type { GuestbookEntry } from "../backend";
 import { useUpdateEntry } from "../hooks/useQueries";
 import type { GeocodingResult } from "../lib/geocoding";
 import { decodeComment, decodePlaceNames } from "../lib/guestbookFormat";
+import type { GuestbookEntry } from "../types/guestbook";
 import PlaceSearchField from "./PlaceSearchField";
 
 interface EditEntryDialogProps {

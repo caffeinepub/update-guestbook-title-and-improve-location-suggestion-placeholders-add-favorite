@@ -1,0 +1,41 @@
+type UserRole = 
+ variant {
+   admin;
+   guest;
+   user;
+ };
+type UserProfile = record {name: text;};
+type Time = int;
+type Location = 
+ record {
+   latitude: float64;
+   longitude: float64;
+ };
+type GuestbookEntry = 
+ record {
+   comment: text;
+   creator: principal;
+   currentLocation: opt Location;
+   favoritePlace: opt Location;
+   name: opt text;
+   timestamp: Time;
+   trailName: opt text;
+ };
+service : {
+  _initializeAccessControl: () -> ();
+  addEntry: (name: opt text, trailName: opt text, comment: text,
+   currentLocation: opt Location, favoritePlace: opt Location) -> ();
+  assignCallerUserRole: (user: principal, role: UserRole) -> ();
+  deleteEntry: (timestamp: Time) -> ();
+  getAllEntries: () -> (vec GuestbookEntry) query;
+  getCallerUserProfile: () -> (opt UserProfile) query;
+  getCallerUserRole: () -> (UserRole) query;
+  getEntriesWithFavoritePlace: () -> (vec GuestbookEntry) query;
+  getEntriesWithLocation: () -> (vec GuestbookEntry) query;
+  getUserProfile: (user: principal) -> (opt UserProfile) query;
+  isCallerAdmin: () -> (bool) query;
+  saveCallerUserProfile: (profile: UserProfile) -> ();
+  updateEntry: (timestamp: Time, name: opt text, trailName: opt text,
+   newComment: text, currentLocation: opt Location, favoritePlace:
+   opt Location) -> ();
+}

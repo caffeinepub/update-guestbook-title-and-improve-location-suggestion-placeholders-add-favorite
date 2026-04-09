@@ -26,7 +26,7 @@ export type UserRole = { 'admin' : null } |
   { 'user' : null } |
   { 'guest' : null };
 export interface _SERVICE {
-  '_initializeAccessControlWithSecret' : ActorMethod<[string], undefined>,
+  '_initializeAccessControl' : ActorMethod<[], undefined>,
   'addEntry' : ActorMethod<
     [[] | [string], [] | [string], string, [] | [Location], [] | [Location]],
     undefined

@@ -13,7 +13,6 @@ import { Button } from "@/components/ui/button";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import { ArrowLeft, Loader2, MapPin, Pencil, Trash2 } from "lucide-react";
 import React, { useState } from "react";
-import type { GuestbookEntry } from "../backend";
 import EditEntryDialog from "../components/EditEntryDialog";
 import { useInternetIdentity } from "../hooks/useInternetIdentity";
 import {
@@ -27,6 +26,7 @@ import {
   formatAuthorLabel,
   formatTimestamp,
 } from "../lib/guestbookFormat";
+import type { GuestbookEntry } from "../types/guestbook";
 
 export default function EntryDetailPage() {
   const { timestamp } = useParams({ from: "/entry/$timestamp" });

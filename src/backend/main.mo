@@ -8,8 +8,8 @@ import Text "mo:core/Text";
 import Int "mo:core/Int";
 import Order "mo:core/Order";
 
-import MixinAuthorization "authorization/MixinAuthorization";
-import AccessControl "authorization/access-control";
+import MixinAuthorization "mo:caffeineai-authorization/MixinAuthorization";
+import AccessControl "mo:caffeineai-authorization/access-control";
 
 // GuestBook app (with data migration)
 
